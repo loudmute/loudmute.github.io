@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="1 动画系统基本概念现代游戏动画系统的概念，简单介绍一下：  帧：计算机每次渲染完一幅图并并显示出来，这一幅图就是一帧。 帧率：连续的帧形成了动画，每秒刷新帧的次数称为帧率，单位是“FPS（Frames Per Second，帧&#x2F;秒）”，也可以简称为“帧“ 帧间隔实践Time.deltaTime，当前帧与上一帧的实践差值   帧动画：一种动画技术，事先准备好每一帧的画面，然后依次播放。简">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UnityNote6-动画系统">
+<meta property="og:url" content="https://loudmute.github.io/2023/02/21/38-UnityNote6-%E5%8A%A8%E7%94%BB%E7%B3%BB%E7%BB%9F/index.html">
+<meta property="og:site_name" content="loudmute">
+<meta property="og:description" content="1 动画系统基本概念现代游戏动画系统的概念，简单介绍一下：  帧：计算机每次渲染完一幅图并并显示出来，这一幅图就是一帧。 帧率：连续的帧形成了动画，每秒刷新帧的次数称为帧率，单位是“FPS（Frames Per Second，帧&#x2F;秒）”，也可以简称为“帧“ 帧间隔实践Time.deltaTime，当前帧与上一帧的实践差值   帧动画：一种动画技术，事先准备好每一帧的画面，然后依次播放。简">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.imgur.com/8ife9cC.png">
+<meta property="og:image" content="https://i.imgur.com/tMe42lL.gif">
+<meta property="og:image" content="https://i.imgur.com/DYEThKe.png">
+<meta property="og:image" content="https://i.imgur.com/bjX5i3C.png">
+<meta property="og:image" content="https://i.imgur.com/blyYMJ0.png">
+<meta property="og:image" content="https://i.imgur.com/A0KgHQo.png">
+<meta property="og:image" content="https://i.imgur.com/YDtXqO8.gif">
+<meta property="article:published_time" content="2023-02-21T09:19:43.000Z">
+<meta property="article:modified_time" content="2026-04-21T09:24:44.700Z">
+<meta property="article:author" content="loudmute">
+<meta property="article:tag" content="C#">
+<meta property="article:tag" content="Unity">
+<meta property="article:tag" content="游戏开发">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/8ife9cC.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>UnityNote6-动画系统</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a href="/tags/">标签</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2023/03/05/39-UnityLab-2D%E5%86%92%E9%99%A9%E5%B0%8F%E6%B8%B8%E6%88%8F%E6%80%BB%E7%BB%93/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2023/02/20/37-UnityNote5-UI%E7%B3%BB%E7%BB%9F/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://loudmute.github.io/2023/02/21/38-UnityNote6-%E5%8A%A8%E7%94%BB%E7%B3%BB%E7%BB%9F/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://loudmute.github.io/2023/02/21/38-UnityNote6-%E5%8A%A8%E7%94%BB%E7%B3%BB%E7%BB%9F/&text=UnityNote6-动画系统"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://loudmute.github.io/2023/02/21/38-UnityNote6-%E5%8A%A8%E7%94%BB%E7%B3%BB%E7%BB%9F/&title=UnityNote6-动画系统"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://loudmute.github.io/2023/02/21/38-UnityNote6-%E5%8A%A8%E7%94%BB%E7%B3%BB%E7%BB%9F/&is_video=false&description=UnityNote6-动画系统"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=UnityNote6-动画系统&body=Check out this article: https://loudmute.github.io/2023/02/21/38-UnityNote6-%E5%8A%A8%E7%94%BB%E7%B3%BB%E7%BB%9F/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://loudmute.github.io/2023/02/21/38-UnityNote6-%E5%8A%A8%E7%94%BB%E7%B3%BB%E7%BB%9F/&title=UnityNote6-动画系统"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://loudmute.github.io/2023/02/21/38-UnityNote6-%E5%8A%A8%E7%94%BB%E7%B3%BB%E7%BB%9F/&title=UnityNote6-动画系统"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://loudmute.github.io/2023/02/21/38-UnityNote6-%E5%8A%A8%E7%94%BB%E7%B3%BB%E7%BB%9F/&title=UnityNote6-动画系统"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://loudmute.github.io/2023/02/21/38-UnityNote6-%E5%8A%A8%E7%94%BB%E7%B3%BB%E7%BB%9F/&title=UnityNote6-动画系统"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://loudmute.github.io/2023/02/21/38-UnityNote6-%E5%8A%A8%E7%94%BB%E7%B3%BB%E7%BB%9F/&name=UnityNote6-动画系统&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://loudmute.github.io/2023/02/21/38-UnityNote6-%E5%8A%A8%E7%94%BB%E7%B3%BB%E7%BB%9F/&t=UnityNote6-动画系统"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%8A%A8%E7%94%BB%E7%B3%BB%E7%BB%9F%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text">1 动画系统基本概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2D%E5%8A%A8%E7%94%BB%E5%AE%9E%E4%BE%8B%E5%88%86%E6%9E%90"><span class="toc-number">2.</span> <span class="toc-text">2 2D动画实例分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E7%B4%A0%E6%9D%90%E5%87%86%E5%A4%87"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 素材准备</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-1-%E8%B5%84%E6%BA%90%E5%AF%BC%E5%85%A5%E4%B8%8E%E6%95%B4%E7%90%86"><span class="toc-number">2.1.1.</span> <span class="toc-text">2.1.1 资源导入与整理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-2-%E5%9B%BE%E7%89%87%E8%AE%BE%E7%BD%AE"><span class="toc-number">2.1.2.</span> <span class="toc-text">2.1.2 图片设置</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E5%9C%BA%E6%99%AF%E6%90%AD%E5%BB%BA%E4%B8%8E%E8%A7%92%E8%89%B2%E6%8E%A7%E5%88%B6"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 场景搭建与角色控制</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-1-%E5%9C%BA%E6%99%AF%E6%90%AD%E5%BB%BA"><span class="toc-number">2.2.1.</span> <span class="toc-text">2.2.1 场景搭建</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-2-%E8%A7%92%E8%89%B2%E6%8E%A7%E5%88%B6"><span class="toc-number">2.2.2.</span> <span class="toc-text">2.2.2 角色控制</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E5%8A%A8%E7%94%BB%E7%9A%84%E5%88%B6%E4%BD%9C%E6%AD%A5%E9%AA%A4"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 动画的制作步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-1%E7%BC%96%E8%BE%91%E5%8A%A8%E7%94%BB"><span class="toc-number">2.3.1.</span> <span class="toc-text">2.3.1编辑动画</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-2-%E7%BC%96%E8%BE%91%E5%8A%A8%E7%94%BB%E7%8A%B6%E6%80%81%E6%9C%BA"><span class="toc-number">2.3.2.</span> <span class="toc-text">2.3.2 编辑动画状态机</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-3-%E8%AE%BE%E7%BD%AE%E5%8A%A8%E7%94%BB%E5%8F%98%E9%87%8F"><span class="toc-number">2.3.3.</span> <span class="toc-text">2.3.3 设置动画变量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-4-%E5%8A%A8%E7%94%BB%E8%BF%87%E6%B8%A1"><span class="toc-number">2.3.4.</span> <span class="toc-text">2.3.4 动画过渡</span></a></li></ol></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        UnityNote6-动画系统
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">loudmute</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2023-02-21T09:19:43.000Z" class="dt-published" itemprop="datePublished">2023-02-21</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/">游戏开发</a> › <a class="category-link" href="/categories/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/Unity/">Unity</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/C/" rel="tag">C#</a>, <a class="p-category" href="/tags/Unity/" rel="tag">Unity</a>, <a class="p-category" href="/tags/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/" rel="tag">游戏开发</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h2 id="1-动画系统基本概念"><a href="#1-动画系统基本概念" class="headerlink" title="1 动画系统基本概念"></a>1 动画系统基本概念</h2><p>现代游戏动画系统的概念，简单介绍一下：</p>
+<ul>
+<li>帧：计算机每次渲染完一幅图并并显示出来，这一幅图就是一帧。<ul>
+<li>帧率：连续的帧形成了动画，每秒刷新帧的次数称为帧率，单位是“FPS（Frames Per Second，帧&#x2F;秒）”，也可以简称为“帧“</li>
+<li>帧间隔实践<code>Time.deltaTime</code>，当前帧与上一帧的实践差值</li>
+</ul>
+</li>
+<li>帧动画：一种动画技术，事先准备好每一帧的画面，然后依次播放。简单直接，但工作量大，存储空间也大。</li>
+<li>2D&#x2F;3D骨骼动画：人物模型会绑定一个骨架，每一段骨骼关联人物模型的一部分，移动和旋转骨架，人物也会跟着做各种动作。节省工作量和存储空间。</li>
+<li>动画融合：通过插值等技术，自动计算不同动作状态之间的过渡状态，使得状态转换的自然。</li>
+<li>动画状态机：表示了各种动画状态间的联系以及转换逻辑。</li>
+</ul>
+<h2 id="2-2D动画实例分析"><a href="#2-2D动画实例分析" class="headerlink" title="2 2D动画实例分析"></a>2 2D动画实例分析</h2><h3 id="2-1-素材准备"><a href="#2-1-素材准备" class="headerlink" title="2.1 素材准备"></a>2.1 素材准备</h3><p>现在的商场里找不到Standard Assets了，苦了我这个菜鸟小白呀&gt;^&lt;，找了好久才发现已经下架了，好在还可以下载，放个链接：<a target="_blank" rel="noopener" href="https://download.unity3d.com/download_unity/a6cc294b73ee/WindowsStandardAssetsInstaller/UnityStandardAssetsSetup.exe">https://download.unity3d.com/download_unity/a6cc294b73ee/WindowsStandardAssetsInstaller/UnityStandardAssetsSetup.exe</a></p>
+<h4 id="2-1-1-资源导入与整理"><a href="#2-1-1-资源导入与整理" class="headerlink" title="2.1.1 资源导入与整理"></a>2.1.1 资源导入与整理</h4><p><strong>导入资源</strong></p>
+<p>在窗口Project -&gt; Assets文件夹下，导入本地已经下载好的资源包Standard Assets -&gt; 2D.unitypackage</p>
+<p><strong>整理资源</strong></p>
+<ul>
+<li>Project -&gt; Assets文件夹下，创建Resources文件夹</li>
+<li>Resources文件下，创建anims和sprites文件夹，分别存放动画资源和图片资源</li>
+<li>Assets&#x2F;Standard Assets&#x2F;2D&#x2F;sprites文件下，PlatformWhiteSprite.png文件和所有Robot开头的png图片文件，复制Assets&#x2F;Resources&#x2F;sprites文件夹</li>
+</ul>
+<h4 id="2-1-2-图片设置"><a href="#2-1-2-图片设置" class="headerlink" title="2.1.2 图片设置"></a>2.1.2 图片设置</h4><ul>
+<li><strong>参数设置</strong>：<ul>
+<li>Texture Type（贴图类型）：Sprite（2D and UI），即2D精灵图片</li>
+<li>Sprite Mode（精灵模式）：（1）Single，一张图片文件里只有一张图（2）Multiple，一张图片文件里有多张图</li>
+<li>这里除了PlatformWhiteSprite.png是单图，其他图片文件均为多图</li>
+<li>Pixels Per Unit（像素与图片大小的比例）：默认100，即100像素对应场景中的1米</li>
+<li>单击Apply，是设置生效</li>
+</ul>
+</li>
+<li>批量选中图片：按住Ctrl&#x2F;Shift键</li>
+<li><strong>多图模式切割</strong><ul>
+<li>编辑器菜单栏Window -&gt; Package Manager -&gt; 左上角加号后边选择Packages: Unity Registry，找到2D Sprite并安装</li>
+<li>选中图片，点击Sprite Editor，打开精灵编辑器</li>
+<li>常用功能Slice（切割），3种类型：Auto（自动）、Grid By Cell Size（根据图片大小划分网格）和Grid By Cell Count（根据行数列数划分网格）</li>
+<li>这里我们选用第二种类型，切割大小设置为275像素*275像素</li>
+<li>点击Apply，使设置生效</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-2-场景搭建与角色控制"><a href="#2-2-场景搭建与角色控制" class="headerlink" title="2.2 场景搭建与角色控制"></a>2.2 场景搭建与角色控制</h3><h4 id="2-2-1-场景搭建"><a href="#2-2-1-场景搭建" class="headerlink" title="2.2.1 场景搭建"></a>2.2.1 场景搭建</h4><img src="https://i.imgur.com/8ife9cC.png" alt="image-20250221162417072" style="zoom: 25%;" />
+
+<ul>
+<li><strong>新建场景</strong>：编辑器菜单栏File -&gt; New Scene，保存并命名为Test2DAnim：File -&gt; Save As，单击场景窗口2D按钮，切换到2D视角</li>
+<li><strong>地板搭建</strong>：使用PlatformWhiteSprite图片，添加Box Collider 2D组件，并适当调整，做成预制体存放于Resources&#x2F;prefabs文件夹下</li>
+<li><strong>玩家Player</strong>：使用RobotBoyIdleSprite切割好的任意图片<ul>
+<li>找到切割好的图片：Resources&#x2F;sprites&#x2F;RobotBoyidelSprite，点开类似于播放的小三角按钮</li>
+<li>添加Rigidbody2D组件，勾选Constraints选项中的Freeze Rotation Z选项，避免玩家跌倒</li>
+<li>添加Capsule Collider 2D组件，点击Edit Collider调整胶囊形状，胶囊体要比人物略小、左右对称、脚部对准</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-2-2-角色控制"><a href="#2-2-2-角色控制" class="headerlink" title="2.2.2 角色控制"></a>2.2.2 角色控制</h4><p>对玩家Player进行操作：</p>
+<ul>
+<li>添加资源自带的通用控制角色运动脚本，Platformer Character 2D</li>
+<li>添加资源自带的输入脚本（键盘、手柄等输入），Platformer 2D User Control</li>
+<li>指定角色脚本的应用<ul>
+<li>添加Animator组件，并在Resources&#x2F;anims文件下新建一个Animator Controller文件，放入Animator组件的Controller一栏</li>
+<li>创建一个名为GroundCheck的子物体，放于玩家脚下，用于地面检测</li>
+<li>在角色脚本Platformer Character 2D中，What Is Ground选项，默认是Nothing（没有），将它改为Everything</li>
+</ul>
+</li>
+</ul>
+<p>至此，玩家可以进行左右移动。</p>
+<h3 id="2-3-动画的制作步骤"><a href="#2-3-动画的制作步骤" class="headerlink" title="2.3 动画的制作步骤"></a>2.3 动画的制作步骤</h3><p>为角色加上动画，总的步骤分为3步：</p>
+<ul>
+<li>编辑动画：把素材中的图片串联起来，形成动画</li>
+<li>编辑动画状态机：把编辑好的动画，通过Animator有机结合起来，可以转换状态</li>
+<li>设置动画变量</li>
+</ul>
+<h4 id="2-3-1编辑动画"><a href="#2-3-1编辑动画" class="headerlink" title="2.3.1编辑动画"></a>2.3.1<strong>编辑动画</strong></h4><ul>
+<li><strong>打开Animation窗口</strong>：编辑器菜单栏Window→Animation→Animation</li>
+<li><strong>创建动画文件</strong>：选中Player，在Animation窗口点击Create，自定义路径和文件名，如Resources&#x2F;anims&#x2F;Idel.anim，做站立动画。注意，Animation窗口播放的是当前选中物体的动画。</li>
+<li><strong>放入动画素材</strong>：将Project窗口中，找到文件夹Assets&#x2F;Resources&#x2F;sprites&#x2F;RobotBoyIdelSprite，将该文件夹下的所有分割好的图片拖拽到Animation拖拽到Animation窗口中，即可自动形成动画序列</li>
+<li><strong>更改动画播放速率</strong>：Animation窗口的Samples（采样率、速率）参数，默认60，可适当更改</li>
+<li><strong>播放动画</strong>：选中Player，点击播放按钮，即可播放；点击左右短箭头，也可以在场景中预览</li>
+</ul>
+<p>由以上步骤，可以得到玩家的walk、run、jump等动画动作，到了这里我挺激动的，太兴奋辣~</p>
+<img src="https://i.imgur.com/tMe42lL.gif" alt="2danimtest-1" style="zoom: 25%;" />
+
+<h4 id="2-3-2-编辑动画状态机"><a href="#2-3-2-编辑动画状态机" class="headerlink" title="2.3.2 编辑动画状态机"></a>2.3.2 <strong>编辑动画状态机</strong></h4><ul>
+<li><strong>打开Animator窗口</strong>：编辑器菜单栏Window→Animation→Animator</li>
+<li><strong>增删状态</strong>：选中Player，Animator窗口中已有几个自动添加的新状态，通过右键状态或这拖拽动画文件，可以进行状态的增删。</li>
+<li><strong>状态连接</strong>：通过右键一个状态选择Make Transition即可创建一个到下一状态的箭头。</li>
+<li><strong>动画状态机中的状态</strong>：Entry是初始状态，是入口，其连接的第一个状态时默认状态;Any State时任意状态</li>
+</ul>
+<p>经过操作，可以得到一个状态机：</p>
+<img src="https://i.imgur.com/DYEThKe.png" alt="image-20250221162218987" style="zoom:50%;" />
+
+<h4 id="2-3-3-设置动画变量"><a href="#2-3-3-设置动画变量" class="headerlink" title="2.3.3 设置动画变量"></a>2.3.3 <strong>设置动画变量</strong></h4><p>有了状态转移图（动画状态机），我们该考虑状态之间的转换逻辑，即箭头的问题。</p>
+<ul>
+<li><p><strong>增加动画变量</strong>：在Animator窗口左上角，Paraments-&gt;在点小加号，即可增添不同类型的变量以及设置变量值</p>
+  <img src="https://i.imgur.com/bjX5i3C.png" alt="image-20250221163532352" style="zoom: 50%;" />
+</li>
+<li><p><strong>设置过度逻辑</strong>：单击箭头，即可查看一状态到另一状态的转移信息。如下如所示，我们在增设了动画变量后，可以在Conditions中看到变量的有关信息，通过速度是否高于或低于0.2，0.01，我们可以实现站立、走、跑三种状态之间的转移逻辑；通过是否碰到地面，可以实现跳跃、站立、任意状态三者之前的转移逻辑。</p>
+  <img src="https://i.imgur.com/blyYMJ0.png" alt="image-20250221163301559" style="zoom: 50%;" /></li>
+</ul>
+<p>至此，我们的角色在移动时有了动画动作。但是，实际运行时发现，延迟很高，这就涉及到了动画过渡。</p>
+<h4 id="2-3-4-动画过渡"><a href="#2-3-4-动画过渡" class="headerlink" title="2.3.4 动画过渡"></a>2.3.4 动画过渡</h4><img src="https://i.imgur.com/A0KgHQo.png" alt="image-20250221164523208" style="zoom:50%;" />
+
+<p>如图，是一个动画状态转移信息，关于时间的参数有两部分：</p>
+<ul>
+<li>Exit Time（退出时间），指切换到其他动画前，基于播放一段当前动画所用的时间。常用于不可中断的动画，如攻击收招、拔枪等动作。</li>
+<li>Transition Duration（状态转换时间），指从状态A切换到状态B的叠加状态时间，从上图可直观看出。用于动作的完美过渡，如真实的3D动作游戏，玩家的动作切换。</li>
+</ul>
+<p>但是我们现在的2D动画这两种设置所带来的效果，取消勾选图中的Has Exit Time，让这两部分置为0即可。</p>
+<p>至此，我们可以得到一个无延迟的动画转换。</p>
+<img src="https://i.imgur.com/YDtXqO8.gif" alt="2danimtest-2" style="zoom:50%;" />
+
+
+
+<p>不足的是，我们使用导入的资源，完全写好了脚本，无法自己动手实现一个，需要自己再找个项目练一练手，以便体验脚本在动画方面的使用。</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/about/">关于</a></li>
+        
+          <li><a href="/archives/">文章</a></li>
+        
+          <li><a href="/categories/">分类</a></li>
+        
+          <li><a href="/tags/">标签</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%8A%A8%E7%94%BB%E7%B3%BB%E7%BB%9F%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text">1 动画系统基本概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2D%E5%8A%A8%E7%94%BB%E5%AE%9E%E4%BE%8B%E5%88%86%E6%9E%90"><span class="toc-number">2.</span> <span class="toc-text">2 2D动画实例分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E7%B4%A0%E6%9D%90%E5%87%86%E5%A4%87"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 素材准备</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-1-%E8%B5%84%E6%BA%90%E5%AF%BC%E5%85%A5%E4%B8%8E%E6%95%B4%E7%90%86"><span class="toc-number">2.1.1.</span> <span class="toc-text">2.1.1 资源导入与整理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-2-%E5%9B%BE%E7%89%87%E8%AE%BE%E7%BD%AE"><span class="toc-number">2.1.2.</span> <span class="toc-text">2.1.2 图片设置</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E5%9C%BA%E6%99%AF%E6%90%AD%E5%BB%BA%E4%B8%8E%E8%A7%92%E8%89%B2%E6%8E%A7%E5%88%B6"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 场景搭建与角色控制</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-1-%E5%9C%BA%E6%99%AF%E6%90%AD%E5%BB%BA"><span class="toc-number">2.2.1.</span> <span class="toc-text">2.2.1 场景搭建</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-2-%E8%A7%92%E8%89%B2%E6%8E%A7%E5%88%B6"><span class="toc-number">2.2.2.</span> <span class="toc-text">2.2.2 角色控制</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E5%8A%A8%E7%94%BB%E7%9A%84%E5%88%B6%E4%BD%9C%E6%AD%A5%E9%AA%A4"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 动画的制作步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-1%E7%BC%96%E8%BE%91%E5%8A%A8%E7%94%BB"><span class="toc-number">2.3.1.</span> <span class="toc-text">2.3.1编辑动画</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-2-%E7%BC%96%E8%BE%91%E5%8A%A8%E7%94%BB%E7%8A%B6%E6%80%81%E6%9C%BA"><span class="toc-number">2.3.2.</span> <span class="toc-text">2.3.2 编辑动画状态机</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-3-%E8%AE%BE%E7%BD%AE%E5%8A%A8%E7%94%BB%E5%8F%98%E9%87%8F"><span class="toc-number">2.3.3.</span> <span class="toc-text">2.3.3 设置动画变量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-4-%E5%8A%A8%E7%94%BB%E8%BF%87%E6%B8%A1"><span class="toc-number">2.3.4.</span> <span class="toc-text">2.3.4 动画过渡</span></a></li></ol></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://loudmute.github.io/2023/02/21/38-UnityNote6-%E5%8A%A8%E7%94%BB%E7%B3%BB%E7%BB%9F/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://loudmute.github.io/2023/02/21/38-UnityNote6-%E5%8A%A8%E7%94%BB%E7%B3%BB%E7%BB%9F/&text=UnityNote6-动画系统"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://loudmute.github.io/2023/02/21/38-UnityNote6-%E5%8A%A8%E7%94%BB%E7%B3%BB%E7%BB%9F/&title=UnityNote6-动画系统"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://loudmute.github.io/2023/02/21/38-UnityNote6-%E5%8A%A8%E7%94%BB%E7%B3%BB%E7%BB%9F/&is_video=false&description=UnityNote6-动画系统"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=UnityNote6-动画系统&body=Check out this article: https://loudmute.github.io/2023/02/21/38-UnityNote6-%E5%8A%A8%E7%94%BB%E7%B3%BB%E7%BB%9F/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://loudmute.github.io/2023/02/21/38-UnityNote6-%E5%8A%A8%E7%94%BB%E7%B3%BB%E7%BB%9F/&title=UnityNote6-动画系统"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://loudmute.github.io/2023/02/21/38-UnityNote6-%E5%8A%A8%E7%94%BB%E7%B3%BB%E7%BB%9F/&title=UnityNote6-动画系统"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://loudmute.github.io/2023/02/21/38-UnityNote6-%E5%8A%A8%E7%94%BB%E7%B3%BB%E7%BB%9F/&title=UnityNote6-动画系统"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://loudmute.github.io/2023/02/21/38-UnityNote6-%E5%8A%A8%E7%94%BB%E7%B3%BB%E7%BB%9F/&title=UnityNote6-动画系统"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://loudmute.github.io/2023/02/21/38-UnityNote6-%E5%8A%A8%E7%94%BB%E7%B3%BB%E7%BB%9F/&name=UnityNote6-动画系统&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://loudmute.github.io/2023/02/21/38-UnityNote6-%E5%8A%A8%E7%94%BB%E7%B3%BB%E7%BB%9F/&t=UnityNote6-动画系统"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2026
+    loudmute
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a href="/tags/">标签</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

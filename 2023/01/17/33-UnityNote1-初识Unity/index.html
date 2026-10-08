@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="1 Unity的世界Unity中的世界全在编辑器中的全景视角scene或者游戏视角game中的显示框中，这个世界是游戏世界。   这个世界有两个基本概念：1.物体，2.组件。 一个物体挂载多个组件，组件为物体赋予了各种各样的属性（位置、大小、材质、颜色、所受重力等）。 一个物体也可以挂载到另一物体上，称之为子物体与父物体  我们只创建一个名为“张三”的物体不行，他还有五官、四肢、皮肤等物理属性，还">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UnityNote1-初识Unity">
+<meta property="og:url" content="https://loudmute.github.io/2023/01/17/33-UnityNote1-%E5%88%9D%E8%AF%86Unity/index.html">
+<meta property="og:site_name" content="loudmute">
+<meta property="og:description" content="1 Unity的世界Unity中的世界全在编辑器中的全景视角scene或者游戏视角game中的显示框中，这个世界是游戏世界。   这个世界有两个基本概念：1.物体，2.组件。 一个物体挂载多个组件，组件为物体赋予了各种各样的属性（位置、大小、材质、颜色、所受重力等）。 一个物体也可以挂载到另一物体上，称之为子物体与父物体  我们只创建一个名为“张三”的物体不行，他还有五官、四肢、皮肤等物理属性，还">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.imgur.com/IAlmtbh.png">
+<meta property="og:image" content="https://i.imgur.com/nGfozRB.png">
+<meta property="og:image" content="https://i.imgur.com/CDT7sGH.gif">
+<meta property="article:published_time" content="2023-01-17T08:38:05.000Z">
+<meta property="article:modified_time" content="2026-04-21T09:24:19.994Z">
+<meta property="article:author" content="loudmute">
+<meta property="article:tag" content="C#">
+<meta property="article:tag" content="Unity">
+<meta property="article:tag" content="游戏开发">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/IAlmtbh.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>UnityNote1-初识Unity</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a href="/tags/">标签</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2023/02/05/34-UnityNote2-%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E5%92%8C%E8%84%9A%E6%9C%AC%E7%BC%96%E7%A8%8B/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://loudmute.github.io/2023/01/17/33-UnityNote1-%E5%88%9D%E8%AF%86Unity/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://loudmute.github.io/2023/01/17/33-UnityNote1-%E5%88%9D%E8%AF%86Unity/&text=UnityNote1-初识Unity"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://loudmute.github.io/2023/01/17/33-UnityNote1-%E5%88%9D%E8%AF%86Unity/&title=UnityNote1-初识Unity"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://loudmute.github.io/2023/01/17/33-UnityNote1-%E5%88%9D%E8%AF%86Unity/&is_video=false&description=UnityNote1-初识Unity"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=UnityNote1-初识Unity&body=Check out this article: https://loudmute.github.io/2023/01/17/33-UnityNote1-%E5%88%9D%E8%AF%86Unity/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://loudmute.github.io/2023/01/17/33-UnityNote1-%E5%88%9D%E8%AF%86Unity/&title=UnityNote1-初识Unity"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://loudmute.github.io/2023/01/17/33-UnityNote1-%E5%88%9D%E8%AF%86Unity/&title=UnityNote1-初识Unity"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://loudmute.github.io/2023/01/17/33-UnityNote1-%E5%88%9D%E8%AF%86Unity/&title=UnityNote1-初识Unity"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://loudmute.github.io/2023/01/17/33-UnityNote1-%E5%88%9D%E8%AF%86Unity/&title=UnityNote1-初识Unity"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://loudmute.github.io/2023/01/17/33-UnityNote1-%E5%88%9D%E8%AF%86Unity/&name=UnityNote1-初识Unity&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://loudmute.github.io/2023/01/17/33-UnityNote1-%E5%88%9D%E8%AF%86Unity/&t=UnityNote1-初识Unity"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Unity%E7%9A%84%E4%B8%96%E7%95%8C"><span class="toc-number">1.</span> <span class="toc-text">1 Unity的世界</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Unity%E4%B8%AD%E7%9A%84%E8%84%9A%E6%9C%AC"><span class="toc-number">2.</span> <span class="toc-text">2 Unity中的脚本</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-Start-%E5%92%8CUpdate-%E4%BA%8B%E4%BB%B6"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 Start()和Update()事件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E7%89%A9%E4%BD%93%E7%9A%84%E8%BF%90%E5%8A%A8"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 物体的运动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E8%AF%BB%E5%8F%96%E5%92%8C%E5%A4%84%E7%90%86%E8%BE%93%E5%85%A5"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 读取和处理输入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-%E8%A7%A6%E5%8F%91%E5%99%A8%E4%BA%8B%E4%BB%B6"><span class="toc-number">2.4.</span> <span class="toc-text">2.4 触发器事件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-%E9%94%80%E6%AF%81%E7%89%A9%E4%BD%93"><span class="toc-number">2.5.</span> <span class="toc-text">2.5 销毁物体</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%AE%9E%E4%BE%8B%EF%BC%9ARun-a-Ball%EF%BC%81%EF%BC%81%EF%BC%81"><span class="toc-number">3.</span> <span class="toc-text">3 实例：Run a Ball！！！</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E6%B8%B8%E6%88%8F%E7%AE%80%E4%BB%8B"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 游戏简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E5%9C%BA%E6%99%AF%E6%90%AD%E5%BB%BA"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 场景搭建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E8%84%9A%E6%9C%AC%E7%BC%96%E5%86%99"><span class="toc-number">3.3.</span> <span class="toc-text">3.2 脚本编写</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        UnityNote1-初识Unity
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">loudmute</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2023-01-17T08:38:05.000Z" class="dt-published" itemprop="datePublished">2023-01-17</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/">游戏开发</a> › <a class="category-link" href="/categories/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/Unity/">Unity</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/C/" rel="tag">C#</a>, <a class="p-category" href="/tags/Unity/" rel="tag">Unity</a>, <a class="p-category" href="/tags/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/" rel="tag">游戏开发</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h2 id="1-Unity的世界"><a href="#1-Unity的世界" class="headerlink" title="1 Unity的世界"></a>1 Unity的世界</h2><p>Unity中的世界全在编辑器中的全景视角<code>scene</code>或者游戏视角<code>game</code>中的显示框中，这个世界是游戏世界。</p>
+<p><img src="https://i.imgur.com/IAlmtbh.png"></p>
+<ul>
+<li>这个世界有两个基本概念：1.物体，2.组件。</li>
+<li>一个物体挂载多个组件，组件为物体赋予了各种各样的属性（位置、大小、材质、颜色、所受重力等）。</li>
+<li>一个物体也可以挂载到另一物体上，称之为子物体与父物体</li>
+</ul>
+<p>我们只创建一个名为“张三”的物体不行，他还有五官、四肢、皮肤等物理属性，还有走路、说话等功能，甚至还有嬉笑怒骂等心理状况，这些需要我们在创建名为“张三”的物体之后，通过各种各样的组件来赋予。</p>
+<p>最常见最基本的组件是<code>Transform</code>组件，其包含三个属性：1. <code>position</code>（位置），2. <code>rotation</code>（旋转），3. <code>scale</code>（缩放）。一般，我们在创建一个物体后，该物体自动会含有该组件。</p>
+<h2 id="2-Unity中的脚本"><a href="#2-Unity中的脚本" class="headerlink" title="2 Unity中的脚本"></a>2 Unity中的脚本</h2><p>在各种组件之中，有一种组件，我们称之为“脚本（script）”，unity使用C#作为脚本语言。</p>
+<p><img src="https://i.imgur.com/nGfozRB.png"></p>
+<p>脚本是一种组件，他与其他组件的区别在于：我们可以通过用脚本编程，来精细地实现各种各样地功能，如批量创建物体、物体的复杂移动、两个物体之间发生碰撞后的反应，当然这说明使用脚本语言可以操作其他组件。</p>
+<p>由于游戏世界是程序的世界，那么这个世界的规则如何， 全凭我们如何通过脚本和引擎来设计。在这个世界中，物体及其物体间发生的事件，我们通过脚本中的来实现。</p>
+<p>接下来，让我们看一些脚本中的常见函数和代码。</p>
+<h3 id="2-1-Start-和Update-事件"><a href="#2-1-Start-和Update-事件" class="headerlink" title="2.1 Start()和Update()事件"></a>2.1 <code>Start()</code>和<code>Update()</code>事件</h3><figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Start()</span><br><span class="line">&#123;</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>Start()</code>函数是游戏的开始，是初始化函数。</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Update()</span><br><span class="line">&#123;</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>Update()</code>函数是游戏每一帧的更新，是程序的循环，在游戏中每帧执行一次。</p>
+<h3 id="2-2-物体的运动"><a href="#2-2-物体的运动" class="headerlink" title="2.2 物体的运动"></a>2.2 物体的运动</h3><p>我们在方才提到了，<code>Transform</code>组件是最常见最基本的组件，正是因为它包含了1. <code>position</code>（位置），2. <code>rotation</code>（旋转），3. <code>scale</code>（缩放）这三个最基本属性。</p>
+<p>我们可以直接在unity窗口中找到<code>Transform</code>-&gt;<code>position</code> 输入框，填入位置进行修改，这是一种显示修改，即我们可以看得见输入框。我们主要关注和讨论的，是隐式修改，即通过脚本代码来进行位置的修改，程序如下：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Start</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">	transform.Translate(<span class="number">1.5f</span>, <span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Start</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">	transform.position = </span><br><span class="line">		<span class="keyword">new</span> Vector3(<span class="number">1.5f</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>两种代码的最终效果是，物体沿X轴正方向移动了1.5米。其中方式1基于局部坐标系，修改物体的相对位置；方式2基于世界坐标系，修改物体的绝对位置。</p>
+<p>在<code>Start()</code>函数中运行，只在游戏开始改变物体位置一次，如果我们在<code>Update()</code>函数中运行该代码，游戏将进行持续的位移：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Update</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">	transform.Translate(<span class="number">1.5f</span>, <span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Update</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">	transform.position = </span><br><span class="line">		<span class="keyword">new</span> Vector3(<span class="number">1.5f</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们直到，<code>Updat()</code>函数在游戏中是每帧运行一次，即物体的移动是“距离&#x2F;帧”，我们往往需要的是”距离&#x2F;秒”，要让物体的运动由“每帧移动相同距离”变为”没秒移动相同距离”，代码需要修改：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Update</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">	transform.Translate(、</span><br><span class="line">	<span class="number">1.5f</span> * Time.deltaTime, </span><br><span class="line">	<span class="number">0</span>, </span><br><span class="line">	<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Update</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">	transform.position = </span><br><span class="line">		<span class="keyword">new</span> Vector3(</span><br><span class="line">		<span class="number">1.5f</span> * Time.deltaTime, </span><br><span class="line">		<span class="number">0</span>, </span><br><span class="line">		<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>Time.deltaTime</code>表示两帧之间的时间间隔，不同的<code>距离/帧</code>* <code>Time.deltaTime</code>&#x3D;相同的 <code>距离/秒</code> 。</p>
+<h3 id="2-3-读取和处理输入"><a href="#2-3-读取和处理输入" class="headerlink" title="2.3 读取和处理输入"></a>2.3 读取和处理输入</h3><p>在游戏中，物体的移动往往是横向和纵向移动，然后再加上游戏视角的移动（或者没有）。在unity中，我们往往先读入的是物体的横轴<code>Horizontal</code>（或者说横向或者说水平）和纵轴<code>Vertical</code>（或者说纵向或者说垂直）的方向幅度：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Update</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">float</span> x = Input.GetAxis(<span class="string">&quot;Horizontal&quot;</span>);</span><br><span class="line">	<span class="built_in">float</span> y = Input.GetAxis(<span class="string">&quot;Vertical&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>Input.GetAxis()</code>返回一个float类型的值，这个值是正侧化的，取值范围是 -1~1，其中<code>Vertical</code>和 <code>Horizontal</code>作为参数，指定获取哪个轴的方向幅度。</p>
+<p>读取了玩家输入方向幅度，物体还不会进行位置的移动，只有配合在相应方向幅度上的速度才会移动，下面代码是让物体做相应输入方向幅度的移动：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Update</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">float</span> x = Input.GetAxis(<span class="string">&quot;Horizontal&quot;</span>);</span><br><span class="line">	<span class="built_in">float</span> y = Input.GetAxis(<span class="string">&quot;Vertical&quot;</span>);</span><br><span class="line">    </span><br><span class="line">    transform.Translate(</span><br><span class="line">    	x * <span class="number">10</span> * Time.deltaTime,</span><br><span class="line">    	<span class="number">0</span>,</span><br><span class="line">    	y * <span class="number">10</span> * Time.deltaTime);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-4-触发器事件"><a href="#2-4-触发器事件" class="headerlink" title="2.4 触发器事件"></a>2.4 触发器事件</h3><p>我们刚才讨论的，全是一个物体的变化，接下来讨论运动的物体之间的相互影响。一个基本问题：如何判断一个物体是否碰到了另一个物体？</p>
+<p>我是可以使用触发器解决这个问题，触发器是一个组件，它定义了一个范围。当其他带有碰撞体组件的物体进入了这个范围时，就会产生一个触发事件，脚本捕捉到这个事件的时候，就可以做出相应的处理。</p>
+<p>在unity的窗口中，我们通过物体的组件界面来创建触发器：</p>
+<p><code>Inspector</code> -&gt; <code>Collider</code> -&gt; <code>Is Trigger</code></p>
+<p><code>Inspector</code> -&gt; 增加 <code>Rigidbody</code> -&gt; <code>Is Kinematic</code></p>
+<p>增添了该组件后，我们通过脚本语言来进行触发器事件的实现。</p>
+<p>触发器事件分为三种：开始触发（<code>OnTriggerEnter()</code>）、触发持续中（<code>OnTriggerStay()</code>）、结束触发（<code>OnTriggerExit</code>）</p>
+<p>以触发开始举个例子程序：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> UnityEngine;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Coin</span> : <span class="title">MonoBehaviour</span> &#123;</span><br><span class="line">      <span class="comment">//  触发开始事件OnTriggerEnter，参数为碰撞体信息，即另一个进入了该触发区域的物体的碰撞体</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">OnTriggerEnter</span>(<span class="params">Collider other</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        Debug.Log(other.name + <span class="string">&quot; 碰到了我&quot;</span>);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中 <code>Debug.Log()</code>向控制台输出指定信息，常用于查bug。</p>
+<h3 id="2-5-销毁物体"><a href="#2-5-销毁物体" class="headerlink" title="2.5 销毁物体"></a>2.5 销毁物体</h3><p>当本物体被另一物体碰到（进入触发器范围）时，本物体自动销毁，<code>Destroy()</code>函数用于销毁物体，其中参数 <code>gameObject</code>指代脚本挂载的物体：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> UnityEngine;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Coin</span> : <span class="title">MonoBehaviour</span> &#123;</span><br><span class="line">      <span class="comment">//  触发开始事件OnTriggerEnter，参数为碰撞体信息，即另一个进入了该触发区域的物体的碰撞体</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">OnTriggerEnter</span>(<span class="params">Collider other</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        Debug.Log(other.name + <span class="string">&quot; 碰到了我&quot;</span>);</span><br><span class="line">        Destroy(gameObject);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="3-实例：Run-a-Ball！！！"><a href="#3-实例：Run-a-Ball！！！" class="headerlink" title="3 实例：Run a Ball！！！"></a>3 实例：Run a Ball！！！</h2><p><img src="https://i.imgur.com/CDT7sGH.gif"></p>
+<h3 id="3-1-游戏简介"><a href="#3-1-游戏简介" class="headerlink" title="3.1 游戏简介"></a>3.1 游戏简介</h3><p>游戏中的小球会以恒定速度向前移动，而玩家控制着小球左右移动来躲避跑道中的障碍物。如果玩家能控制小球在跑道上移动一定距离则视为玩家通过关卡，触碰到障碍物或从跑道上掉落则视为失败。我们需要实现的功能点概括来说分为主角的运动、摄像机的移动和过关与失败的检测等。</p>
+<h3 id="3-2-场景搭建"><a href="#3-2-场景搭建" class="headerlink" title="3.2 场景搭建"></a>3.2 场景搭建</h3><ul>
+<li>一个球体，作为<code>Player</code></li>
+<li>一个很长的长方体，作为跑道</li>
+<li>很多个小长方体，作为障碍（由于重复，最好用预制体）</li>
+<li>摄像机作为球体的子物体，来实现游戏视角跟随玩家</li>
+</ul>
+<h3 id="3-2-脚本编写"><a href="#3-2-脚本编写" class="headerlink" title="3.2 脚本编写"></a>3.2 脚本编写</h3><p>玩家挂载的<code>Player</code>脚本：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> UnityEngine;</span><br><span class="line"><span class="keyword">using</span> UnityEngine.SceneManagement;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Player</span> : <span class="title">MonoBehaviour</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">float</span> control_speed = <span class="number">10</span>;<span class="comment">//玩家左右移动的速度</span></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">float</span> forward_speed = <span class="number">10</span>; <span class="comment">//小球自动向前的速度</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">Update</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//获取方向输入</span></span><br><span class="line">        <span class="built_in">float</span> x = Input.GetAxis(<span class="string">&quot;Horizontal&quot;</span>);</span><br><span class="line">        <span class="comment">//小球移动</span></span><br><span class="line">        transform.Translate(</span><br><span class="line">            x * control_speed * Time.deltaTime,</span><br><span class="line">            <span class="number">0</span>,</span><br><span class="line">            forward_speed * Time.deltaTime);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//判断玩家跑出跑道边缘</span></span><br><span class="line">        <span class="keyword">if</span> (transform.position.x &lt; <span class="number">-4</span> || transform.position.x &gt; <span class="number">4</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            transform.Translate(</span><br><span class="line">                <span class="number">0</span>,</span><br><span class="line">                <span class="number">-10</span> * Time.deltaTime,</span><br><span class="line">                <span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (transform.position.y &lt; <span class="number">-20</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            Time.timeScale = <span class="number">0</span>;</span><br><span class="line">            Debug.Log(<span class="string">&quot;Player:游戏结束!&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//玩家按R键重启</span></span><br><span class="line">        <span class="keyword">if</span> (Input.GetKeyDown(KeyCode.R))</span><br><span class="line">        &#123;</span><br><span class="line">            SceneManager.LoadScene(<span class="number">0</span>);</span><br><span class="line">            Time.timeScale = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>障碍物挂载的<code>BarrierColider</code>脚本：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> UnityEngine;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">BarrierColider</span> : <span class="title">MonoBehaviour</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">OnTriggerEnter</span>(<span class="params">Collider other</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (other.name == <span class="string">&quot;Player&quot;</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            Time.timeScale = <span class="number">0</span>;          </span><br><span class="line">            Debug.Log(<span class="string">&quot;Barrier:游戏结束!&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>跑道终点的空物体挂载的<code>FinalPoint</code>脚本：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> Unity.VisualScripting;</span><br><span class="line"><span class="keyword">using</span> UnityEngine;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">FinalPoint</span> : <span class="title">MonoBehaviour</span></span><br><span class="line">&#123;</span><br><span class="line">    GameObject endUI;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">Start</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        endUI = GameObject.Find(<span class="string">&quot;EndUI&quot;</span>);</span><br><span class="line">        endUI.SetActive(<span class="literal">false</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">OnTriggerEnter</span>(<span class="params">Collider other</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (other.name == <span class="string">&quot;Player&quot;</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            Time.timeScale = <span class="number">0</span>;</span><br><span class="line">            Debug.Log(<span class="string">&quot;FinalPoint:游戏通关!&quot;</span>);</span><br><span class="line">            endUI.SetActive(<span class="literal">true</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/about/">关于</a></li>
+        
+          <li><a href="/archives/">文章</a></li>
+        
+          <li><a href="/categories/">分类</a></li>
+        
+          <li><a href="/tags/">标签</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Unity%E7%9A%84%E4%B8%96%E7%95%8C"><span class="toc-number">1.</span> <span class="toc-text">1 Unity的世界</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Unity%E4%B8%AD%E7%9A%84%E8%84%9A%E6%9C%AC"><span class="toc-number">2.</span> <span class="toc-text">2 Unity中的脚本</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-Start-%E5%92%8CUpdate-%E4%BA%8B%E4%BB%B6"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 Start()和Update()事件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E7%89%A9%E4%BD%93%E7%9A%84%E8%BF%90%E5%8A%A8"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 物体的运动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E8%AF%BB%E5%8F%96%E5%92%8C%E5%A4%84%E7%90%86%E8%BE%93%E5%85%A5"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 读取和处理输入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-%E8%A7%A6%E5%8F%91%E5%99%A8%E4%BA%8B%E4%BB%B6"><span class="toc-number">2.4.</span> <span class="toc-text">2.4 触发器事件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-%E9%94%80%E6%AF%81%E7%89%A9%E4%BD%93"><span class="toc-number">2.5.</span> <span class="toc-text">2.5 销毁物体</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%AE%9E%E4%BE%8B%EF%BC%9ARun-a-Ball%EF%BC%81%EF%BC%81%EF%BC%81"><span class="toc-number">3.</span> <span class="toc-text">3 实例：Run a Ball！！！</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E6%B8%B8%E6%88%8F%E7%AE%80%E4%BB%8B"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 游戏简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E5%9C%BA%E6%99%AF%E6%90%AD%E5%BB%BA"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 场景搭建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E8%84%9A%E6%9C%AC%E7%BC%96%E5%86%99"><span class="toc-number">3.3.</span> <span class="toc-text">3.2 脚本编写</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://loudmute.github.io/2023/01/17/33-UnityNote1-%E5%88%9D%E8%AF%86Unity/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://loudmute.github.io/2023/01/17/33-UnityNote1-%E5%88%9D%E8%AF%86Unity/&text=UnityNote1-初识Unity"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://loudmute.github.io/2023/01/17/33-UnityNote1-%E5%88%9D%E8%AF%86Unity/&title=UnityNote1-初识Unity"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://loudmute.github.io/2023/01/17/33-UnityNote1-%E5%88%9D%E8%AF%86Unity/&is_video=false&description=UnityNote1-初识Unity"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=UnityNote1-初识Unity&body=Check out this article: https://loudmute.github.io/2023/01/17/33-UnityNote1-%E5%88%9D%E8%AF%86Unity/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://loudmute.github.io/2023/01/17/33-UnityNote1-%E5%88%9D%E8%AF%86Unity/&title=UnityNote1-初识Unity"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://loudmute.github.io/2023/01/17/33-UnityNote1-%E5%88%9D%E8%AF%86Unity/&title=UnityNote1-初识Unity"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://loudmute.github.io/2023/01/17/33-UnityNote1-%E5%88%9D%E8%AF%86Unity/&title=UnityNote1-初识Unity"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://loudmute.github.io/2023/01/17/33-UnityNote1-%E5%88%9D%E8%AF%86Unity/&title=UnityNote1-初识Unity"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://loudmute.github.io/2023/01/17/33-UnityNote1-%E5%88%9D%E8%AF%86Unity/&name=UnityNote1-初识Unity&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://loudmute.github.io/2023/01/17/33-UnityNote1-%E5%88%9D%E8%AF%86Unity/&t=UnityNote1-初识Unity"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2026
+    loudmute
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a href="/tags/">标签</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

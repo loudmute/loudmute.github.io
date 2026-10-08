@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="二. 通用函数：快速的逐元素数组函数通用函数是一种在ndarray数据中进行逐元素操作的函数，是一些简单函数的向量化封装。 一元通用函数（不全）：  abs，fabs 绝对值 sqrt 开平方 squre 平方 exp e的x方 log log10 log2 log1p 计算log值分别以e 10 2为底，其中log1p &#x3D;&#x3D; log(1+x) sign 计算元素符号值：1，0">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Numpy总结-2.通用函数">
+<meta property="og:url" content="https://loudmute.github.io/2023/07/07/5-Numpy%E6%80%BB%E7%BB%93-2-%E9%80%9A%E7%94%A8%E5%87%BD%E6%95%B0/index.html">
+<meta property="og:site_name" content="loudmute">
+<meta property="og:description" content="二. 通用函数：快速的逐元素数组函数通用函数是一种在ndarray数据中进行逐元素操作的函数，是一些简单函数的向量化封装。 一元通用函数（不全）：  abs，fabs 绝对值 sqrt 开平方 squre 平方 exp e的x方 log log10 log2 log1p 计算log值分别以e 10 2为底，其中log1p &#x3D;&#x3D; log(1+x) sign 计算元素符号值：1，0">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-07-07T09:54:05.000Z">
+<meta property="article:modified_time" content="2025-02-19T08:55:09.910Z">
+<meta property="article:author" content="loudmute">
+<meta property="article:tag" content="Numpy">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="编程">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Numpy总结-2.通用函数</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a href="/tags/">标签</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2023/07/07/6-Numpy%E6%80%BB%E7%BB%93-3-%E9%9D%A2%E5%90%91%E6%95%B0%E7%BB%84%E7%BC%96%E7%A8%8B/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2023/07/07/4-Numpy%E6%80%BB%E7%BB%93-1-Numpy-ndaay/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://loudmute.github.io/2023/07/07/5-Numpy%E6%80%BB%E7%BB%93-2-%E9%80%9A%E7%94%A8%E5%87%BD%E6%95%B0/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://loudmute.github.io/2023/07/07/5-Numpy%E6%80%BB%E7%BB%93-2-%E9%80%9A%E7%94%A8%E5%87%BD%E6%95%B0/&text=Numpy总结-2.通用函数"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://loudmute.github.io/2023/07/07/5-Numpy%E6%80%BB%E7%BB%93-2-%E9%80%9A%E7%94%A8%E5%87%BD%E6%95%B0/&title=Numpy总结-2.通用函数"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://loudmute.github.io/2023/07/07/5-Numpy%E6%80%BB%E7%BB%93-2-%E9%80%9A%E7%94%A8%E5%87%BD%E6%95%B0/&is_video=false&description=Numpy总结-2.通用函数"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Numpy总结-2.通用函数&body=Check out this article: https://loudmute.github.io/2023/07/07/5-Numpy%E6%80%BB%E7%BB%93-2-%E9%80%9A%E7%94%A8%E5%87%BD%E6%95%B0/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://loudmute.github.io/2023/07/07/5-Numpy%E6%80%BB%E7%BB%93-2-%E9%80%9A%E7%94%A8%E5%87%BD%E6%95%B0/&title=Numpy总结-2.通用函数"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://loudmute.github.io/2023/07/07/5-Numpy%E6%80%BB%E7%BB%93-2-%E9%80%9A%E7%94%A8%E5%87%BD%E6%95%B0/&title=Numpy总结-2.通用函数"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://loudmute.github.io/2023/07/07/5-Numpy%E6%80%BB%E7%BB%93-2-%E9%80%9A%E7%94%A8%E5%87%BD%E6%95%B0/&title=Numpy总结-2.通用函数"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://loudmute.github.io/2023/07/07/5-Numpy%E6%80%BB%E7%BB%93-2-%E9%80%9A%E7%94%A8%E5%87%BD%E6%95%B0/&title=Numpy总结-2.通用函数"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://loudmute.github.io/2023/07/07/5-Numpy%E6%80%BB%E7%BB%93-2-%E9%80%9A%E7%94%A8%E5%87%BD%E6%95%B0/&name=Numpy总结-2.通用函数&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://loudmute.github.io/2023/07/07/5-Numpy%E6%80%BB%E7%BB%93-2-%E9%80%9A%E7%94%A8%E5%87%BD%E6%95%B0/&t=Numpy总结-2.通用函数"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C-%E9%80%9A%E7%94%A8%E5%87%BD%E6%95%B0%EF%BC%9A%E5%BF%AB%E9%80%9F%E7%9A%84%E9%80%90%E5%85%83%E7%B4%A0%E6%95%B0%E7%BB%84%E5%87%BD%E6%95%B0"><span class="toc-number">1.</span> <span class="toc-text">二. 通用函数：快速的逐元素数组函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E5%85%83%E9%80%9A%E7%94%A8%E5%87%BD%E6%95%B0"><span class="toc-number">1.1.</span> <span class="toc-text">一元通用函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E5%85%83%E9%80%9A%E7%94%A8%E5%87%BD%E6%95%B0"><span class="toc-number">1.2.</span> <span class="toc-text">二元通用函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%94%E5%9B%9E%E5%A4%9A%E4%B8%AA%E6%95%B0%E7%BB%84%E7%9A%84%E9%80%9A%E7%94%A8%E5%87%BD%E6%95%B0"><span class="toc-number">1.3.</span> <span class="toc-text">返回多个数组的通用函数</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Numpy总结-2.通用函数
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">loudmute</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2023-07-07T09:54:05.000Z" class="dt-published" itemprop="datePublished">2023-07-07</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/%E7%BC%96%E7%A8%8B/">编程</a> › <a class="category-link" href="/categories/%E7%BC%96%E7%A8%8B/python/">python</a> › <a class="category-link" href="/categories/%E7%BC%96%E7%A8%8B/python/Numpy/">Numpy</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Numpy/" rel="tag">Numpy</a>, <a class="p-category" href="/tags/python/" rel="tag">python</a>, <a class="p-category" href="/tags/%E7%BC%96%E7%A8%8B/" rel="tag">编程</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="二-通用函数：快速的逐元素数组函数"><a href="#二-通用函数：快速的逐元素数组函数" class="headerlink" title="二. 通用函数：快速的逐元素数组函数"></a>二. 通用函数：快速的逐元素数组函数</h1><p>通用函数是一种在ndarray数据中进行逐元素操作的函数，是一些简单函数的向量化封装。</p>
+<p>一元通用函数（不全）：</p>
+<ul>
+<li>abs，fabs 绝对值</li>
+<li>sqrt 开平方</li>
+<li>squre 平方</li>
+<li>exp e的x方</li>
+<li>log log10 log2 log1p 计算log值分别以e 10 2为底，其中log1p &#x3D;&#x3D; log(1+x)</li>
+<li>sign 计算元素符号值：1，0，-1</li>
+<li>ceil 向上取整</li>
+<li>floor 向下取整</li>
+<li>modef 返回小数部分和整数部分</li>
+<li>isnan 返回布尔数组，判断是否位NAN</li>
+<li>iffinite, isinf 返回布尔数组，判断是否有限，无限</li>
+</ul>
+<p>二元通用函数（不全）：</p>
+<ul>
+<li>add 将数组元素对应相加</li>
+<li>subtract 在第二个数组中，将第一个数组元素去除<br>  。。。</li>
+</ul>
+<h3 id="一元通用函数"><a href="#一元通用函数" class="headerlink" title="一元通用函数"></a>一元通用函数</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">arr = np.arange(<span class="number">10</span>)</span><br><span class="line">arr</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># sqrt()函数</span></span><br><span class="line">np.sqrt(arr)</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>array([0.        , 1.        , 1.41421356, 1.73205081, 2.        ,
+       2.23606798, 2.44948974, 2.64575131, 2.82842712, 3.        ])
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># exp函数</span></span><br><span class="line">np.exp(arr)</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>array([1.00000000e+00, 2.71828183e+00, 7.38905610e+00, 2.00855369e+01,
+       5.45981500e+01, 1.48413159e+02, 4.03428793e+02, 1.09663316e+03,
+       2.98095799e+03, 8.10308393e+03])
+</code></pre>
+<h3 id="二元通用函数"><a href="#二元通用函数" class="headerlink" title="二元通用函数"></a>二元通用函数</h3><p>一元通用函数，接受一个数组，经过变换，返回一个数组</p>
+<p>二元通用函数，接受两个数组，经过变换，返回一个数组</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">x = np.random.randn(<span class="number">8</span>)</span><br><span class="line">y = np.random.randn(<span class="number">8</span>)</span><br><span class="line">x, y</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>(array([ 0.03426031, -0.43894563, -0.49428392,  0.73344936, -0.03165544,
+        -0.39385805,  0.78745897,  0.01248169]),
+ array([ 0.27524596,  0.87124251,  0.91514686, -0.2712566 , -0.68812282,
+        -1.3694955 , -0.84039565, -1.42753544]))
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># maximum函数，逐元素返回数组中较大的元素</span></span><br><span class="line">np.maximum(x, y)</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>array([ 0.27524596,  0.87124251,  0.91514686,  0.73344936, -0.03165544,
+       -0.39385805,  0.78745897,  0.01248169])
+</code></pre>
+<h3 id="返回多个数组的通用函数"><a href="#返回多个数组的通用函数" class="headerlink" title="返回多个数组的通用函数"></a>返回多个数组的通用函数</h3><p>modef()函数：返回一个浮点数数组值的小数部分和整数部分</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">arr = np.random.randn(<span class="number">7</span>) * <span class="number">5</span></span><br><span class="line">arr</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>array([-0.70137362,  0.49296571,  2.22867794,  3.40408469, -2.85728641,
+        0.75160556,  3.01566449])
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">remainder, whole_part = np.modf(arr)</span><br><span class="line">remainder, whole_part</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>(array([-0.70137362,  0.49296571,  0.22867794,  0.40408469, -0.85728641,
+         0.75160556,  0.01566449]),
+ array([-0.,  0.,  2.,  3., -2.,  0.,  3.]))
+</code></pre>
+<p>通用函数接受一个可选参数out，允许对数组按位置操作</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">arr</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>array([-0.70137362,  0.49296571,  2.22867794,  3.40408469, -2.85728641,
+        0.75160556,  3.01566449])
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">np.sqrt(arr)</span><br></pre></td></tr></table></figure>
+
+<pre><code>C:\Users\86136\AppData\Local\Temp\ipykernel_42584\2296558006.py:1: RuntimeWarning: invalid value encountered in sqrt
+  np.sqrt(arr)
+
+
+
+
+
+array([       nan, 0.70211517, 1.49287573, 1.84501618,        nan,
+       0.86695188, 1.73656687])
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">arr</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>array([-0.70137362,  0.49296571,  2.22867794,  3.40408469, -2.85728641,
+        0.75160556,  3.01566449])
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">np.sqrt(arr, arr)</span><br></pre></td></tr></table></figure>
+
+<pre><code>C:\Users\86136\AppData\Local\Temp\ipykernel_42584\269955669.py:1: RuntimeWarning: invalid value encountered in sqrt
+  np.sqrt(arr, arr)
+
+
+
+
+
+array([       nan, 0.70211517, 1.49287573, 1.84501618,        nan,
+       0.86695188, 1.73656687])
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">arr</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>array([       nan, 0.70211517, 1.49287573, 1.84501618,        nan,
+       0.86695188, 1.73656687])
+</code></pre>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/about/">关于</a></li>
+        
+          <li><a href="/archives/">文章</a></li>
+        
+          <li><a href="/categories/">分类</a></li>
+        
+          <li><a href="/tags/">标签</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C-%E9%80%9A%E7%94%A8%E5%87%BD%E6%95%B0%EF%BC%9A%E5%BF%AB%E9%80%9F%E7%9A%84%E9%80%90%E5%85%83%E7%B4%A0%E6%95%B0%E7%BB%84%E5%87%BD%E6%95%B0"><span class="toc-number">1.</span> <span class="toc-text">二. 通用函数：快速的逐元素数组函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E5%85%83%E9%80%9A%E7%94%A8%E5%87%BD%E6%95%B0"><span class="toc-number">1.1.</span> <span class="toc-text">一元通用函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E5%85%83%E9%80%9A%E7%94%A8%E5%87%BD%E6%95%B0"><span class="toc-number">1.2.</span> <span class="toc-text">二元通用函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%94%E5%9B%9E%E5%A4%9A%E4%B8%AA%E6%95%B0%E7%BB%84%E7%9A%84%E9%80%9A%E7%94%A8%E5%87%BD%E6%95%B0"><span class="toc-number">1.3.</span> <span class="toc-text">返回多个数组的通用函数</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://loudmute.github.io/2023/07/07/5-Numpy%E6%80%BB%E7%BB%93-2-%E9%80%9A%E7%94%A8%E5%87%BD%E6%95%B0/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://loudmute.github.io/2023/07/07/5-Numpy%E6%80%BB%E7%BB%93-2-%E9%80%9A%E7%94%A8%E5%87%BD%E6%95%B0/&text=Numpy总结-2.通用函数"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://loudmute.github.io/2023/07/07/5-Numpy%E6%80%BB%E7%BB%93-2-%E9%80%9A%E7%94%A8%E5%87%BD%E6%95%B0/&title=Numpy总结-2.通用函数"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://loudmute.github.io/2023/07/07/5-Numpy%E6%80%BB%E7%BB%93-2-%E9%80%9A%E7%94%A8%E5%87%BD%E6%95%B0/&is_video=false&description=Numpy总结-2.通用函数"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Numpy总结-2.通用函数&body=Check out this article: https://loudmute.github.io/2023/07/07/5-Numpy%E6%80%BB%E7%BB%93-2-%E9%80%9A%E7%94%A8%E5%87%BD%E6%95%B0/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://loudmute.github.io/2023/07/07/5-Numpy%E6%80%BB%E7%BB%93-2-%E9%80%9A%E7%94%A8%E5%87%BD%E6%95%B0/&title=Numpy总结-2.通用函数"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://loudmute.github.io/2023/07/07/5-Numpy%E6%80%BB%E7%BB%93-2-%E9%80%9A%E7%94%A8%E5%87%BD%E6%95%B0/&title=Numpy总结-2.通用函数"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://loudmute.github.io/2023/07/07/5-Numpy%E6%80%BB%E7%BB%93-2-%E9%80%9A%E7%94%A8%E5%87%BD%E6%95%B0/&title=Numpy总结-2.通用函数"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://loudmute.github.io/2023/07/07/5-Numpy%E6%80%BB%E7%BB%93-2-%E9%80%9A%E7%94%A8%E5%87%BD%E6%95%B0/&title=Numpy总结-2.通用函数"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://loudmute.github.io/2023/07/07/5-Numpy%E6%80%BB%E7%BB%93-2-%E9%80%9A%E7%94%A8%E5%87%BD%E6%95%B0/&name=Numpy总结-2.通用函数&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://loudmute.github.io/2023/07/07/5-Numpy%E6%80%BB%E7%BB%93-2-%E9%80%9A%E7%94%A8%E5%87%BD%E6%95%B0/&t=Numpy总结-2.通用函数"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2026
+    loudmute
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a href="/tags/">标签</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

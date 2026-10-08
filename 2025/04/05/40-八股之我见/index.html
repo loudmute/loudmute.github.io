@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="虚函数和多态 https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;629281871  https:&#x2F;&#x2F;www.bilibili.com&#x2F;video&#x2F;BV1Ts4y1u7rA&#x2F;?spm_id_from&#x3D;333.337.search-card.all.click&amp;vd_source&#x3D;814330d3527237342cf943b532e345a5   Q：什么是虚函数虚函数是指父类中的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++中的一些常见问题">
+<meta property="og:url" content="https://loudmute.github.io/2025/04/05/40-%E5%85%AB%E8%82%A1%E4%B9%8B%E6%88%91%E8%A7%81/index.html">
+<meta property="og:site_name" content="loudmute">
+<meta property="og:description" content="虚函数和多态 https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;629281871  https:&#x2F;&#x2F;www.bilibili.com&#x2F;video&#x2F;BV1Ts4y1u7rA&#x2F;?spm_id_from&#x3D;333.337.search-card.all.click&amp;vd_source&#x3D;814330d3527237342cf943b532e345a5   Q：什么是虚函数虚函数是指父类中的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.imgur.com/evbWO9c.png">
+<meta property="og:image" content="https://i.imgur.com/Y3Ybr6q.png">
+<meta property="og:image" content="https://i.imgur.com/1nvMTPt.png">
+<meta property="article:published_time" content="2025-04-05T09:43:54.000Z">
+<meta property="article:modified_time" content="2026-04-21T09:34:28.009Z">
+<meta property="article:author" content="loudmute">
+<meta property="article:tag" content="八股">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/evbWO9c.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>C++中的一些常见问题</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a href="/tags/">标签</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2025/03/02/29-%E5%93%88%E5%B7%A5%E5%A4%A7OSNote7-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://loudmute.github.io/2025/04/05/40-%E5%85%AB%E8%82%A1%E4%B9%8B%E6%88%91%E8%A7%81/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://loudmute.github.io/2025/04/05/40-%E5%85%AB%E8%82%A1%E4%B9%8B%E6%88%91%E8%A7%81/&text=C++中的一些常见问题"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://loudmute.github.io/2025/04/05/40-%E5%85%AB%E8%82%A1%E4%B9%8B%E6%88%91%E8%A7%81/&title=C++中的一些常见问题"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://loudmute.github.io/2025/04/05/40-%E5%85%AB%E8%82%A1%E4%B9%8B%E6%88%91%E8%A7%81/&is_video=false&description=C++中的一些常见问题"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=C++中的一些常见问题&body=Check out this article: https://loudmute.github.io/2025/04/05/40-%E5%85%AB%E8%82%A1%E4%B9%8B%E6%88%91%E8%A7%81/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://loudmute.github.io/2025/04/05/40-%E5%85%AB%E8%82%A1%E4%B9%8B%E6%88%91%E8%A7%81/&title=C++中的一些常见问题"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://loudmute.github.io/2025/04/05/40-%E5%85%AB%E8%82%A1%E4%B9%8B%E6%88%91%E8%A7%81/&title=C++中的一些常见问题"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://loudmute.github.io/2025/04/05/40-%E5%85%AB%E8%82%A1%E4%B9%8B%E6%88%91%E8%A7%81/&title=C++中的一些常见问题"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://loudmute.github.io/2025/04/05/40-%E5%85%AB%E8%82%A1%E4%B9%8B%E6%88%91%E8%A7%81/&title=C++中的一些常见问题"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://loudmute.github.io/2025/04/05/40-%E5%85%AB%E8%82%A1%E4%B9%8B%E6%88%91%E8%A7%81/&name=C++中的一些常见问题&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://loudmute.github.io/2025/04/05/40-%E5%85%AB%E8%82%A1%E4%B9%8B%E6%88%91%E8%A7%81/&t=C++中的一些常见问题"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%99%9A%E5%87%BD%E6%95%B0%E5%92%8C%E5%A4%9A%E6%80%81"><span class="toc-number">1.</span> <span class="toc-text">虚函数和多态</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9A%E4%BB%80%E4%B9%88%E6%98%AF%E8%99%9A%E5%87%BD%E6%95%B0"><span class="toc-number">1.1.</span> <span class="toc-text">Q：什么是虚函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9A%E8%99%9A%E5%87%BD%E6%95%B0%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="toc-number">1.2.</span> <span class="toc-text">Q：虚函数的实现原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9A%E8%99%9A%E5%87%BD%E6%95%B0%E7%9A%84%E8%B0%83%E7%94%A8%E6%97%B6%E6%9C%BA"><span class="toc-number">1.3.</span> <span class="toc-text">Q：虚函数的调用时机</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9A%E7%B1%BB%E7%9A%84%E5%AF%B9%E8%B1%A1%E3%80%81%E8%99%9A%E5%87%BD%E6%95%B0%E8%A1%A8%E3%80%81%E5%87%BD%E6%95%B0%E3%80%81%E8%99%9A%E5%87%BD%E6%95%B0%E5%9C%A8%E5%86%85%E5%AD%98%E4%B8%AD%E7%9A%84%E4%BD%93%E7%8E%B0"><span class="toc-number">1.4.</span> <span class="toc-text">Q：类的对象、虚函数表、函数、虚函数在内存中的体现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9A%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E5%92%8C%E6%9E%90%E6%9E%84%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E8%99%9A%E5%87%BD%E6%95%B0"><span class="toc-number">1.5.</span> <span class="toc-text">Q：构造函数和析构函数调用虚函数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%94%9F%E5%8A%A8%E7%90%86%E8%A7%A3"><span class="toc-number">1.5.1.</span> <span class="toc-text">生动理解</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9AC%E8%AF%AD%E8%A8%80%E5%8F%AF%E4%BB%A5%E5%AE%9E%E7%8E%B0%E8%99%9A%E5%87%BD%E6%95%B0%E6%9C%BA%E5%88%B6%E5%90%97"><span class="toc-number">1.6.</span> <span class="toc-text">Q：C语言可以实现虚函数机制吗</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9A%E4%BB%80%E4%B9%88%E6%98%AF%E5%A4%9A%E6%80%81"><span class="toc-number">1.7.</span> <span class="toc-text">Q：什么是多态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9AC-%E7%9A%84%E5%A4%9A%E6%80%81%E6%98%AF%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E7%9A%84"><span class="toc-number">1.8.</span> <span class="toc-text">Q：C++的多态是如何实现的</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%EF%BC%8C%E7%BB%A7%E6%89%BF%E9%97%AE%E9%A2%98"><span class="toc-number">2.</span> <span class="toc-text">内存模型，继承问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9AC-%E4%B8%AD%E7%B1%BB%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%EF%BC%88%E5%B8%83%E5%B1%80%EF%BC%89"><span class="toc-number">2.1.</span> <span class="toc-text">Q：C++中类对象的内存模型（布局）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%94%9F%E5%8A%A8%E7%90%86%E8%A7%A3-1"><span class="toc-number">2.1.1.</span> <span class="toc-text">生动理解</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9A%E8%8F%B1%E5%BD%A2%EF%BC%88%E9%92%BB%E7%9F%B3%EF%BC%89%E7%BB%A7%E6%89%BF%E5%AD%98%E5%9C%A8%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%8C%E8%AF%A5%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3"><span class="toc-number">2.2.</span> <span class="toc-text">Q：菱形（钻石）继承存在什么问题，该如何解决</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="toc-number">3.</span> <span class="toc-text">内存管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9Ac-%E6%98%AF%E5%A6%82%E4%BD%95%E5%81%9A%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E7%9A%84%EF%BC%88%E5%86%85%E5%AD%98%E5%88%86%E5%8C%BA%EF%BC%89"><span class="toc-number">3.1.</span> <span class="toc-text">Q：c++是如何做内存管理的（内存分区）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9A%E5%A0%86%E5%92%8C%E6%A0%88%E7%9A%84%E5%86%85%E5%AD%98%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB"><span class="toc-number">3.2.</span> <span class="toc-text">Q：堆和栈的内存有什么区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9AC-%E5%92%8CC%E5%88%86%E5%88%AB%E7%94%A8%E4%BB%80%E4%B9%88%E5%87%BD%E6%95%B0%E5%88%86%E9%85%8D%E5%92%8C%E9%87%8A%E6%94%BE%E5%86%85%E5%AD%98%EF%BC%9F%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%E8%83%BD%E5%90%A6%E6%B7%B7%E7%94%A8%EF%BC%9F"><span class="toc-number">3.3.</span> <span class="toc-text">Q：C++和C分别用什么函数分配和释放内存？有什么区别？能否混用？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9A%E5%86%85%E5%AD%98%E5%AF%B9%E9%BD%90%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%E4%B8%BA%E4%BB%80%E4%B9%88%EF%BC%9F%E6%80%8E%E4%B9%88%E5%81%9A%EF%BC%9F"><span class="toc-number">3.4.</span> <span class="toc-text">Q：内存对齐是什么？为什么？怎么做？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2"><span class="toc-number">4.</span> <span class="toc-text">类型转换</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9AC-%E6%9C%89%E5%93%AA%E4%BA%9B%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%E7%9A%84%E6%96%B9%E6%B3%95%EF%BC%88%E5%85%B3%E9%94%AE%E5%AD%97%EF%BC%89%EF%BC%8C%E5%90%84%E8%87%AA%E6%9C%89%E4%BB%80%E4%B9%88%E4%BD%9C%E7%94%A8%EF%BC%9F"><span class="toc-number">4.1.</span> <span class="toc-text">Q：C++有哪些类型转换的方法（关键字），各自有什么作用？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9Astatic-cast-%E5%92%8C-dynamic-cast%E7%9A%84%E5%BC%82%E5%90%8C%E7%82%B9"><span class="toc-number">4.2.</span> <span class="toc-text">Q：static_cast 和 dynamic_cast的异同点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88"><span class="toc-number">5.</span> <span class="toc-text">智能指针</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9AC-%E4%B8%AD%E7%9A%84%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%8C%E5%90%84%E8%87%AA%E6%9C%89%E4%BB%80%E4%B9%88%E4%BD%9C%E7%94%A8%EF%BC%9F"><span class="toc-number">5.1.</span> <span class="toc-text">Q：C++中的智能指针有哪些，各自有什么作用？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9Ashared-ptr%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E3%80%81%E6%8B%B7%E8%B4%9D%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E5%92%8C%E8%B5%8B%E5%80%BC%E8%BF%90%E7%AE%97%E7%AC%A6%E6%80%8E%E4%B9%88%E5%86%99%EF%BC%9Fshared-ptr%E6%98%AF%E4%B8%8D%E6%98%AF%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%EF%BC%9F"><span class="toc-number">5.2.</span> <span class="toc-text">Q：shared_ptr的实现原理是什么？构造函数、拷贝构造函数和赋值运算符怎么写？shared_ptr是不是线程安全的？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9Aweak-ptr%E6%98%AF%E4%B8%BA%E4%BA%86%E8%A7%A3%E5%86%B3shared-ptr%E7%9A%84%E5%BE%AA%E7%8E%AF%E5%BC%95%E7%94%A8%E9%97%AE%E9%A2%98%EF%BC%8C%E9%82%A3%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E7%94%A8raw-ptr%E6%9D%A5%E8%A7%A3%E5%86%B3%E8%BF%99%E4%B8%AA%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="toc-number">5.3.</span> <span class="toc-text">Q：weak_ptr是为了解决shared_ptr的循环引用问题，那为什么不用raw ptr来解决这个问题？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E5%AD%97"><span class="toc-number">6.</span> <span class="toc-text">关键字</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#const%E4%BD%9C%E7%94%A8%EF%BC%9F%E6%8C%87%E9%92%88%E5%B8%B8%E9%87%8F%E5%92%8C%E5%B8%B8%E9%87%8F%E6%8C%87%E9%92%88%EF%BC%9Fconst%E4%BF%AE%E9%A5%B0%E7%9A%84%E5%87%BD%E6%95%B0%E8%83%BD%E5%90%A6%E9%87%8D%E8%BD%BD%EF%BC%9F"><span class="toc-number">6.1.</span> <span class="toc-text">const作用？指针常量和常量指针？const修饰的函数能否重载？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#static%E4%BD%9C%E7%94%A8%EF%BC%9Fstatic%E5%8F%98%E9%87%8F%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E5%88%9D%E5%A7%8B%E5%8C%96%EF%BC%9F"><span class="toc-number">6.2.</span> <span class="toc-text">static作用？static变量什么时候初始化？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E5%AD%97-1"><span class="toc-number">7.</span> <span class="toc-text">关键字</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9Aconst%E4%BD%9C%E7%94%A8%EF%BC%9F%E6%8C%87%E9%92%88%E5%B8%B8%E9%87%8F%E5%92%8C%E5%B8%B8%E9%87%8F%E6%8C%87%E9%92%88%EF%BC%9Fconst%E4%BF%AE%E9%A5%B0%E7%9A%84%E5%87%BD%E6%95%B0%E8%83%BD%E5%90%A6%E9%87%8D%E8%BD%BD%EF%BC%9F"><span class="toc-number">7.1.</span> <span class="toc-text">Q：const作用？指针常量和常量指针？const修饰的函数能否重载？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9Astatic%E4%BD%9C%E7%94%A8%EF%BC%9Fstatic%E5%8F%98%E9%87%8F%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E5%88%9D%E5%A7%8B%E5%8C%96%EF%BC%9F"><span class="toc-number">7.2.</span> <span class="toc-text">Q：static作用？static变量什么时候初始化？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9Aextern%E7%9A%84%E4%BD%9C%E7%94%A8%EF%BC%9F"><span class="toc-number">7.3.</span> <span class="toc-text">Q：extern的作用？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9Aexplicit%E7%9A%84%E4%BD%9C%E7%94%A8%EF%BC%9F"><span class="toc-number">7.4.</span> <span class="toc-text">Q：explicit的作用？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9Aconstexpr%E7%9A%84%E4%BD%9C%E7%94%A8%EF%BC%9F"><span class="toc-number">7.5.</span> <span class="toc-text">Q：constexpr的作用？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9Avolatile%E7%9A%84%E4%BD%9C%E7%94%A8%EF%BC%9F"><span class="toc-number">7.6.</span> <span class="toc-text">Q：volatile的作用？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9Amutable%E7%9A%84%E4%BD%9C%E7%94%A8%EF%BC%9F"><span class="toc-number">7.7.</span> <span class="toc-text">Q：mutable的作用？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9Aauto%E5%92%8Cdecltype%E7%9A%84%E4%BD%9C%E7%94%A8%E5%92%8C%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-number">7.8.</span> <span class="toc-text">Q：auto和decltype的作用和区别？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8B%B7%E8%B4%9D%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="toc-number">8.</span> <span class="toc-text">拷贝构造函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E8%87%AA%E5%B7%B1%E5%AE%9A%E4%B9%89%E6%8B%B7%E8%B4%9D%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%EF%BC%9F"><span class="toc-number">8.1.</span> <span class="toc-text">Q：为什么要自己定义拷贝构造函数？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9A%E6%B7%B1%E6%8B%B7%E8%B4%9D%E5%92%8C%E6%B5%85%E6%8B%B7%E8%B4%9D%EF%BC%9F"><span class="toc-number">8.2.</span> <span class="toc-text">Q：深拷贝和浅拷贝？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9A%E4%BB%80%E4%B9%88%E6%98%AF%E7%A7%BB%E5%8A%A8%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%EF%BC%8C%E5%92%8C%E6%8B%B7%E8%B4%9D%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-number">8.3.</span> <span class="toc-text">Q：什么是移动构造函数，和拷贝构造函数有什么区别？</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        C++中的一些常见问题
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">loudmute</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-04-05T09:43:54.000Z" class="dt-published" itemprop="datePublished">2025-04-05</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/%E5%85%AB%E8%82%A1/">八股</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/%E5%85%AB%E8%82%A1/" rel="tag">八股</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h2 id="虚函数和多态"><a href="#虚函数和多态" class="headerlink" title="虚函数和多态"></a>虚函数和多态</h2><ul>
+<li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/629281871">https://zhuanlan.zhihu.com/p/629281871</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Ts4y1u7rA/?spm_id_from=333.337.search-card.all.click&vd_source=814330d3527237342cf943b532e345a5">https://www.bilibili.com/video/BV1Ts4y1u7rA/?spm_id_from=333.337.search-card.all.click&amp;vd_source=814330d3527237342cf943b532e345a5</a></p>
+</li>
+</ul>
+<h3 id="Q：什么是虚函数"><a href="#Q：什么是虚函数" class="headerlink" title="Q：什么是虚函数"></a>Q：什么是虚函数</h3><p>虚函数是指父类中的一种特殊类型的函数，继承父类的子类可以对函数进行自己的实现。虚函数的调用取决于对象的实际类型，而不是指针或应用的类型。在C++中，使用关键字“Virtual”来定义虚函数。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Base</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">foo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Base::foo()&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Derived</span> : <span class="keyword">public</span> Base &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">foo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Derived::foo()&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Derived obj;</span><br><span class="line">    Base* ptr = &amp;obj;</span><br><span class="line">    ptr-&gt;<span class="built_in">foo</span>(); <span class="comment">// 输出：Derived::foo()</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Q：虚函数的实现原理"><a href="#Q：虚函数的实现原理" class="headerlink" title="Q：虚函数的实现原理"></a>Q：虚函数的实现原理</h3><p>虚函数通过虚函数表来实现，虚函数表存放着一个类中所有虚函数的地址。在一个含虚函数的类中，其在内存中会存放一个虚函数表指针指向虚函数表，再通过虚函数表中存放的虚函数地址找到相应的虚函数。当一个子类对虚函数进行重写时，该子类虚函数表中存放的虚函数地址会发生改变，改为重写后的虚函数地址。因此，当我们用父类指针调用子类对象时，可以指明实际调用的函数。</p>
+<p>在编译器编译期间，若类中存在虚函数，将会为该类在内存中生成一个虚函数表，并且构造函数在编译后会为该类生成一个虚函数表指针指向虚函数表的地址；在经过编译、链接生成可执行文件在内存中执行时，程序可以通过该路线找到相应类型对象的虚函数并执行。</p>
+<h3 id="Q：虚函数的调用时机"><a href="#Q：虚函数的调用时机" class="headerlink" title="Q：虚函数的调用时机"></a>Q：虚函数的调用时机</h3><p>当通过指针或引用方式调用虚函数时，是在程序执行时确定的。使用指针或引用方式调用虚函数时，指针指向子类对象内存的起始地址，也就是子类的虚函数表指针，然后可以找到所指的子类对象的虚函数表。</p>
+<p>当通过值调用方式调用虚函数是，是在程序编译时确定的。使用值调用方式时，编译器会生成一个新的基类对象，派生类中的数据丢失，虚函数表指针指向基类虚函数表地址。</p>
+<h3 id="Q：类的对象、虚函数表、函数、虚函数在内存中的体现"><a href="#Q：类的对象、虚函数表、函数、虚函数在内存中的体现" class="headerlink" title="Q：类的对象、虚函数表、函数、虚函数在内存中的体现"></a>Q：类的对象、虚函数表、函数、虚函数在内存中的体现</h3><p>同一类的不同对象，共享同一张虚函数表；不同类的虚函数表不同。</p>
+<p>对于一个没有声明虚函数、只含有普通函数的类来说，其实例化的对象在内从中只有成员变量占空间；</p>
+<p>对于一个声明了虚函数的类来说，其实例化的对象在内存中除了成员变量，还会有虚函数表指针占空间。</p>
+<img src="https://i.imgur.com/evbWO9c.png" alt="image-20250402152405432" style="zoom:25%;" />
+
+<img src="https://i.imgur.com/Y3Ybr6q.png" alt="image-20250402151023227" style="zoom: 25%;" />
+
+<h3 id="Q：构造函数和析构函数调用虚函数"><a href="#Q：构造函数和析构函数调用虚函数" class="headerlink" title="Q：构造函数和析构函数调用虚函数"></a>Q：构造函数和析构函数调用虚函数</h3><p>调用构造函数时，先进行父类成分的构造，再进行子类的构造。在父类构造期间，子类的特有成分还未构造，此时调用子类的虚函数，将因为数据未初始化而报错；调用析构函数时，先进行子类成分的析构，再进行父类的系统。在父类析构期间，子类的特有成分已经销毁，此时调用子类的虚函数，将因为数据不存在而报错。</p>
+<h4 id="生动理解"><a href="#生动理解" class="headerlink" title="生动理解"></a>生动理解</h4><p>形象例子， <strong>建筑工地比喻</strong></p>
+<p>想象你在盖一栋房子（创建对象）：</p>
+<p><strong>1. 构造函数阶段（正在盖房子）</strong></p>
+<ul>
+<li><strong>基类构造函数</strong>：正在打地基（基类部分）</li>
+<li><strong>派生类构造函数</strong>：还没开始盖上层建筑（派生类部分）</li>
+</ul>
+<p>👉 这时候如果工人问：”怎么装修房间？”（调用虚函数）：</p>
+<ul>
+<li>你只能按<strong>地基施工手册</strong>（基类版本）回答</li>
+<li>不能按<strong>完整房屋设计图</strong>（派生类版本）回答，因为上层还没盖好！</li>
+</ul>
+<p> <strong>2. 析构函数阶段（拆房子）</strong></p>
+<ul>
+<li><strong>派生类析构函数</strong>：已经拆掉了上层建筑</li>
+<li><strong>基类析构函数</strong>：正在拆地基</li>
+</ul>
+<p>👉 这时候如果工人问：”怎么处理房间？”（调用虚函数）：</p>
+<ul>
+<li>你只能用<strong>地基拆除手册</strong>（基类版本）回答</li>
+<li>不能用<strong>完整房屋方案</strong>（派生类版本），因为上层已经拆掉了！</li>
+</ul>
+<h3 id="Q：C语言可以实现虚函数机制吗"><a href="#Q：C语言可以实现虚函数机制吗" class="headerlink" title="Q：C语言可以实现虚函数机制吗"></a>Q：C语言可以实现虚函数机制吗</h3><p>可以，需要手动构造父子关系、创建虚函数表、填充虚函数表、设置虚函数表指针并指向虚函数表、当虚函数重写时修改函数指针。</p>
+<h3 id="Q：什么是多态"><a href="#Q：什么是多态" class="headerlink" title="Q：什么是多态"></a>Q：什么是多态</h3><p>多态是面向对象的三大特性之一，指同一方法在不同的对象中可以有不同的实现。多态的本质是<strong>通过抽象建立契约，通过继承实现变化</strong>，最终达到用统一接口处理多种对象的目的。</p>
+<h3 id="Q：C-的多态是如何实现的"><a href="#Q：C-的多态是如何实现的" class="headerlink" title="Q：C++的多态是如何实现的"></a>Q：C++的多态是如何实现的</h3><p>C++的多态可以分为编译时多态和运行时多态。编译时多态又称为静态联编，通过重载和模板来实现；运行时多态又称为动态联编，通过继承和虚函数实现。</p>
+<h2 id="内存模型，继承问题"><a href="#内存模型，继承问题" class="headerlink" title="内存模型，继承问题"></a>内存模型，继承问题</h2><h3 id="Q：C-中类对象的内存模型（布局）"><a href="#Q：C-中类对象的内存模型（布局）" class="headerlink" title="Q：C++中类对象的内存模型（布局）"></a>Q：C++中类对象的内存模型（布局）</h3><ol>
+<li>一个类对象：若有虚函数，虚函数指针表始终放在内存空间的头部；成员变量按照声明顺序布局；若有继承，按照继承顺序分配内存</li>
+<li>多继承：每个有虚函数的父类会维护自己的虚函数表，并按照继承顺序布局；子类重写虚函数时，每个包含该虚函数的父类会更新虚函数表中的虚函数地址；子类新增虚函数时，会追加到一个父类的虚函数表末尾</li>
+<li>菱形（钻石）继承：使用虚继承的内存布局为，按继承顺序排列的父类、子类、公共基类，公共基类的成员只存储一份放在对象内存尾部</li>
+</ol>
+<h4 id="生动理解-1"><a href="#生动理解-1" class="headerlink" title="生动理解"></a>生动理解</h4><p>多继承</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[ Father::vptr ] → 指向Father的虚表</span><br><span class="line">[ Father::a ]</span><br><span class="line">[ Mother::vptr ] → 指向Mother的虚表</span><br><span class="line">[ Mother::b ]</span><br><span class="line">[ Child新增成员 ]</span><br></pre></td></tr></table></figure>
+
+<p>虚继承+菱形继承</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Child 对象内存布局：</span><br><span class="line">[ Dad::vbptr ]       → 指向虚基类表（记录Grandpa的偏移量）</span><br><span class="line">[ Mom::vbptr ]       → 同上</span><br><span class="line">[ Child自有成员 ]     （若无则为空）</span><br><span class="line">[ Grandpa::treasure ] （共享的唯一副本）</span><br></pre></td></tr></table></figure>
+
+<h3 id="Q：菱形（钻石）继承存在什么问题，该如何解决"><a href="#Q：菱形（钻石）继承存在什么问题，该如何解决" class="headerlink" title="Q：菱形（钻石）继承存在什么问题，该如何解决"></a>Q：菱形（钻石）继承存在什么问题，该如何解决</h3><p>存在二义性问题，即两个父类都会继承基类的数据和方法，当子类使用基类所包含的数据和方法时，编译器不知道该数据和方法来自哪一个父类；使用虚继承解决问题，父类继承基类加上virtual修饰符，此时两个父类共享一份基类数据，避免了二义性问题。</p>
+<h2 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h2><ul>
+<li><p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1nv4y1M7TW/?spm_id_from=333.337.search-card.all.click&vd_source=814330d3527237342cf943b532e345a5">https://www.bilibili.com/video/BV1nv4y1M7TW/?spm_id_from=333.337.search-card.all.click&amp;vd_source=814330d3527237342cf943b532e345a5</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1CS4y1E7JR/?spm_id_from=333.1387.homepage.video_card.click&vd_source=814330d3527237342cf943b532e345a5">https://www.bilibili.com/video/BV1CS4y1E7JR/?spm_id_from=333.1387.homepage.video_card.click&amp;vd_source=814330d3527237342cf943b532e345a5</a></p>
+</li>
+</ul>
+<h3 id="Q：c-是如何做内存管理的（内存分区）"><a href="#Q：c-是如何做内存管理的（内存分区）" class="headerlink" title="Q：c++是如何做内存管理的（内存分区）"></a>Q：c++是如何做内存管理的（内存分区）</h3><img src="https://i.imgur.com/1nvMTPt.png" alt="image-20250403161158696" style="zoom: 50%;" />
+
+
+
+<ol>
+<li>栈区：在执行函数时，函数内局部变量的存储单元都可以在栈上创建，函数执行结束后这些存储单元会被自动释放，能分配较小的内存空间</li>
+<li>堆区：使用malloc和free动态分配和释放内存，能够分配较大的内存空间</li>
+<li>自由存储区：C++通过new和delete动态分配和释放对象的抽象概念，其具体实现可能是堆区或者内存池；自由存储区是C++的术语，堆区是C语言和操作系统的术语</li>
+<li>全局或静态变量区：用于存储全局变量和静态变量</li>
+<li>常量存储区：专门用来存放常量</li>
+<li>代码区：用于存放函数体的二进制代码</li>
+</ol>
+<h3 id="Q：堆和栈的内存有什么区别"><a href="#Q：堆和栈的内存有什么区别" class="headerlink" title="Q：堆和栈的内存有什么区别"></a>Q：堆和栈的内存有什么区别</h3><ol>
+<li>堆中的内存通过手动申请和释放，栈中的内存通过操作系统自动申请和释放</li>
+<li>堆能分配的内存较大，栈能分配的内存较小</li>
+<li>在堆中分配和释放内存会产生碎片，在栈中不会产生碎片</li>
+<li>堆的分配效率较低，栈的分配效率较高</li>
+<li>堆地址从低向上，栈地址从高向下</li>
+</ol>
+<h3 id="Q：C-和C分别用什么函数分配和释放内存？有什么区别？能否混用？"><a href="#Q：C-和C分别用什么函数分配和释放内存？有什么区别？能否混用？" class="headerlink" title="Q：C++和C分别用什么函数分配和释放内存？有什么区别？能否混用？"></a>Q：C++和C分别用什么函数分配和释放内存？有什么区别？能否混用？</h3><p>C++使用new和delete来分配和释放内存，C使用malloc和free来分配和释放内存；</p>
+<p><strong>区别：</strong></p>
+<ol>
+<li>new&#x2F;delete进行两步操作：1）内存的分配和释放 2）构造或析构函数的调用；malloc&#x2F;free执行内存的分配和释放</li>
+<li>new返回类型指针，类型安全；malloc返回void*，再强制转成成所需类型</li>
+<li>new从自由存储区获取分配内存；malloc从堆区获取分配内存</li>
+<li>new无需指定分配内存大小；malloc需要指定分配内存大小</li>
+</ol>
+<p>因此，从内存分配以及函数的操作执行上来说，不能混用</p>
+<h3 id="Q：内存对齐是什么？为什么？怎么做？"><a href="#Q：内存对齐是什么？为什么？怎么做？" class="headerlink" title="Q：内存对齐是什么？为什么？怎么做？"></a>Q：内存对齐是什么？为什么？怎么做？</h3><p>**是什么：**内存对齐指数据在内存中的起始地址必须是特定整数的倍数</p>
+<p>**为什么：**CPU从内存中存取数据是按照一个固定长度的字节来进行的，比如在32位机上，CPU每次存取4字节的数据；如不进行对齐，对于存放不规范的数据可能要存取两次两块地址中的数据，再进行掩码、移位等操作，再写入目标寄存器内存，效率很低；由此可以提高数据读取速度，更好利用内存。</p>
+<p><strong>怎么做：</strong></p>
+<p>对齐原则：</p>
+<p>1）结构体首地址对齐：结构体变量的起始内存地址必须能被其最宽基本类型成员的对齐值整除  </p>
+<p>2）成员偏移量对齐：结构体每个成员相对于结构体起始地址的偏移量，必须是该成员自身大小的整数倍</p>
+<p> 3）结构体总大小对齐：结构体的总大小必须是最宽基本类型成员大小的整数倍</p>
+<p>如何做：声明数据结构时，字节对齐的成员依次声明，小成员组合在一起，不要再字节对齐的成员之间声明小成员</p>
+<h2 id="类型转换"><a href="#类型转换" class="headerlink" title="类型转换"></a>类型转换</h2><h3 id="Q：C-有哪些类型转换的方法（关键字），各自有什么作用？"><a href="#Q：C-有哪些类型转换的方法（关键字），各自有什么作用？" class="headerlink" title="Q：C++有哪些类型转换的方法（关键字），各自有什么作用？"></a>Q：C++有哪些类型转换的方法（关键字），各自有什么作用？</h3><ul>
+<li>**static_cast：**静态类型转换（编译时类型转换）；可以进行基本数据类型之间的转换，类层次间的向上转换（安全）和向下转换（不安全）；不能进行无关类型指针间的转换，不能改变对象的底层const</li>
+<li>**dynamic_cast：**动态类型转换（运行时类型转换）；使用时父类一定要有虚函数，否则编译不通过；主要用于基类和派生类之间的间的向上和向下转换；运行时检查类型是否匹配，失败则返回nullptr(指针)或抛异常(引用)</li>
+<li>**const_cast：**用于移除变量的const修饰符，也可反向添加const修饰符；只能用于指针或引用类型，不能直接用于普通变量；只能修改底层const（是否const)，不能修改顶层const（变量本身是否const)。</li>
+<li>**reinterpret_cast：**重新解释数据的二进制内存，比特位不变，类型要变；可以转换任何的内置数据类型、任何指针类型、是甚至转换内置数据类型为指针；无视类型安全或常量的情形，十分危险</li>
+</ul>
+<h3 id="Q：static-cast-和-dynamic-cast的异同点"><a href="#Q：static-cast-和-dynamic-cast的异同点" class="headerlink" title="Q：static_cast 和 dynamic_cast的异同点"></a>Q：static_cast 和 dynamic_cast的异同点</h3><p>二者都做类型安全检查，前者在编译时进行，后者运行时进行；二者都可以做基类和派生类之间的转换，前者只有上行转换安全下行不安全，后者上行和下行都安全；后者要求基类有虚函数，前者不要求；</p>
+<h2 id="智能指针"><a href="#智能指针" class="headerlink" title="智能指针"></a>智能指针</h2><h3 id="Q：C-中的智能指针有哪些，各自有什么作用？"><a href="#Q：C-中的智能指针有哪些，各自有什么作用？" class="headerlink" title="Q：C++中的智能指针有哪些，各自有什么作用？"></a>Q：C++中的智能指针有哪些，各自有什么作用？</h3><p>智能指针主要解决内存泄漏的问题，可以自动地释放内存。智能指针本身是一个类，当函数结束的时候会调用析构函数，并由析构函数释放内存空间。智能指针分为1）独占指针(unique_ptr)	2）共享指针(shared_ptr)	3）弱指针(weak_ptr)</p>
+<ul>
+<li>unique_ptr：是<strong>独占所有权</strong>的指针，保证同一时间段只有一个指针能管理资源，可通过move操作转让所有权</li>
+<li>shared_ptr：多指针共享同一资源，采用了<strong>引用计数</strong>的机制当技术归0时自动释放内存</li>
+<li>weak_ptr：是shared_ptr的观察者，<strong>不增加引用计数</strong>，用于解决循环引用或检查资源是否存在，需要通过lock()转为shared_ptr才能访问资源</li>
+</ul>
+<h3 id="Q：shared-ptr的实现原理是什么？构造函数、拷贝构造函数和赋值运算符怎么写？shared-ptr是不是线程安全的？"><a href="#Q：shared-ptr的实现原理是什么？构造函数、拷贝构造函数和赋值运算符怎么写？shared-ptr是不是线程安全的？" class="headerlink" title="Q：shared_ptr的实现原理是什么？构造函数、拷贝构造函数和赋值运算符怎么写？shared_ptr是不是线程安全的？"></a>Q：shared_ptr的实现原理是什么？构造函数、拷贝构造函数和赋值运算符怎么写？shared_ptr是不是线程安全的？</h3><p><strong>实现原理</strong></p>
+<p>shared_ptr的实现原理基于引用技术和控制块机制，每个shared_ptr对象内部存储一个指向目标资源的指针和一个指向控制块的指针；控制块中存放计数器，用于记录指向资源的shared_ptr的个数；当引用技术归0时自动释放资源内存，控制块也随之销毁；</p>
+<p><strong>怎么写</strong></p>
+<ol>
+<li>构造函数：将指针指向对象，引用计数置为1</li>
+<li>拷贝构造函数：将指针指向对象，引用技术++</li>
+<li>复制运算符：等号左边的原指针的引用计数-1，若降为0则释放所指对象的内存空间；等号右边的新指针引用技术+1</li>
+</ol>
+<p><strong>是不是线程安全</strong></p>
+<p>shared_ptr的引用本身是安全的；其管理的对象的线程安全无法保障；多个线程同时操作同一个shared_ptr对象也不是安全的。</p>
+<h3 id="Q：weak-ptr是为了解决shared-ptr的循环引用问题，那为什么不用raw-ptr来解决这个问题？"><a href="#Q：weak-ptr是为了解决shared-ptr的循环引用问题，那为什么不用raw-ptr来解决这个问题？" class="headerlink" title="Q：weak_ptr是为了解决shared_ptr的循环引用问题，那为什么不用raw ptr来解决这个问题？"></a>Q：weak_ptr是为了解决shared_ptr的循环引用问题，那为什么不用raw ptr来解决这个问题？</h3><p>使用weak_ptr不会增加引用计数的增加，当shred_ptr全部销毁时所指对象将会被释放，weak_ptr不再持有有效指针，调用.lock()会返回一个空的shared_ptr（相当于null_ptr）；使用raw ptr指针，对象内存释放后，其指向原地址成为一个悬垂指针，访问时成为一个未定义行为。</p>
+<h2 id="关键字"><a href="#关键字" class="headerlink" title="关键字"></a>关键字</h2><h3 id="const作用？指针常量和常量指针？const修饰的函数能否重载？"><a href="#const作用？指针常量和常量指针？const修饰的函数能否重载？" class="headerlink" title="const作用？指针常量和常量指针？const修饰的函数能否重载？"></a>const作用？指针常量和常量指针？const修饰的函数能否重载？</h3><p><strong>const作用</strong>：const修饰符用来定义常量，具有不可变形；在类中，被const修改的函数不能修改类中的成员</p>
+<p><strong>指针常量和常量指针</strong>：指针常量指，该指针是常量不可修改；常量指针指，指针指向对象是常量不可修改；这涉及底层const和顶层const的概念，底层const指自身指向的对象不可变，顶层const指自身不能变，生动一点就是const在里头锁自己const在外头锁对象</p>
+<p><strong>能否重载</strong>：可以重载。<strong>需要补充！</strong></p>
+<h3 id="static作用？static变量什么时候初始化？"><a href="#static作用？static变量什么时候初始化？" class="headerlink" title="static作用？static变量什么时候初始化？"></a>static作用？static变量什么时候初始化？</h3><p><strong>作用：</strong></p>
+<p>1）函数作用域-&gt;静态局部变量：该变量指进行一次初始化，函数每次调用时该变量不会重置</p>
+<p>2）类作用域-&gt;静态类成员和静态类函数：该静态类成员在内存中只有一份，所有该类对象共享；静态类函数可以独立于对象，通过类直接调用</p>
+<p>3）文件作用域-&gt;静态全局变量和函数：限制只在当前文件内部使用，其他文件不可访问，避免重定义的问题</p>
+<p><strong>什么时候初始化：</strong></p>
+<p>静态局部变量在首次使用时分配内存并初始化；静态全局变量和类静态成员变量在main()函数执行之前的静态初始化过程中分配内存并初始化</p>
+<h2 id="关键字-1"><a href="#关键字-1" class="headerlink" title="关键字"></a>关键字</h2><h3 id="Q：const作用？指针常量和常量指针？const修饰的函数能否重载？"><a href="#Q：const作用？指针常量和常量指针？const修饰的函数能否重载？" class="headerlink" title="Q：const作用？指针常量和常量指针？const修饰的函数能否重载？"></a>Q：const作用？指针常量和常量指针？const修饰的函数能否重载？</h3><p><strong>const作用</strong>：const修饰符用来定义常量，具有不可变形；在类中，被const修改的函数不能修改类中的成员</p>
+<p><strong>指针常量和常量指针</strong>：指针常量指，该指针是常量不可修改；常量指针指，指针指向对象是常量不可修改；这涉及底层const和顶层const的概念，底层const指自身指向的对象不可变，顶层const指自身不能变，生动一点就是const在里头锁自己const在外头锁对象</p>
+<p><strong>能否重载</strong>：可以重载。<strong>需要补充！</strong></p>
+<h3 id="Q：static作用？static变量什么时候初始化？"><a href="#Q：static作用？static变量什么时候初始化？" class="headerlink" title="Q：static作用？static变量什么时候初始化？"></a>Q：static作用？static变量什么时候初始化？</h3><p><strong>作用：</strong></p>
+<ol>
+<li><p>函数作用域-&gt;静态局部变量：该变量指进行一次初始化，函数每次调用时该变量不会重置</p>
+</li>
+<li><p>类作用域-&gt;静态类成员和静态类函数：该静态类成员在内存中只有一份，所有该类对象共享；静态类函数可以独立于对象，通过类直接调用</p>
+</li>
+<li><p>文件作用域-&gt;静态全局变量和函数：限制只在当前文件内部使用，其他文件不可访问，避免重定义的问题</p>
+</li>
+</ol>
+<p><strong>什么时候初始化：</strong></p>
+<p>静态局部变量在首次使用时分配内存并初始化；静态全局变量和类静态成员变量在main()函数执行之前的静态初始化过程中分配内存并初始化</p>
+<h3 id="Q：extern的作用？"><a href="#Q：extern的作用？" class="headerlink" title="Q：extern的作用？"></a>Q：extern的作用？</h3><ol>
+<li>作为函数或全局变量的函数声明时，提示编译器在外部文件寻求定义</li>
+<li>与”C”连用如extern “C” void func()时，提示编译器在编译该函数时按C语言规则编译，避免命名冲突</li>
+</ol>
+<h3 id="Q：explicit的作用？"><a href="#Q：explicit的作用？" class="headerlink" title="Q：explicit的作用？"></a>Q：explicit的作用？</h3><p>​	禁止编译器自动自动进行隐式类型转换，要求必须显示调用构造函数或转换操作</p>
+<h3 id="Q：constexpr的作用？"><a href="#Q：constexpr的作用？" class="headerlink" title="Q：constexpr的作用？"></a>Q：constexpr的作用？</h3><p>可以让变量或函数在编译器期间就能计算出结果，而不是等到运行时，省去了运行时间；还可以用于需要编译期常量的地方，如数组、模板参数</p>
+<h3 id="Q：volatile的作用？"><a href="#Q：volatile的作用？" class="headerlink" title="Q：volatile的作用？"></a>Q：volatile的作用？</h3><p>告诉编译器每次访问volatile修饰的变量时都直接从内存中读取最新值，而不是使用寄存器中的缓存指。对于易变的变量，保证每次可以看到它的最新值</p>
+<h3 id="Q：mutable的作用？"><a href="#Q：mutable的作用？" class="headerlink" title="Q：mutable的作用？"></a>Q：mutable的作用？</h3><ol>
+<li>允许const成员函数或const对象修改该变量</li>
+<li>用于修饰lambda表达式，可以修改捕获的常量</li>
+</ol>
+<h3 id="Q：auto和decltype的作用和区别？"><a href="#Q：auto和decltype的作用和区别？" class="headerlink" title="Q：auto和decltype的作用和区别？"></a>Q：auto和decltype的作用和区别？</h3><p>auto，猜类型，侧重简化；decltype，照镜子，侧重精确</p>
+<p>**作用：**auto是自动类型推导，让编译器根据初始化表达式推导变量类型；decltype是精确类型检查，直接返回表达式的静态类型</p>
+<p><strong>却别</strong>：auto基于值的初始化推断类型，可能丢失引用；decltype基于表达式的形式推断类型，完全保留原类型特性</p>
+<h2 id="拷贝构造函数"><a href="#拷贝构造函数" class="headerlink" title="拷贝构造函数"></a>拷贝构造函数</h2><h3 id="Q：为什么要自己定义拷贝构造函数？"><a href="#Q：为什么要自己定义拷贝构造函数？" class="headerlink" title="Q：为什么要自己定义拷贝构造函数？"></a>Q：为什么要自己定义拷贝构造函数？</h3><p>编译器默认的生成的浅拷贝会导致多个对象共享同一份资源，引发重复释放、数据竞争等问题</p>
+<h3 id="Q：深拷贝和浅拷贝？"><a href="#Q：深拷贝和浅拷贝？" class="headerlink" title="Q：深拷贝和浅拷贝？"></a>Q：深拷贝和浅拷贝？</h3><p>浅拷贝复制指向对象的指针，不复制对象本身，新旧对象会共享同一块内存；深拷贝不仅复制指向对象的指针，还会复制对象，新旧对象使用不同的内存</p>
+<h3 id="Q：什么是移动构造函数，和拷贝构造函数有什么区别？"><a href="#Q：什么是移动构造函数，和拷贝构造函数有什么区别？" class="headerlink" title="Q：什么是移动构造函数，和拷贝构造函数有什么区别？"></a>Q：什么是移动构造函数，和拷贝构造函数有什么区别？</h3><p>移动构造函数传递的参数是一个右值引用，不重新分配内存而是直接接管原对象内存，并在移动后销毁原对象；拷贝构造函数传递的参数是一个左值引用，需要重新分配内存，性能较低</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/about/">关于</a></li>
+        
+          <li><a href="/archives/">文章</a></li>
+        
+          <li><a href="/categories/">分类</a></li>
+        
+          <li><a href="/tags/">标签</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%99%9A%E5%87%BD%E6%95%B0%E5%92%8C%E5%A4%9A%E6%80%81"><span class="toc-number">1.</span> <span class="toc-text">虚函数和多态</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9A%E4%BB%80%E4%B9%88%E6%98%AF%E8%99%9A%E5%87%BD%E6%95%B0"><span class="toc-number">1.1.</span> <span class="toc-text">Q：什么是虚函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9A%E8%99%9A%E5%87%BD%E6%95%B0%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="toc-number">1.2.</span> <span class="toc-text">Q：虚函数的实现原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9A%E8%99%9A%E5%87%BD%E6%95%B0%E7%9A%84%E8%B0%83%E7%94%A8%E6%97%B6%E6%9C%BA"><span class="toc-number">1.3.</span> <span class="toc-text">Q：虚函数的调用时机</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9A%E7%B1%BB%E7%9A%84%E5%AF%B9%E8%B1%A1%E3%80%81%E8%99%9A%E5%87%BD%E6%95%B0%E8%A1%A8%E3%80%81%E5%87%BD%E6%95%B0%E3%80%81%E8%99%9A%E5%87%BD%E6%95%B0%E5%9C%A8%E5%86%85%E5%AD%98%E4%B8%AD%E7%9A%84%E4%BD%93%E7%8E%B0"><span class="toc-number">1.4.</span> <span class="toc-text">Q：类的对象、虚函数表、函数、虚函数在内存中的体现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9A%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E5%92%8C%E6%9E%90%E6%9E%84%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E8%99%9A%E5%87%BD%E6%95%B0"><span class="toc-number">1.5.</span> <span class="toc-text">Q：构造函数和析构函数调用虚函数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%94%9F%E5%8A%A8%E7%90%86%E8%A7%A3"><span class="toc-number">1.5.1.</span> <span class="toc-text">生动理解</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9AC%E8%AF%AD%E8%A8%80%E5%8F%AF%E4%BB%A5%E5%AE%9E%E7%8E%B0%E8%99%9A%E5%87%BD%E6%95%B0%E6%9C%BA%E5%88%B6%E5%90%97"><span class="toc-number">1.6.</span> <span class="toc-text">Q：C语言可以实现虚函数机制吗</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9A%E4%BB%80%E4%B9%88%E6%98%AF%E5%A4%9A%E6%80%81"><span class="toc-number">1.7.</span> <span class="toc-text">Q：什么是多态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9AC-%E7%9A%84%E5%A4%9A%E6%80%81%E6%98%AF%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E7%9A%84"><span class="toc-number">1.8.</span> <span class="toc-text">Q：C++的多态是如何实现的</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%EF%BC%8C%E7%BB%A7%E6%89%BF%E9%97%AE%E9%A2%98"><span class="toc-number">2.</span> <span class="toc-text">内存模型，继承问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9AC-%E4%B8%AD%E7%B1%BB%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%EF%BC%88%E5%B8%83%E5%B1%80%EF%BC%89"><span class="toc-number">2.1.</span> <span class="toc-text">Q：C++中类对象的内存模型（布局）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%94%9F%E5%8A%A8%E7%90%86%E8%A7%A3-1"><span class="toc-number">2.1.1.</span> <span class="toc-text">生动理解</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9A%E8%8F%B1%E5%BD%A2%EF%BC%88%E9%92%BB%E7%9F%B3%EF%BC%89%E7%BB%A7%E6%89%BF%E5%AD%98%E5%9C%A8%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%8C%E8%AF%A5%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3"><span class="toc-number">2.2.</span> <span class="toc-text">Q：菱形（钻石）继承存在什么问题，该如何解决</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="toc-number">3.</span> <span class="toc-text">内存管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9Ac-%E6%98%AF%E5%A6%82%E4%BD%95%E5%81%9A%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E7%9A%84%EF%BC%88%E5%86%85%E5%AD%98%E5%88%86%E5%8C%BA%EF%BC%89"><span class="toc-number">3.1.</span> <span class="toc-text">Q：c++是如何做内存管理的（内存分区）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9A%E5%A0%86%E5%92%8C%E6%A0%88%E7%9A%84%E5%86%85%E5%AD%98%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB"><span class="toc-number">3.2.</span> <span class="toc-text">Q：堆和栈的内存有什么区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9AC-%E5%92%8CC%E5%88%86%E5%88%AB%E7%94%A8%E4%BB%80%E4%B9%88%E5%87%BD%E6%95%B0%E5%88%86%E9%85%8D%E5%92%8C%E9%87%8A%E6%94%BE%E5%86%85%E5%AD%98%EF%BC%9F%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%E8%83%BD%E5%90%A6%E6%B7%B7%E7%94%A8%EF%BC%9F"><span class="toc-number">3.3.</span> <span class="toc-text">Q：C++和C分别用什么函数分配和释放内存？有什么区别？能否混用？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9A%E5%86%85%E5%AD%98%E5%AF%B9%E9%BD%90%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%E4%B8%BA%E4%BB%80%E4%B9%88%EF%BC%9F%E6%80%8E%E4%B9%88%E5%81%9A%EF%BC%9F"><span class="toc-number">3.4.</span> <span class="toc-text">Q：内存对齐是什么？为什么？怎么做？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2"><span class="toc-number">4.</span> <span class="toc-text">类型转换</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9AC-%E6%9C%89%E5%93%AA%E4%BA%9B%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%E7%9A%84%E6%96%B9%E6%B3%95%EF%BC%88%E5%85%B3%E9%94%AE%E5%AD%97%EF%BC%89%EF%BC%8C%E5%90%84%E8%87%AA%E6%9C%89%E4%BB%80%E4%B9%88%E4%BD%9C%E7%94%A8%EF%BC%9F"><span class="toc-number">4.1.</span> <span class="toc-text">Q：C++有哪些类型转换的方法（关键字），各自有什么作用？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9Astatic-cast-%E5%92%8C-dynamic-cast%E7%9A%84%E5%BC%82%E5%90%8C%E7%82%B9"><span class="toc-number">4.2.</span> <span class="toc-text">Q：static_cast 和 dynamic_cast的异同点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88"><span class="toc-number">5.</span> <span class="toc-text">智能指针</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9AC-%E4%B8%AD%E7%9A%84%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%8C%E5%90%84%E8%87%AA%E6%9C%89%E4%BB%80%E4%B9%88%E4%BD%9C%E7%94%A8%EF%BC%9F"><span class="toc-number">5.1.</span> <span class="toc-text">Q：C++中的智能指针有哪些，各自有什么作用？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9Ashared-ptr%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E3%80%81%E6%8B%B7%E8%B4%9D%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E5%92%8C%E8%B5%8B%E5%80%BC%E8%BF%90%E7%AE%97%E7%AC%A6%E6%80%8E%E4%B9%88%E5%86%99%EF%BC%9Fshared-ptr%E6%98%AF%E4%B8%8D%E6%98%AF%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%EF%BC%9F"><span class="toc-number">5.2.</span> <span class="toc-text">Q：shared_ptr的实现原理是什么？构造函数、拷贝构造函数和赋值运算符怎么写？shared_ptr是不是线程安全的？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9Aweak-ptr%E6%98%AF%E4%B8%BA%E4%BA%86%E8%A7%A3%E5%86%B3shared-ptr%E7%9A%84%E5%BE%AA%E7%8E%AF%E5%BC%95%E7%94%A8%E9%97%AE%E9%A2%98%EF%BC%8C%E9%82%A3%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E7%94%A8raw-ptr%E6%9D%A5%E8%A7%A3%E5%86%B3%E8%BF%99%E4%B8%AA%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="toc-number">5.3.</span> <span class="toc-text">Q：weak_ptr是为了解决shared_ptr的循环引用问题，那为什么不用raw ptr来解决这个问题？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E5%AD%97"><span class="toc-number">6.</span> <span class="toc-text">关键字</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#const%E4%BD%9C%E7%94%A8%EF%BC%9F%E6%8C%87%E9%92%88%E5%B8%B8%E9%87%8F%E5%92%8C%E5%B8%B8%E9%87%8F%E6%8C%87%E9%92%88%EF%BC%9Fconst%E4%BF%AE%E9%A5%B0%E7%9A%84%E5%87%BD%E6%95%B0%E8%83%BD%E5%90%A6%E9%87%8D%E8%BD%BD%EF%BC%9F"><span class="toc-number">6.1.</span> <span class="toc-text">const作用？指针常量和常量指针？const修饰的函数能否重载？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#static%E4%BD%9C%E7%94%A8%EF%BC%9Fstatic%E5%8F%98%E9%87%8F%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E5%88%9D%E5%A7%8B%E5%8C%96%EF%BC%9F"><span class="toc-number">6.2.</span> <span class="toc-text">static作用？static变量什么时候初始化？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E5%AD%97-1"><span class="toc-number">7.</span> <span class="toc-text">关键字</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9Aconst%E4%BD%9C%E7%94%A8%EF%BC%9F%E6%8C%87%E9%92%88%E5%B8%B8%E9%87%8F%E5%92%8C%E5%B8%B8%E9%87%8F%E6%8C%87%E9%92%88%EF%BC%9Fconst%E4%BF%AE%E9%A5%B0%E7%9A%84%E5%87%BD%E6%95%B0%E8%83%BD%E5%90%A6%E9%87%8D%E8%BD%BD%EF%BC%9F"><span class="toc-number">7.1.</span> <span class="toc-text">Q：const作用？指针常量和常量指针？const修饰的函数能否重载？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9Astatic%E4%BD%9C%E7%94%A8%EF%BC%9Fstatic%E5%8F%98%E9%87%8F%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E5%88%9D%E5%A7%8B%E5%8C%96%EF%BC%9F"><span class="toc-number">7.2.</span> <span class="toc-text">Q：static作用？static变量什么时候初始化？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9Aextern%E7%9A%84%E4%BD%9C%E7%94%A8%EF%BC%9F"><span class="toc-number">7.3.</span> <span class="toc-text">Q：extern的作用？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9Aexplicit%E7%9A%84%E4%BD%9C%E7%94%A8%EF%BC%9F"><span class="toc-number">7.4.</span> <span class="toc-text">Q：explicit的作用？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9Aconstexpr%E7%9A%84%E4%BD%9C%E7%94%A8%EF%BC%9F"><span class="toc-number">7.5.</span> <span class="toc-text">Q：constexpr的作用？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9Avolatile%E7%9A%84%E4%BD%9C%E7%94%A8%EF%BC%9F"><span class="toc-number">7.6.</span> <span class="toc-text">Q：volatile的作用？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9Amutable%E7%9A%84%E4%BD%9C%E7%94%A8%EF%BC%9F"><span class="toc-number">7.7.</span> <span class="toc-text">Q：mutable的作用？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9Aauto%E5%92%8Cdecltype%E7%9A%84%E4%BD%9C%E7%94%A8%E5%92%8C%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-number">7.8.</span> <span class="toc-text">Q：auto和decltype的作用和区别？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8B%B7%E8%B4%9D%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="toc-number">8.</span> <span class="toc-text">拷贝构造函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E8%87%AA%E5%B7%B1%E5%AE%9A%E4%B9%89%E6%8B%B7%E8%B4%9D%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%EF%BC%9F"><span class="toc-number">8.1.</span> <span class="toc-text">Q：为什么要自己定义拷贝构造函数？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9A%E6%B7%B1%E6%8B%B7%E8%B4%9D%E5%92%8C%E6%B5%85%E6%8B%B7%E8%B4%9D%EF%BC%9F"><span class="toc-number">8.2.</span> <span class="toc-text">Q：深拷贝和浅拷贝？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q%EF%BC%9A%E4%BB%80%E4%B9%88%E6%98%AF%E7%A7%BB%E5%8A%A8%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%EF%BC%8C%E5%92%8C%E6%8B%B7%E8%B4%9D%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-number">8.3.</span> <span class="toc-text">Q：什么是移动构造函数，和拷贝构造函数有什么区别？</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://loudmute.github.io/2025/04/05/40-%E5%85%AB%E8%82%A1%E4%B9%8B%E6%88%91%E8%A7%81/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://loudmute.github.io/2025/04/05/40-%E5%85%AB%E8%82%A1%E4%B9%8B%E6%88%91%E8%A7%81/&text=C++中的一些常见问题"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://loudmute.github.io/2025/04/05/40-%E5%85%AB%E8%82%A1%E4%B9%8B%E6%88%91%E8%A7%81/&title=C++中的一些常见问题"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://loudmute.github.io/2025/04/05/40-%E5%85%AB%E8%82%A1%E4%B9%8B%E6%88%91%E8%A7%81/&is_video=false&description=C++中的一些常见问题"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=C++中的一些常见问题&body=Check out this article: https://loudmute.github.io/2025/04/05/40-%E5%85%AB%E8%82%A1%E4%B9%8B%E6%88%91%E8%A7%81/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://loudmute.github.io/2025/04/05/40-%E5%85%AB%E8%82%A1%E4%B9%8B%E6%88%91%E8%A7%81/&title=C++中的一些常见问题"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://loudmute.github.io/2025/04/05/40-%E5%85%AB%E8%82%A1%E4%B9%8B%E6%88%91%E8%A7%81/&title=C++中的一些常见问题"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://loudmute.github.io/2025/04/05/40-%E5%85%AB%E8%82%A1%E4%B9%8B%E6%88%91%E8%A7%81/&title=C++中的一些常见问题"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://loudmute.github.io/2025/04/05/40-%E5%85%AB%E8%82%A1%E4%B9%8B%E6%88%91%E8%A7%81/&title=C++中的一些常见问题"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://loudmute.github.io/2025/04/05/40-%E5%85%AB%E8%82%A1%E4%B9%8B%E6%88%91%E8%A7%81/&name=C++中的一些常见问题&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://loudmute.github.io/2025/04/05/40-%E5%85%AB%E8%82%A1%E4%B9%8B%E6%88%91%E8%A7%81/&t=C++中的一些常见问题"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2026
+    loudmute
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a href="/tags/">标签</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

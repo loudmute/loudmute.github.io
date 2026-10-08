@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="5. 线性代数矩阵的逐元素乘积：* 矩阵的点乘：x.dot(y) np.dot(x, y) x @ y numpy.linalg拥有一个矩阵分解的标准函数集，以及其他常用函数常用的numpy.linalg函数(不全)：  diag 将一个矩阵的对角元素作为一维数组返回，或将一个一维数组转换成方阵，并且非对角巷上位0 dot 矩阵的点乘 trace 计算矩阵对角元素和 det 计算矩阵的行列式 ei">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Numpy总结-5.线性代数">
+<meta property="og:url" content="https://loudmute.github.io/2023/07/07/8-Numpy%E6%80%BB%E7%BB%93-5-%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/index.html">
+<meta property="og:site_name" content="loudmute">
+<meta property="og:description" content="5. 线性代数矩阵的逐元素乘积：* 矩阵的点乘：x.dot(y) np.dot(x, y) x @ y numpy.linalg拥有一个矩阵分解的标准函数集，以及其他常用函数常用的numpy.linalg函数(不全)：  diag 将一个矩阵的对角元素作为一维数组返回，或将一个一维数组转换成方阵，并且非对角巷上位0 dot 矩阵的点乘 trace 计算矩阵对角元素和 det 计算矩阵的行列式 ei">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-07-07T09:55:49.000Z">
+<meta property="article:modified_time" content="2025-02-19T08:55:39.498Z">
+<meta property="article:author" content="loudmute">
+<meta property="article:tag" content="Numpy">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="编程">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Numpy总结-5.线性代数</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a href="/tags/">标签</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2023/07/07/9-Numpy%E6%80%BB%E7%BB%93-6-%E4%BC%AA%E9%9A%8F%E6%9C%BA%E5%87%BD%E6%95%B0%E7%9A%84%E7%94%9F%E6%88%90/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2023/07/07/7-Numpy%E6%80%BB%E7%BB%93-4-%E7%94%A8%E6%95%B0%E7%BB%84%E8%BF%9B%E8%A1%8C%E6%96%87%E4%BB%B6%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://loudmute.github.io/2023/07/07/8-Numpy%E6%80%BB%E7%BB%93-5-%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://loudmute.github.io/2023/07/07/8-Numpy%E6%80%BB%E7%BB%93-5-%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/&text=Numpy总结-5.线性代数"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://loudmute.github.io/2023/07/07/8-Numpy%E6%80%BB%E7%BB%93-5-%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/&title=Numpy总结-5.线性代数"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://loudmute.github.io/2023/07/07/8-Numpy%E6%80%BB%E7%BB%93-5-%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/&is_video=false&description=Numpy总结-5.线性代数"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Numpy总结-5.线性代数&body=Check out this article: https://loudmute.github.io/2023/07/07/8-Numpy%E6%80%BB%E7%BB%93-5-%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://loudmute.github.io/2023/07/07/8-Numpy%E6%80%BB%E7%BB%93-5-%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/&title=Numpy总结-5.线性代数"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://loudmute.github.io/2023/07/07/8-Numpy%E6%80%BB%E7%BB%93-5-%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/&title=Numpy总结-5.线性代数"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://loudmute.github.io/2023/07/07/8-Numpy%E6%80%BB%E7%BB%93-5-%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/&title=Numpy总结-5.线性代数"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://loudmute.github.io/2023/07/07/8-Numpy%E6%80%BB%E7%BB%93-5-%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/&title=Numpy总结-5.线性代数"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://loudmute.github.io/2023/07/07/8-Numpy%E6%80%BB%E7%BB%93-5-%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/&name=Numpy总结-5.线性代数&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://loudmute.github.io/2023/07/07/8-Numpy%E6%80%BB%E7%BB%93-5-%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/&t=Numpy总结-5.线性代数"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#5-%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0"><span class="toc-number">1.</span> <span class="toc-text">5. 线性代数</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Numpy总结-5.线性代数
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">loudmute</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2023-07-07T09:55:49.000Z" class="dt-published" itemprop="datePublished">2023-07-07</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/%E7%BC%96%E7%A8%8B/">编程</a> › <a class="category-link" href="/categories/%E7%BC%96%E7%A8%8B/python/">python</a> › <a class="category-link" href="/categories/%E7%BC%96%E7%A8%8B/python/Numpy/">Numpy</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Numpy/" rel="tag">Numpy</a>, <a class="p-category" href="/tags/python/" rel="tag">python</a>, <a class="p-category" href="/tags/%E7%BC%96%E7%A8%8B/" rel="tag">编程</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="5-线性代数"><a href="#5-线性代数" class="headerlink" title="5. 线性代数"></a>5. 线性代数</h1><p>矩阵的逐元素乘积：*</p>
+<p>矩阵的点乘：x.dot(y) np.dot(x, y) x @ y</p>
+<p>numpy.linalg拥有一个矩阵分解的标准函数集，以及其他常用函数<br>常用的numpy.linalg函数(不全)：</p>
+<ul>
+<li>diag 将一个矩阵的对角元素作为一维数组返回，或将一个一维数组转换成方阵，并且非对角巷上位0</li>
+<li>dot 矩阵的点乘</li>
+<li>trace 计算矩阵对角元素和</li>
+<li>det 计算矩阵的行列式</li>
+<li>eig 计算方阵的特征值和特征向量</li>
+<li>inv 计算方阵的逆矩阵</li>
+<li>solve 求解方程Ax &#x3D; b，其中A为方阵</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">x = np.arange(<span class="number">1</span>, <span class="number">7</span>).reshape(<span class="number">2</span>, <span class="number">3</span>)</span><br><span class="line">y = np.array([[<span class="number">6</span>, <span class="number">23</span>], [-<span class="number">1</span>, <span class="number">7</span>], [<span class="number">8</span>, <span class="number">9</span>]])</span><br><span class="line">x, y</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>(array([[1, 2, 3],
+        [4, 5, 6]]),
+ array([[ 6, 23],
+        [-1,  7],
+        [ 8,  9]]))
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">x.dot(y), np.dot(x, y), x @ y</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>(array([[ 28,  64],
+        [ 67, 181]]),
+ array([[ 28,  64],
+        [ 67, 181]]),
+ array([[ 28,  64],
+        [ 67, 181]]))
+</code></pre>
+<p>numpy.linalg中的函数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> numpy.linalg <span class="keyword">import</span> inv</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">x = np.random.randn(<span class="number">5</span>, <span class="number">5</span>)</span><br><span class="line">x</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>array([[-0.82024942, -0.35270277,  0.20410367,  0.2108181 ,  0.38030731],
+       [ 1.13206913,  1.02435098,  0.87622199, -0.92836612,  0.63914773],
+       [-0.29595266,  0.28768738, -1.25447888,  0.80932531, -0.89262801],
+       [-2.24284808, -0.36840935,  0.95902494, -0.4698864 ,  1.21135963],
+       [ 1.57715939, -0.59465126, -0.86810588,  0.38573813,  2.43938348]])
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mat = x.T.dot(x)</span><br><span class="line">mat</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>array([[ 9.55977685,  1.25222491, -2.32429428,  0.1988343 ,  1.80618912],
+       [ 1.25222491,  1.74579378,  0.62757968, -0.84876532, -1.63308033],
+       [-2.32429428,  0.62757968,  4.05647722, -2.5712019 ,  0.80152135],
+       [ 0.1988343 , -0.84876532, -2.5712019 ,  1.93090253, -0.86385206],
+       [ 1.80618912, -1.63308033,  0.80152135, -0.86385206,  8.76791213]])
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mat.dot(inv(mat))</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>array([[ 1.00000000e+00, -2.22044605e-16,  0.00000000e+00,
+         0.00000000e+00,  1.11022302e-16],
+       [ 9.36750677e-17,  1.00000000e+00, -6.66133815e-16,
+        -3.55271368e-15,  3.33066907e-16],
+       [ 4.18068358e-16,  2.33146835e-15,  1.00000000e+00,
+        -1.77635684e-15,  9.43689571e-16],
+       [-6.15826834e-17, -2.44249065e-15,  6.66133815e-16,
+         1.00000000e+00, -1.11022302e-16],
+       [ 0.00000000e+00,  0.00000000e+00, -8.88178420e-16,
+         1.77635684e-15,  1.00000000e+00]])
+</code></pre>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/about/">关于</a></li>
+        
+          <li><a href="/archives/">文章</a></li>
+        
+          <li><a href="/categories/">分类</a></li>
+        
+          <li><a href="/tags/">标签</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#5-%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0"><span class="toc-number">1.</span> <span class="toc-text">5. 线性代数</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://loudmute.github.io/2023/07/07/8-Numpy%E6%80%BB%E7%BB%93-5-%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://loudmute.github.io/2023/07/07/8-Numpy%E6%80%BB%E7%BB%93-5-%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/&text=Numpy总结-5.线性代数"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://loudmute.github.io/2023/07/07/8-Numpy%E6%80%BB%E7%BB%93-5-%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/&title=Numpy总结-5.线性代数"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://loudmute.github.io/2023/07/07/8-Numpy%E6%80%BB%E7%BB%93-5-%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/&is_video=false&description=Numpy总结-5.线性代数"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Numpy总结-5.线性代数&body=Check out this article: https://loudmute.github.io/2023/07/07/8-Numpy%E6%80%BB%E7%BB%93-5-%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://loudmute.github.io/2023/07/07/8-Numpy%E6%80%BB%E7%BB%93-5-%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/&title=Numpy总结-5.线性代数"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://loudmute.github.io/2023/07/07/8-Numpy%E6%80%BB%E7%BB%93-5-%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/&title=Numpy总结-5.线性代数"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://loudmute.github.io/2023/07/07/8-Numpy%E6%80%BB%E7%BB%93-5-%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/&title=Numpy总结-5.线性代数"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://loudmute.github.io/2023/07/07/8-Numpy%E6%80%BB%E7%BB%93-5-%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/&title=Numpy总结-5.线性代数"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://loudmute.github.io/2023/07/07/8-Numpy%E6%80%BB%E7%BB%93-5-%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/&name=Numpy总结-5.线性代数&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://loudmute.github.io/2023/07/07/8-Numpy%E6%80%BB%E7%BB%93-5-%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/&t=Numpy总结-5.线性代数"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2026
+    loudmute
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a href="/tags/">标签</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="对应课程：  L8-CPU管理的直观想法  L9-多进程图像  只是引出一些基本概念和问题，详细展开还在后续课程   1 CPU的有效管理 管理CPU就要先使用CPU，CPU的工作原理核心是取值执行 设置好PC的初始值，CPU就可以自动运行PC指向的程序 当程序中包含中断时，程序需要从用户态进入内核态，如果需要打印等操作还需等待，再从内核态回到用户态，在硬件进行工作时，程序需要等待，其他程序得不到">
+<meta property="og:type" content="article">
+<meta property="og:title" content="哈工大OSNote3-多进程图像">
+<meta property="og:url" content="https://loudmute.github.io/2024/10/16/23-%E5%93%88%E5%B7%A5%E5%A4%A7OSNote3-%E5%A4%9A%E8%BF%9B%E7%A8%8B%E5%9B%BE%E5%83%8F/index.html">
+<meta property="og:site_name" content="loudmute">
+<meta property="og:description" content="对应课程：  L8-CPU管理的直观想法  L9-多进程图像  只是引出一些基本概念和问题，详细展开还在后续课程   1 CPU的有效管理 管理CPU就要先使用CPU，CPU的工作原理核心是取值执行 设置好PC的初始值，CPU就可以自动运行PC指向的程序 当程序中包含中断时，程序需要从用户态进入内核态，如果需要打印等操作还需等待，再从内核态回到用户态，在硬件进行工作时，程序需要等待，其他程序得不到">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.imgur.com/RWdxnSq.png">
+<meta property="og:image" content="https://i.imgur.com/taOTJSS.png">
+<meta property="og:image" content="https://i.imgur.com/yMhG5rh.png">
+<meta property="og:image" content="https://i.imgur.com/hsZZ62U.png">
+<meta property="og:image" content="https://i.imgur.com/cABxEQi.png">
+<meta property="og:image" content="https://i.imgur.com/f2SoWHS.png">
+<meta property="og:image" content="https://i.imgur.com/pw6Aa38.png">
+<meta property="og:image" content="https://i.imgur.com/lj6gXwR.png">
+<meta property="og:image" content="https://i.imgur.com/xY94irn.png">
+<meta property="article:published_time" content="2024-10-16T03:27:28.000Z">
+<meta property="article:modified_time" content="2026-06-10T08:36:44.307Z">
+<meta property="article:author" content="loudmute">
+<meta property="article:tag" content="操作系统">
+<meta property="article:tag" content="笔记">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/RWdxnSq.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>哈工大OSNote3-多进程图像</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a href="/tags/">标签</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2024/11/12/30-%E8%87%AA%E7%94%B1%E8%80%8C%E7%83%AD%E7%83%88%E5%9C%B0%E6%B4%BB%E7%9D%80/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2024/10/12/22-%E5%93%88%E5%B7%A5%E5%A4%A7OSLab2-%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://loudmute.github.io/2024/10/16/23-%E5%93%88%E5%B7%A5%E5%A4%A7OSNote3-%E5%A4%9A%E8%BF%9B%E7%A8%8B%E5%9B%BE%E5%83%8F/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://loudmute.github.io/2024/10/16/23-%E5%93%88%E5%B7%A5%E5%A4%A7OSNote3-%E5%A4%9A%E8%BF%9B%E7%A8%8B%E5%9B%BE%E5%83%8F/&text=哈工大OSNote3-多进程图像"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://loudmute.github.io/2024/10/16/23-%E5%93%88%E5%B7%A5%E5%A4%A7OSNote3-%E5%A4%9A%E8%BF%9B%E7%A8%8B%E5%9B%BE%E5%83%8F/&title=哈工大OSNote3-多进程图像"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://loudmute.github.io/2024/10/16/23-%E5%93%88%E5%B7%A5%E5%A4%A7OSNote3-%E5%A4%9A%E8%BF%9B%E7%A8%8B%E5%9B%BE%E5%83%8F/&is_video=false&description=哈工大OSNote3-多进程图像"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=哈工大OSNote3-多进程图像&body=Check out this article: https://loudmute.github.io/2024/10/16/23-%E5%93%88%E5%B7%A5%E5%A4%A7OSNote3-%E5%A4%9A%E8%BF%9B%E7%A8%8B%E5%9B%BE%E5%83%8F/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://loudmute.github.io/2024/10/16/23-%E5%93%88%E5%B7%A5%E5%A4%A7OSNote3-%E5%A4%9A%E8%BF%9B%E7%A8%8B%E5%9B%BE%E5%83%8F/&title=哈工大OSNote3-多进程图像"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://loudmute.github.io/2024/10/16/23-%E5%93%88%E5%B7%A5%E5%A4%A7OSNote3-%E5%A4%9A%E8%BF%9B%E7%A8%8B%E5%9B%BE%E5%83%8F/&title=哈工大OSNote3-多进程图像"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://loudmute.github.io/2024/10/16/23-%E5%93%88%E5%B7%A5%E5%A4%A7OSNote3-%E5%A4%9A%E8%BF%9B%E7%A8%8B%E5%9B%BE%E5%83%8F/&title=哈工大OSNote3-多进程图像"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://loudmute.github.io/2024/10/16/23-%E5%93%88%E5%B7%A5%E5%A4%A7OSNote3-%E5%A4%9A%E8%BF%9B%E7%A8%8B%E5%9B%BE%E5%83%8F/&title=哈工大OSNote3-多进程图像"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://loudmute.github.io/2024/10/16/23-%E5%93%88%E5%B7%A5%E5%A4%A7OSNote3-%E5%A4%9A%E8%BF%9B%E7%A8%8B%E5%9B%BE%E5%83%8F/&name=哈工大OSNote3-多进程图像&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://loudmute.github.io/2024/10/16/23-%E5%93%88%E5%B7%A5%E5%A4%A7OSNote3-%E5%A4%9A%E8%BF%9B%E7%A8%8B%E5%9B%BE%E5%83%8F/&t=哈工大OSNote3-多进程图像"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-CPU%E7%9A%84%E6%9C%89%E6%95%88%E7%AE%A1%E7%90%86"><span class="toc-number">1.</span> <span class="toc-text">1 CPU的有效管理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%B9%B6%E5%8F%91"><span class="toc-number">2.</span> <span class="toc-text">2 并发</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E8%BF%9B%E7%A8%8B"><span class="toc-number">3.</span> <span class="toc-text">3 进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%A4%9A%E8%BF%9B%E7%A8%8B%E5%9B%BE%E5%83%8F"><span class="toc-number">4.</span> <span class="toc-text">4 多进程图像</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E5%A4%9A%E8%BF%9B%E7%A8%8B%E7%BB%84%E7%BB%87"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 多进程组织</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E5%A4%9A%E8%BF%9B%E7%A8%8B%E4%BA%A4%E6%9B%BF%EF%BC%88%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%EF%BC%89"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 多进程交替（进程调度）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E5%A4%9A%E8%BF%9B%E7%A8%8B%E5%BD%B1%E5%93%8D"><span class="toc-number">4.3.</span> <span class="toc-text">4.3 多进程影响</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-%E5%A4%9A%E8%BF%9B%E7%A8%8B%E5%90%88%E4%BD%9C"><span class="toc-number">4.4.</span> <span class="toc-text">4.4 多进程合作</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        哈工大OSNote3-多进程图像
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">loudmute</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2024-10-16T03:27:28.000Z" class="dt-published" itemprop="datePublished">2024-10-16</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a> › <a class="category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E7%AC%94%E8%AE%B0/">笔记</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag">操作系统</a>, <a class="p-category" href="/tags/%E7%AC%94%E8%AE%B0/" rel="tag">笔记</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <p>对应课程：</p>
+<ul>
+<li><p>L8-CPU管理的直观想法</p>
+</li>
+<li><p>L9-多进程图像</p>
+</li>
+<li><p>只是引出一些基本概念和问题，详细展开还在后续课程</p>
+</li>
+</ul>
+<h2 id="1-CPU的有效管理"><a href="#1-CPU的有效管理" class="headerlink" title="1 CPU的有效管理"></a>1 CPU的有效管理</h2><ul>
+<li>管理CPU就要先使用CPU，CPU的工作原理核心是取值执行</li>
+<li>设置好PC的初始值，CPU就可以自动运行PC指向的程序</li>
+<li>当程序中包含中断时，程序需要从用户态进入内核态，如果需要打印等操作还需等待，再从内核态回到用户态，在硬件进行工作时，程序需要等待，其他程序得不到执行，CPU将闲置，这大大降低了CPU的利用率</li>
+<li>需要找到一种方法，通过有效的使用CPU来提高CPU利用率</li>
+</ul>
+<h2 id="2-并发"><a href="#2-并发" class="headerlink" title="2 并发"></a>2 并发</h2><img src="https://i.imgur.com/RWdxnSq.png" alt="image-20231013175753906" style="zoom: 50%;" />
+
+<ul>
+<li>并发就是在CPU上面交替执行多个程序，可以大大提高CPU的利用率</li>
+<li>当程序A进行一些用不到CPU的操作（如打印操作）时，修改PC值指向程序B，这之前保存程序A的一些信息，跳转到程序B。等程序B执行执行完毕或者进行一些不用CPU的操作时，再切换到程序A</li>
+</ul>
+<h2 id="3-进程"><a href="#3-进程" class="headerlink" title="3 进程"></a>3 进程</h2><ul>
+<li>进程就是运行中的程序</li>
+<li>进程 &#x3D; 程序 + 进程的机器状态</li>
+<li>进程的机器状态：内存 和 寄存器。（指令、程序读取和写入的数据都在寄存器中；许多指令需要读写寄存器、PC指出当前要执行的程序、栈寄存器指出函数调用信息）</li>
+<li>程序需要运行起来才能使用CPU，一段存放在磁盘上的程序只是一段数据</li>
+</ul>
+<h2 id="4-多进程图像"><a href="#4-多进程图像" class="headerlink" title="4 多进程图像"></a>4 多进程图像</h2><ul>
+<li><p>操作系统要合理的管理CPU，就需要将多个进程记录好，按照合理的次序推进</p>
+</li>
+<li><p>多进程图像就是围绕操作系统合理管理CPU产生的一些关键问题</p>
+</li>
+<li><p>多进程图像从启动开始到关机结束：</p>
+<ul>
+<li><p><code>main</code>中的<code>fork()</code>创建了第一个进程，<code>init</code>初始化了终端shell（Windows系统是可视化桌面）：<code>if (! fork()) {init;}</code><img src="https://i.imgur.com/taOTJSS.png" alt="image-20231013181827255" style="zoom:50%;" /></p>
+</li>
+<li><p>命令中断shell再启动其他进程，一个命令启动一个进程，返回shell再启动其他进程：</p>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> * argv[])</span></span><br><span class="line">&#123; </span><br><span class="line">	<span class="keyword">while</span>(<span class="number">1</span>) </span><br><span class="line">    &#123; </span><br><span class="line">        <span class="built_in">scanf</span>(“%s”, cmd);</span><br><span class="line">		<span class="keyword">if</span>(!fork()) &#123;exec(cmd);&#125; </span><br><span class="line">        wait(); </span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+  <img src="https://i.imgur.com/yMhG5rh.png" alt="image-20231013182140812" style="zoom:50%;" /></li>
+</ul>
+</li>
+<li><p>多进程图像主要包括以下几个问题</p>
+<ul>
+<li>（1）多进程如何组织</li>
+<li>（2）多进程如何交替</li>
+<li>（3）多进程如何影响</li>
+<li>（4）多进程如何合作</li>
+</ul>
+</li>
+<li><p>下面只是简单引出这些问题，这些问题是占据了后续的大多课程</p>
+</li>
+</ul>
+<h3 id="4-1-多进程组织"><a href="#4-1-多进程组织" class="headerlink" title="4.1 多进程组织"></a>4.1 多进程组织</h3><img src="https://i.imgur.com/hsZZ62U.png" alt="image-20231013182538902" style="zoom: 33%;" />
+
+<ul>
+<li>操作系统通过$PCB + 状态 + 队列$来组织进程</li>
+<li>PCB（进程控制块）：用来记录进程信息的数据结构</li>
+<li>状态：我们将进程抽象地分为3种状态，<strong>运行、就绪、阻塞</strong><ul>
+<li>运行：在运行状态下，进程正在处理器上运行。这意味着它正在执行 指令</li>
+<li>就绪：在就绪状态下，进程已准备好运行，但由于某种原因，操作系统 选择不在此时运行</li>
+<li>阻塞：在阻塞状态下，一个进程执行了某种操作，直到发生其他事件 时才会准备运行。一个常见的例子是，当进程向磁盘发起 I&#x2F;O 请求时，它会被阻塞， 因此其他进程可以使用处理器</li>
+<li>进程三种状态地转换：<img src="https://i.imgur.com/cABxEQi.png" alt="image-20231013183036742" style="zoom:50%;" /></li>
+<li>进程状态图：给出进程生存期地清晰描述，认识操作系统进程管理地一个窗口：<img src="https://i.imgur.com/f2SoWHS.png" alt="image-20231013183331327" style="zoom:50%;" /></li>
+</ul>
+</li>
+</ul>
+<h3 id="4-2-多进程交替（进程调度）"><a href="#4-2-多进程交替（进程调度）" class="headerlink" title="4.2 多进程交替（进程调度）"></a>4.2 多进程交替（进程调度）</h3><img src="https://i.imgur.com/pw6Aa38.png" alt="image-20231013183643472" style="zoom:50%;" />
+
+<ul>
+<li><p>进程交替的3个部分：$队列操作 + 调度 + 切换$</p>
+</li>
+<li><p>进程调度策略至今仍是一个需要高度关注的问题</p>
+</li>
+<li><p>一些代码：</p>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">switch_to(pCur,pNew) </span><br><span class="line">&#123;</span><br><span class="line">	pCur.ax = CPU.ax;</span><br><span class="line">	pCur.bx = CPU.bx;</span><br><span class="line">	...</span><br><span class="line">	pCur.cs = CPU.cs;</span><br><span class="line">	pCur.retpc = CPU.pc;</span><br><span class="line">	CPU.ax = pNew.ax;</span><br><span class="line">	CPU.bx = pNew.bx;</span><br><span class="line">	...</span><br><span class="line">	CPU.cs = pNew.cs;</span><br><span class="line">	CPU.retpc = pNew.pc; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="4-3-多进程影响"><a href="#4-3-多进程影响" class="headerlink" title="4.3 多进程影响"></a>4.3 多进程影响</h3><img src="https://i.imgur.com/lj6gXwR.png" alt="image-20231013184039608" style="zoom:50%;" />
+
+<ul>
+<li><p>在执行上面代码时，两个进程会出现冲突</p>
+</li>
+<li><p>解决办法：限制对地址100的读写</p>
+</li>
+<li><p>多进程的地址空间分离：内存管理的主要内容</p>
+  <img src="https://i.imgur.com/xY94irn.png" alt="image-20231013184430508" style="zoom:50%;" />
+</li>
+<li><p>通过设置地址映射表，将进程能够访问的内存限制在单个进程访问内以防止进程间的冲突</p>
+</li>
+</ul>
+<h3 id="4-4-多进程合作"><a href="#4-4-多进程合作" class="headerlink" title="4.4 多进程合作"></a>4.4 多进程合作</h3><ul>
+<li><p>以生产者-消费者为例</p>
+</li>
+<li><p>生产者进程：</p>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (<span class="literal">true</span>) </span><br><span class="line">&#123; </span><br><span class="line">	<span class="keyword">while</span>(counter== BUFFER_SIZE) ;</span><br><span class="line">	buffer[in] = item;</span><br><span class="line">	in = (in + <span class="number">1</span>) % BUFFER_SIZE;</span><br><span class="line">	counter++;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>消费者进程：</p>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (<span class="literal">true</span>) </span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">while</span>(counter== <span class="number">0</span>) ;</span><br><span class="line">	item = buffer[out];</span><br><span class="line">	out = (out + <span class="number">1</span>) % BUFFER_SIZE;</span><br><span class="line">	counter--;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>共享数据：</p>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> BUFFER_SIZE 10</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span> . . . &#125; item;</span><br><span class="line">item buffer[BUFFER_SIZE];</span><br><span class="line"><span class="type">int</span> in = out = counter = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>合作的进程都需修改<code>counter</code>（时间片-描述了进程的生命周期）</p>
+<p>  共享数据：<code>int counter = 0;</code>，生产者进程：<code>counter ++;</code>，消费者进程：<code>counter --</code></p>
+<p>  初始情况：<code>counter = 5;</code></p>
+<p>  生产者P:</p>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">register</span> = counter;</span><br><span class="line"><span class="keyword">register</span> = <span class="keyword">register</span> + <span class="number">1</span>;</span><br><span class="line">counter = <span class="keyword">register</span>;</span><br></pre></td></tr></table></figure>
+
+<p>  消费者C:</p>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">register</span> = counter;</span><br><span class="line"><span class="keyword">register</span> = <span class="keyword">register</span> - <span class="number">1</span>;</span><br><span class="line">counter = <span class="keyword">register</span>;</span><br></pre></td></tr></table></figure>
+
+<p>  一个可能的执行序列：</p>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">P.<span class="keyword">register</span> = counter;</span><br><span class="line">P.<span class="keyword">register</span> = P.<span class="keyword">register</span> + <span class="number">1</span>;</span><br><span class="line">C.<span class="keyword">register</span> = counter;</span><br><span class="line">C.<span class="keyword">register</span> = C.<span class="keyword">register</span> - <span class="number">1</span>;</span><br><span class="line">counter = P.<span class="keyword">register</span>;</span><br><span class="line">counter = C.<span class="keyword">register</span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>写<code>counter</code>时阻断其他进程访问<code>counter</code>：</p>
+<p>  生产者P给<code>counter</code>上锁：</p>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">P.<span class="keyword">register</span> = counter;</span><br><span class="line">P.<span class="keyword">register</span> = P.<span class="keyword">register</span> + <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<p>  消费者C检查<code>counter</code>锁</p>
+<p>  生产者P给<code>counter</code>开锁：</p>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">counter = P.<span class="keyword">register</span>;</span><br></pre></td></tr></table></figure>
+
+<p>  消费者C给<code>counter</code>上锁再开锁：</p>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">C.<span class="keyword">register</span> = counter;</span><br><span class="line">C.<span class="keyword">register</span> = C.<span class="keyword">register</span> - <span class="number">1</span>;</span><br><span class="line">counter = C.<span class="keyword">register</span>;</span><br></pre></td></tr></table></figure></li>
+</ul>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/about/">关于</a></li>
+        
+          <li><a href="/archives/">文章</a></li>
+        
+          <li><a href="/categories/">分类</a></li>
+        
+          <li><a href="/tags/">标签</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-CPU%E7%9A%84%E6%9C%89%E6%95%88%E7%AE%A1%E7%90%86"><span class="toc-number">1.</span> <span class="toc-text">1 CPU的有效管理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%B9%B6%E5%8F%91"><span class="toc-number">2.</span> <span class="toc-text">2 并发</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E8%BF%9B%E7%A8%8B"><span class="toc-number">3.</span> <span class="toc-text">3 进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%A4%9A%E8%BF%9B%E7%A8%8B%E5%9B%BE%E5%83%8F"><span class="toc-number">4.</span> <span class="toc-text">4 多进程图像</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E5%A4%9A%E8%BF%9B%E7%A8%8B%E7%BB%84%E7%BB%87"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 多进程组织</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E5%A4%9A%E8%BF%9B%E7%A8%8B%E4%BA%A4%E6%9B%BF%EF%BC%88%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%EF%BC%89"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 多进程交替（进程调度）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E5%A4%9A%E8%BF%9B%E7%A8%8B%E5%BD%B1%E5%93%8D"><span class="toc-number">4.3.</span> <span class="toc-text">4.3 多进程影响</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-%E5%A4%9A%E8%BF%9B%E7%A8%8B%E5%90%88%E4%BD%9C"><span class="toc-number">4.4.</span> <span class="toc-text">4.4 多进程合作</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://loudmute.github.io/2024/10/16/23-%E5%93%88%E5%B7%A5%E5%A4%A7OSNote3-%E5%A4%9A%E8%BF%9B%E7%A8%8B%E5%9B%BE%E5%83%8F/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://loudmute.github.io/2024/10/16/23-%E5%93%88%E5%B7%A5%E5%A4%A7OSNote3-%E5%A4%9A%E8%BF%9B%E7%A8%8B%E5%9B%BE%E5%83%8F/&text=哈工大OSNote3-多进程图像"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://loudmute.github.io/2024/10/16/23-%E5%93%88%E5%B7%A5%E5%A4%A7OSNote3-%E5%A4%9A%E8%BF%9B%E7%A8%8B%E5%9B%BE%E5%83%8F/&title=哈工大OSNote3-多进程图像"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://loudmute.github.io/2024/10/16/23-%E5%93%88%E5%B7%A5%E5%A4%A7OSNote3-%E5%A4%9A%E8%BF%9B%E7%A8%8B%E5%9B%BE%E5%83%8F/&is_video=false&description=哈工大OSNote3-多进程图像"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=哈工大OSNote3-多进程图像&body=Check out this article: https://loudmute.github.io/2024/10/16/23-%E5%93%88%E5%B7%A5%E5%A4%A7OSNote3-%E5%A4%9A%E8%BF%9B%E7%A8%8B%E5%9B%BE%E5%83%8F/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://loudmute.github.io/2024/10/16/23-%E5%93%88%E5%B7%A5%E5%A4%A7OSNote3-%E5%A4%9A%E8%BF%9B%E7%A8%8B%E5%9B%BE%E5%83%8F/&title=哈工大OSNote3-多进程图像"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://loudmute.github.io/2024/10/16/23-%E5%93%88%E5%B7%A5%E5%A4%A7OSNote3-%E5%A4%9A%E8%BF%9B%E7%A8%8B%E5%9B%BE%E5%83%8F/&title=哈工大OSNote3-多进程图像"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://loudmute.github.io/2024/10/16/23-%E5%93%88%E5%B7%A5%E5%A4%A7OSNote3-%E5%A4%9A%E8%BF%9B%E7%A8%8B%E5%9B%BE%E5%83%8F/&title=哈工大OSNote3-多进程图像"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://loudmute.github.io/2024/10/16/23-%E5%93%88%E5%B7%A5%E5%A4%A7OSNote3-%E5%A4%9A%E8%BF%9B%E7%A8%8B%E5%9B%BE%E5%83%8F/&title=哈工大OSNote3-多进程图像"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://loudmute.github.io/2024/10/16/23-%E5%93%88%E5%B7%A5%E5%A4%A7OSNote3-%E5%A4%9A%E8%BF%9B%E7%A8%8B%E5%9B%BE%E5%83%8F/&name=哈工大OSNote3-多进程图像&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://loudmute.github.io/2024/10/16/23-%E5%93%88%E5%B7%A5%E5%A4%A7OSNote3-%E5%A4%9A%E8%BF%9B%E7%A8%8B%E5%9B%BE%E5%83%8F/&t=哈工大OSNote3-多进程图像"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2026
+    loudmute
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a href="/tags/">标签</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

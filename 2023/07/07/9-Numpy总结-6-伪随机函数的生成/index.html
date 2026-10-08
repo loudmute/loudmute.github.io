@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="6. 伪随机函数的生成主要使用np.random模块 numpy.random中的常见函数（不全）：  seed 像随机数生成器传递随机状态种子 shuffle 随机排列一个序列 rand 从均匀分布中抽取样本 randint 由低到高，随机抽取整数 randn 从均值为0， 方差为1的正态分布中抽取样本 binomial 从二项分布中抽取样本 normal 从正态（高斯）分布中抽取样本  1im">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Numpy总结-6.伪随机函数的生成">
+<meta property="og:url" content="https://loudmute.github.io/2023/07/07/9-Numpy%E6%80%BB%E7%BB%93-6-%E4%BC%AA%E9%9A%8F%E6%9C%BA%E5%87%BD%E6%95%B0%E7%9A%84%E7%94%9F%E6%88%90/index.html">
+<meta property="og:site_name" content="loudmute">
+<meta property="og:description" content="6. 伪随机函数的生成主要使用np.random模块 numpy.random中的常见函数（不全）：  seed 像随机数生成器传递随机状态种子 shuffle 随机排列一个序列 rand 从均匀分布中抽取样本 randint 由低到高，随机抽取整数 randn 从均值为0， 方差为1的正态分布中抽取样本 binomial 从二项分布中抽取样本 normal 从正态（高斯）分布中抽取样本  1im">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-07-07T09:56:30.000Z">
+<meta property="article:modified_time" content="2025-02-19T08:55:46.120Z">
+<meta property="article:author" content="loudmute">
+<meta property="article:tag" content="Numpy">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="编程">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Numpy总结-6.伪随机函数的生成</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a href="/tags/">标签</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2023/07/08/10-3D-UX-Net%EF%BC%9A%E7%94%A8%E4%BA%8E%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2%E7%9A%84%E5%A4%A7%E6%A0%B8%E4%BD%93%E5%8D%B7%E7%A7%AF%E7%8E%B0%E4%BB%A3%E5%8C%96%E5%88%86%E5%B1%82Transformer/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2023/07/07/8-Numpy%E6%80%BB%E7%BB%93-5-%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://loudmute.github.io/2023/07/07/9-Numpy%E6%80%BB%E7%BB%93-6-%E4%BC%AA%E9%9A%8F%E6%9C%BA%E5%87%BD%E6%95%B0%E7%9A%84%E7%94%9F%E6%88%90/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://loudmute.github.io/2023/07/07/9-Numpy%E6%80%BB%E7%BB%93-6-%E4%BC%AA%E9%9A%8F%E6%9C%BA%E5%87%BD%E6%95%B0%E7%9A%84%E7%94%9F%E6%88%90/&text=Numpy总结-6.伪随机函数的生成"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://loudmute.github.io/2023/07/07/9-Numpy%E6%80%BB%E7%BB%93-6-%E4%BC%AA%E9%9A%8F%E6%9C%BA%E5%87%BD%E6%95%B0%E7%9A%84%E7%94%9F%E6%88%90/&title=Numpy总结-6.伪随机函数的生成"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://loudmute.github.io/2023/07/07/9-Numpy%E6%80%BB%E7%BB%93-6-%E4%BC%AA%E9%9A%8F%E6%9C%BA%E5%87%BD%E6%95%B0%E7%9A%84%E7%94%9F%E6%88%90/&is_video=false&description=Numpy总结-6.伪随机函数的生成"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Numpy总结-6.伪随机函数的生成&body=Check out this article: https://loudmute.github.io/2023/07/07/9-Numpy%E6%80%BB%E7%BB%93-6-%E4%BC%AA%E9%9A%8F%E6%9C%BA%E5%87%BD%E6%95%B0%E7%9A%84%E7%94%9F%E6%88%90/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://loudmute.github.io/2023/07/07/9-Numpy%E6%80%BB%E7%BB%93-6-%E4%BC%AA%E9%9A%8F%E6%9C%BA%E5%87%BD%E6%95%B0%E7%9A%84%E7%94%9F%E6%88%90/&title=Numpy总结-6.伪随机函数的生成"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://loudmute.github.io/2023/07/07/9-Numpy%E6%80%BB%E7%BB%93-6-%E4%BC%AA%E9%9A%8F%E6%9C%BA%E5%87%BD%E6%95%B0%E7%9A%84%E7%94%9F%E6%88%90/&title=Numpy总结-6.伪随机函数的生成"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://loudmute.github.io/2023/07/07/9-Numpy%E6%80%BB%E7%BB%93-6-%E4%BC%AA%E9%9A%8F%E6%9C%BA%E5%87%BD%E6%95%B0%E7%9A%84%E7%94%9F%E6%88%90/&title=Numpy总结-6.伪随机函数的生成"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://loudmute.github.io/2023/07/07/9-Numpy%E6%80%BB%E7%BB%93-6-%E4%BC%AA%E9%9A%8F%E6%9C%BA%E5%87%BD%E6%95%B0%E7%9A%84%E7%94%9F%E6%88%90/&title=Numpy总结-6.伪随机函数的生成"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://loudmute.github.io/2023/07/07/9-Numpy%E6%80%BB%E7%BB%93-6-%E4%BC%AA%E9%9A%8F%E6%9C%BA%E5%87%BD%E6%95%B0%E7%9A%84%E7%94%9F%E6%88%90/&name=Numpy总结-6.伪随机函数的生成&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://loudmute.github.io/2023/07/07/9-Numpy%E6%80%BB%E7%BB%93-6-%E4%BC%AA%E9%9A%8F%E6%9C%BA%E5%87%BD%E6%95%B0%E7%9A%84%E7%94%9F%E6%88%90/&t=Numpy总结-6.伪随机函数的生成"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#6-%E4%BC%AA%E9%9A%8F%E6%9C%BA%E5%87%BD%E6%95%B0%E7%9A%84%E7%94%9F%E6%88%90"><span class="toc-number">1.</span> <span class="toc-text">6. 伪随机函数的生成</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Numpy总结-6.伪随机函数的生成
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">loudmute</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2023-07-07T09:56:30.000Z" class="dt-published" itemprop="datePublished">2023-07-07</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/%E7%BC%96%E7%A8%8B/">编程</a> › <a class="category-link" href="/categories/%E7%BC%96%E7%A8%8B/python/">python</a> › <a class="category-link" href="/categories/%E7%BC%96%E7%A8%8B/python/Numpy/">Numpy</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Numpy/" rel="tag">Numpy</a>, <a class="p-category" href="/tags/python/" rel="tag">python</a>, <a class="p-category" href="/tags/%E7%BC%96%E7%A8%8B/" rel="tag">编程</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="6-伪随机函数的生成"><a href="#6-伪随机函数的生成" class="headerlink" title="6. 伪随机函数的生成"></a>6. 伪随机函数的生成</h1><p>主要使用np.random模块</p>
+<p>numpy.random中的常见函数（不全）：</p>
+<ul>
+<li>seed 像随机数生成器传递随机状态种子</li>
+<li>shuffle 随机排列一个序列</li>
+<li>rand 从均匀分布中抽取样本</li>
+<li>randint 由低到高，随机抽取整数</li>
+<li>randn 从均值为0， 方差为1的正态分布中抽取样本</li>
+<li>binomial 从二项分布中抽取样本</li>
+<li>normal 从正态（高斯）分布中抽取样本</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">samples = np.random.normal(size = (<span class="number">4</span>, <span class="number">4</span>))</span><br><span class="line">samples</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>array([[ 0.10346038, -0.23277967,  0.23074895, -0.51645475],
+       [ 0.88840995,  0.27574673, -1.0508378 ,  1.26257317],
+       [-1.78183817,  0.18499594, -0.22393833,  1.36331696],
+       [-0.08946206,  0.88673875, -1.27282072, -1.03744724]])
+</code></pre>
+<p>伪随机数由确定算法根据随机数生成器中的随机数种子生成，可以通过np.random.seed更改Numpy的随机数种子</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">np.random.seed(<span class="number">1234</span>)</span><br></pre></td></tr></table></figure>
+
+<p>numpy中的数据生成函数共用了一个全局的随机数种子，为了避免全局状态，可以使用numpy.random.RandomState生成一个随机数生成器，使数据独立于其他随机数状态</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rng = np.random.RandomState(<span class="number">1234</span>)</span><br><span class="line">rng.randn(<span class="number">10</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>array([ 0.47143516, -1.19097569,  1.43270697, -0.3126519 , -0.72058873,
+        0.88716294,  0.85958841, -0.6365235 ,  0.01569637, -2.24268495])
+</code></pre>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/about/">关于</a></li>
+        
+          <li><a href="/archives/">文章</a></li>
+        
+          <li><a href="/categories/">分类</a></li>
+        
+          <li><a href="/tags/">标签</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#6-%E4%BC%AA%E9%9A%8F%E6%9C%BA%E5%87%BD%E6%95%B0%E7%9A%84%E7%94%9F%E6%88%90"><span class="toc-number">1.</span> <span class="toc-text">6. 伪随机函数的生成</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://loudmute.github.io/2023/07/07/9-Numpy%E6%80%BB%E7%BB%93-6-%E4%BC%AA%E9%9A%8F%E6%9C%BA%E5%87%BD%E6%95%B0%E7%9A%84%E7%94%9F%E6%88%90/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://loudmute.github.io/2023/07/07/9-Numpy%E6%80%BB%E7%BB%93-6-%E4%BC%AA%E9%9A%8F%E6%9C%BA%E5%87%BD%E6%95%B0%E7%9A%84%E7%94%9F%E6%88%90/&text=Numpy总结-6.伪随机函数的生成"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://loudmute.github.io/2023/07/07/9-Numpy%E6%80%BB%E7%BB%93-6-%E4%BC%AA%E9%9A%8F%E6%9C%BA%E5%87%BD%E6%95%B0%E7%9A%84%E7%94%9F%E6%88%90/&title=Numpy总结-6.伪随机函数的生成"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://loudmute.github.io/2023/07/07/9-Numpy%E6%80%BB%E7%BB%93-6-%E4%BC%AA%E9%9A%8F%E6%9C%BA%E5%87%BD%E6%95%B0%E7%9A%84%E7%94%9F%E6%88%90/&is_video=false&description=Numpy总结-6.伪随机函数的生成"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Numpy总结-6.伪随机函数的生成&body=Check out this article: https://loudmute.github.io/2023/07/07/9-Numpy%E6%80%BB%E7%BB%93-6-%E4%BC%AA%E9%9A%8F%E6%9C%BA%E5%87%BD%E6%95%B0%E7%9A%84%E7%94%9F%E6%88%90/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://loudmute.github.io/2023/07/07/9-Numpy%E6%80%BB%E7%BB%93-6-%E4%BC%AA%E9%9A%8F%E6%9C%BA%E5%87%BD%E6%95%B0%E7%9A%84%E7%94%9F%E6%88%90/&title=Numpy总结-6.伪随机函数的生成"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://loudmute.github.io/2023/07/07/9-Numpy%E6%80%BB%E7%BB%93-6-%E4%BC%AA%E9%9A%8F%E6%9C%BA%E5%87%BD%E6%95%B0%E7%9A%84%E7%94%9F%E6%88%90/&title=Numpy总结-6.伪随机函数的生成"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://loudmute.github.io/2023/07/07/9-Numpy%E6%80%BB%E7%BB%93-6-%E4%BC%AA%E9%9A%8F%E6%9C%BA%E5%87%BD%E6%95%B0%E7%9A%84%E7%94%9F%E6%88%90/&title=Numpy总结-6.伪随机函数的生成"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://loudmute.github.io/2023/07/07/9-Numpy%E6%80%BB%E7%BB%93-6-%E4%BC%AA%E9%9A%8F%E6%9C%BA%E5%87%BD%E6%95%B0%E7%9A%84%E7%94%9F%E6%88%90/&title=Numpy总结-6.伪随机函数的生成"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://loudmute.github.io/2023/07/07/9-Numpy%E6%80%BB%E7%BB%93-6-%E4%BC%AA%E9%9A%8F%E6%9C%BA%E5%87%BD%E6%95%B0%E7%9A%84%E7%94%9F%E6%88%90/&name=Numpy总结-6.伪随机函数的生成&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://loudmute.github.io/2023/07/07/9-Numpy%E6%80%BB%E7%BB%93-6-%E4%BC%AA%E9%9A%8F%E6%9C%BA%E5%87%BD%E6%95%B0%E7%9A%84%E7%94%9F%E6%88%90/&t=Numpy总结-6.伪随机函数的生成"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2026
+    loudmute
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a href="/tags/">标签</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
