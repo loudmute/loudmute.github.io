@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Java OOP 的核心是：把数据和操作封进类；用继承和接口做扩展；运行时通过多态选真正实现；再用封装和访问控制保证安全；用 equals&#x2F;hashCode、final、抽象类&#x2F;接口这些规则把行为约定清楚。  知识脉络： -&gt; 类与对象：是什么、构造 -&gt; 三大特性: 封装 -&gt; 继承 -&gt; 多态 (怎么组织代码) -&gt; 方法关系：重载(同类扩展">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java-面向对象">
+<meta property="og:url" content="https://loudmute.github.io/2025/08/05/250805-Java-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/index.html">
+<meta property="og:site_name" content="loudmute">
+<meta property="og:description" content="Java OOP 的核心是：把数据和操作封进类；用继承和接口做扩展；运行时通过多态选真正实现；再用封装和访问控制保证安全；用 equals&#x2F;hashCode、final、抽象类&#x2F;接口这些规则把行为约定清楚。  知识脉络： -&gt; 类与对象：是什么、构造 -&gt; 三大特性: 封装 -&gt; 继承 -&gt; 多态 (怎么组织代码) -&gt; 方法关系：重载(同类扩展">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-08-04T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-09T09:37:32.322Z">
+<meta property="article:author" content="loudmute">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Java-面向对象</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a href="/tags/">标签</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2025/08/18/250818-Java-%E6%A0%B8%E5%BF%83%E7%B1%BB/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2025/05/14/250514-3D-RPG-%E6%B8%B8%E6%88%8F%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%8B%EF%BC%89/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://loudmute.github.io/2025/08/05/250805-Java-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://loudmute.github.io/2025/08/05/250805-Java-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/&text=Java-面向对象"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://loudmute.github.io/2025/08/05/250805-Java-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/&title=Java-面向对象"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://loudmute.github.io/2025/08/05/250805-Java-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/&is_video=false&description=Java-面向对象"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Java-面向对象&body=Check out this article: https://loudmute.github.io/2025/08/05/250805-Java-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://loudmute.github.io/2025/08/05/250805-Java-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/&title=Java-面向对象"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://loudmute.github.io/2025/08/05/250805-Java-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/&title=Java-面向对象"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://loudmute.github.io/2025/08/05/250805-Java-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/&title=Java-面向对象"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://loudmute.github.io/2025/08/05/250805-Java-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/&title=Java-面向对象"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://loudmute.github.io/2025/08/05/250805-Java-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/&name=Java-面向对象&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://loudmute.github.io/2025/08/05/250805-Java-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/&t=Java-面向对象"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B1%BB%E4%B8%8E%E5%AF%B9%E8%B1%A1"><span class="toc-number">1.</span> <span class="toc-text">类与对象</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95"><span class="toc-number">1.1.</span> <span class="toc-text">构造方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E5%A4%A7%E7%89%B9%E6%80%A7"><span class="toc-number">2.</span> <span class="toc-text">三大特性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E5%A4%A7%E7%89%B9%E6%80%A7-1"><span class="toc-number">2.1.</span> <span class="toc-text">三大特性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%91%E4%B8%8A%E5%92%8C%E5%90%91%E4%B8%8B%E8%BD%AC%E5%9E%8B"><span class="toc-number">2.2.</span> <span class="toc-text">向上和向下转型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%87%8D%E8%BD%BD%E5%92%8C%E9%87%8D%E5%86%99"><span class="toc-number">3.</span> <span class="toc-text">重载和重写</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%BD%E8%B1%A1%E7%B1%BB%E5%92%8C%E6%8E%A5%E5%8F%A3"><span class="toc-number">4.</span> <span class="toc-text">抽象类和接口</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8A%BD%E8%B1%A1%E7%B1%BB"><span class="toc-number">4.1.</span> <span class="toc-text">抽象类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A5%E5%8F%A3"><span class="toc-number">4.2.</span> <span class="toc-text">接口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8A%BD%E8%B1%A1%E7%B1%BB%E5%92%8C%E6%8E%A5%E5%8F%A3%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">4.3.</span> <span class="toc-text">抽象类和接口的区别</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E7%A7%8D%E5%85%B3%E9%94%AE%E5%AD%97"><span class="toc-number">5.</span> <span class="toc-text">三种关键字</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Java-面向对象
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">loudmute</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-08-04T16:00:00.000Z" class="dt-published" itemprop="datePublished">2025-08-05</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/">后端开发</a> › <a class="category-link" href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Java/">Java</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Java/" rel="tag">Java</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <blockquote>
+<p>Java OOP 的核心是：把数据和操作封进类；用继承和接口做扩展；运行时通过多态选真正实现；再用封装和访问控制保证安全；用 equals&#x2F;hashCode、final、抽象类&#x2F;接口这些规则把行为约定清楚。</p>
+</blockquote>
+<p>知识脉络：</p>
+<p>-&gt; 类与对象：是什么、构造</p>
+<p>-&gt; 三大特性: 封装 -&gt; 继承 -&gt; 多态 (怎么组织代码)</p>
+<p>-&gt; 方法关系：重载(同类扩展) vs 重写(子类覆盖)</p>
+<p>-&gt; 抽象：抽象类&#x2F;接口(定规范、定模板)</p>
+<p>-&gt; 修饰与约束：static &#x2F; final &#x2F; this &#x2F; super &#x2F; access)</p>
+<h2 id="类与对象"><a href="#类与对象" class="headerlink" title="类与对象"></a>类与对象</h2><p>类是一种模板，定义字段和数据；对象是类new出来的实例。</p>
+<p>类信息一份在方法区，对象在堆区，引用在栈区。</p>
+<p>定义一个类意味着约定一种类型：有哪些数据，有哪些方法。</p>
+<p>一个类被编译为<code>.class</code>，加载到JVM内存里才有可用的类信息。</p>
+<h3 id="构造方法"><a href="#构造方法" class="headerlink" title="构造方法"></a>构造方法</h3><p>构造方法（构造器）是用来创建对象时自动调用的特殊方法，用户初始化对象。</p>
+<p>特点：1）名字和类名相同；2）无返回类型；3）不能被继承，但子类可以通过<code>super(...)</code>调用父类的构造方法。</p>
+<p>没有写构造器时，编辑器自动生成默认的无参构造器。</p>
+<p>写了构造器时，不会自动生成，要用到无参构造器时需要自己写。</p>
+<p>可以重载，一个类可以有多个构造方法，参数列表不同，还可用<code>this(...)</code>调用本类其他构造方法。</p>
+<p>不可以重写，构造方法不能被继承，只是子类可以通过 <code>super(...)</code> 调用父类的构造方法。</p>
+<p>子类构造时一定要先初始化父类部分。</p>
+<p>1）子类构造第一行必须有<code>super(...)</code>或者<code>this(...)</code></p>
+<p>2）若没有，编译器自动插入<code>super()</code></p>
+<p>3）父类没有无参构造时，子类必须显示<code>super(...)</code></p>
+<h2 id="三大特性"><a href="#三大特性" class="headerlink" title="三大特性"></a>三大特性</h2><h3 id="三大特性-1"><a href="#三大特性-1" class="headerlink" title="三大特性"></a>三大特性</h3><p>面向对象的三大特性是：封装、继承、多态。</p>
+<p><strong>封装</strong>就是把字段和方法隐藏在对象内部，不允许外部直接访问对象内部信息，提供可供外部使用的方法。</p>
+<p>-&gt; 1) 隐藏内部信息；2）提供可用方法；3）保护数据安全</p>
+<p><strong>继承</strong>就是子类复用父类结构，并扩展自己的字段和方法。</p>
+<p>-&gt; 1）代码复用；2）功能扩展；3）单继承限制</p>
+<p><strong>多态</strong>就是同一父类引用，指向不同子类对象，调用重写方法是走运行时实际类型（动态绑定）。</p>
+<p>-&gt; 1）分类应用指向子类对象；2）动态绑定；3）重写方法</p>
+<p>封装让对象有了结构 -&gt; 结构可以通过继承复用，并出现了父类和子类的垂直关系 -&gt; 多态利用父类和子类的关系，通过父类同一引用，而子类对象在运行时可以表现不同的行为。</p>
+<h3 id="向上和向下转型"><a href="#向上和向下转型" class="headerlink" title="向上和向下转型"></a>向上和向下转型</h3><p>向上转型 是 子类对象 被 父类变量 引用。</p>
+<p>向下转型 是 指向子类对象的父类引用 强制转换为 子类引用。</p>
+<p>向上转型，安全、便于统一处理，编译时统一引用，运行时看实际类型，配合重写，就是多态的体现。</p>
+<p>向下转型，有风险需保证类型匹配(<code>instanceof</code>)、为了使用子类特有属性，编译时就可以在代码中使用子类特有属性，运行时检查类型。</p>
+<p>被引用的对象始终没变，变的是引用变量的编译器类型。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">Animal</span> <span class="variable">animal</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Dog</span>();        <span class="comment">//向上转型</span></span><br><span class="line">        <span class="keyword">if</span> (animal <span class="keyword">instanceof</span> Dog)&#123; <span class="comment">//运行时类型检查</span></span><br><span class="line">            <span class="type">Dog</span> <span class="variable">dog</span> <span class="operator">=</span> (Dog) animal;        <span class="comment">//向下转型</span></span><br><span class="line">            dog.eat();</span><br><span class="line">            dog.bark();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Animal</span> &#123;</span><br><span class="line">    <span class="type">public</span> <span class="title function_">Animal</span><span class="params">()</span> &#123;&#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">void</span> <span class="title function_">eat</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;eat!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Dog</span> <span class="keyword">extends</span> <span class="title class_">Animal</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">void</span> <span class="title function_">bark</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;bark!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="重载和重写"><a href="#重载和重写" class="headerlink" title="重载和重写"></a>重载和重写</h2><p>重载(Overload)就是同一类中多个同名方法根据不同的传参执行不同的逻辑处理。</p>
+<p>重写(Override)就是子类对父类方法的重新改造，外部样子不能变，内部逻辑可以变。</p>
+<p>重载和重写的区别：</p>
+<p>1）范围：重载发生在同类中；重写发正在继承关系中</p>
+<p>2）方法签名：重载的方法名相同、参数列表必须不同；重写的方法签名必须相同。</p>
+<p>3）返回类型：重载的返回类型可以不同；重写的返回类型必须相同，或是原返回类型的子类型。</p>
+<p>4）访问修饰符：重载的可以不同；重写的子类方法访问权限 &gt;&#x3D; 父类方法访问权限</p>
+<p>5）绑定时期：重载方法是静态绑定；重写方法是动态绑定；</p>
+<blockquote>
+<p><strong>关于重写：</strong></p>
+<ol>
+<li>方法名、参数列表必须相同，子类方法返回值类型应比父类方法返回值类型更小或相等，抛出的异常范围小于等于父类，访问修饰符范围大于等于父类。</li>
+<li>如果父类方法访问修饰符为 <code>private/final/static</code> 则子类就不能重写该方法，但是被 <code>static</code> 修饰的方法能够被再次声明。</li>
+<li>构造方法无法被重写</li>
+<li>如果方法的返回类型是 void 和基本数据类型，则返回值重写时不可修改。但是如果方法的返回值是引用类型，重写时是可以返回该引用类型的子类的。</li>
+</ol>
+</blockquote>
+<h2 id="抽象类和接口"><a href="#抽象类和接口" class="headerlink" title="抽象类和接口"></a>抽象类和接口</h2><h3 id="抽象类"><a href="#抽象类" class="headerlink" title="抽象类"></a>抽象类</h3><p>抽象类是一种不能被实例化的类模板。</p>
+<ul>
+<li>用<code>abstract</code> 修饰类</li>
+<li>可以有抽象方法（只有声明没有方法体、子类必须实现）</li>
+<li>也可以有实例字段、普通方法、构造器</li>
+</ul>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">Animal</span> &#123;</span><br><span class="line">    <span class="title class_">String</span> name;                 <span class="comment">// 可以有字段</span></span><br><span class="line">    <span class="keyword">public</span> <span class="title class_">Animal</span>(<span class="title class_">String</span> name) &#123; <span class="variable language_">this</span>.<span class="property">name</span> = name; &#125;  <span class="comment">// 可以有构造器</span></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">void</span> <span class="title function_">breathe</span>(<span class="params"></span>) &#123; ... &#125; <span class="comment">// 可以有已实现方法</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="built_in">void</span> <span class="title function_">eat</span>();   <span class="comment">// 抽象方法，子类必须实现</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="接口"><a href="#接口" class="headerlink" title="接口"></a>接口</h3><p>接口是一种能力约定，规定能做什么。</p>
+<ul>
+<li>用<code>interface</code>定义</li>
+<li>方法默认是抽象的（Java8可以定义default&#x2F;static，Java9还有private）</li>
+<li>字段默认是 <code>public static final</code> （常量）</li>
+<li>一个类可以实现多个接口</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> <span class="title class_">Flyable</span> &#123;</span><br><span class="line">    <span class="type">void</span> <span class="title function_">fly</span><span class="params">()</span>;  <span class="comment">// 约定：能飞</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Bird</span> <span class="keyword">implements</span> <span class="title class_">Flyable</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">void</span> <span class="title function_">fly</span><span class="params">()</span> &#123; ... &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="抽象类和接口的区别"><a href="#抽象类和接口的区别" class="headerlink" title="抽象类和接口的区别"></a>抽象类和接口的区别</h3><p>抽象类是模板（身份 + 可复用代码）-是什么-所属关系，接口是契约（能力）-怎么做-能力。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>抽象类</th>
+<th>接口</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>目的</td>
+<td>「是什么」+ 可抽公共实现</td>
+<td>「能做什么」</td>
+</tr>
+<tr>
+<td>继承&#x2F;实现</td>
+<td>单继承（extends 一个类）</td>
+<td>可实现多个</td>
+</tr>
+<tr>
+<td>字段</td>
+<td>可有普通实例字段</td>
+<td>一般是常量（public static final）</td>
+</tr>
+<tr>
+<td>构造器</td>
+<td>有</td>
+<td>无</td>
+</tr>
+<tr>
+<td>方法</td>
+<td>抽象 + 普通方法都可</td>
+<td>抽象 + default&#x2F;static 等</td>
+</tr>
+<tr>
+<td>设计关系</td>
+<td>垂直的类层次</td>
+<td>水平的能力组合</td>
+</tr>
+</tbody></table>
+<p>选择：</p>
+<ul>
+<li>需要共享字段、构造逻辑、部分默认实现，且是「一种东西」→ 抽象类</li>
+<li>需要多种来源的能力、多组合 → 接口</li>
+<li>很多框架：接口对外，抽象类对内抽公共代码（如集合里的 <code>List</code> + <code>AbstractList</code>）</li>
+</ul>
+<blockquote>
+<p>一个类只能继承一个抽象类，而一个类可以实现多个接口。这决定了，子类继承自一个抽象类的关系是垂直的，一个类实现多个接口的关系是水平的。</p>
+<p>抽象类决定“是什么”以及部分的“怎么做”（公共字段和公共方法），而接口决定“能做什么”。当我们描述各种各样的动物时，我们可以从两个角度来描述：1）是什么 2）能做什么。“动物”一词就是抽象类，各种各样的动物都会有一致的东西（公共字段）比如器官、名字、年龄，都会有一致的行为（公共方法）比如摄取影响、身体衰老等，这是从“是什么”的角度来描述。我们也可以用“能做什么”来描述，比如能跑的（接口一）有猫、狗、虎、豹，比如能飞的（接口2）有鸟、飞机、宇宙飞船。</p>
+<p>也就是说，抽象类强调所属关系，接口强调功能。</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">「是什么」思维：</span><br><span class="line">动物</span><br><span class="line">├─ 哺乳动物</span><br><span class="line">│    ├─ 狗</span><br><span class="line">│    └─ 猫</span><br><span class="line">└─ 鸟类</span><br><span class="line"><span class="code">    ├─ 鸭子</span></span><br><span class="line"><span class="code">    └─ 鸡</span></span><br><span class="line"><span class="code">「能做什么」思维：</span></span><br><span class="line"><span class="code">能跑步: [狗, 鸭子, 机器人, 汽车...]</span></span><br><span class="line"><span class="code">能游泳: [狗, 鸭子, 船, 鱼...]  </span></span><br><span class="line"><span class="code">能飞行: [鸭子, 飞机, 鸟, 无人机...]</span></span><br></pre></td></tr></table></figure>
+
+<p>由抽象类和具体类构成的继承的垂直关系，不同的子类最终都会溯源到相当的父类；而由接口的具体类构成的实现的水平关系，不同的子类未必会有相同的父类。</p>
+<p>在Java的各种各样的框架中，具体类、抽象类、接口，三者的分工往往是这样的：</p>
+<ul>
+<li>接口：做什么，是拿来用的</li>
+<li>抽象类和具体类：怎么做，是负责实现的</li>
+</ul>
+<p>所以一个复杂的框架，对于它的使用者来说，往往就是调用接口；对于它的实现者来说，则需要考虑接口、抽象类和具体类。</p>
+<p>以集合框架为例，我们要使用一种集合类型时，往往使用接口类型的引用来进行各种调用。</p>
+</blockquote>
+<h2 id="三种关键字"><a href="#三种关键字" class="headerlink" title="三种关键字"></a>三种关键字</h2><p><strong>按三个维度记</strong></p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>关键字</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>访问范围</td>
+<td>private &#x2F; 默认 &#x2F; protected &#x2F; public</td>
+<td>谁能看见</td>
+</tr>
+<tr>
+<td>所属</td>
+<td>static</td>
+<td>属类，不属实例；无 this</td>
+</tr>
+<tr>
+<td>可变性</td>
+<td>final</td>
+<td>变量不可再赋值；方法不可重写；类不可继承</td>
+</tr>
+</tbody></table>
+<p><strong>访问权限</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>同类</th>
+<th>同包</th>
+<th>子类</th>
+<th>全世界</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>private</td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>默认</td>
+<td>✓</td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>protected</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓（可跨包）</td>
+<td></td>
+</tr>
+<tr>
+<td>public</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+</tbody></table>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/about/">关于</a></li>
+        
+          <li><a href="/archives/">文章</a></li>
+        
+          <li><a href="/categories/">分类</a></li>
+        
+          <li><a href="/tags/">标签</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B1%BB%E4%B8%8E%E5%AF%B9%E8%B1%A1"><span class="toc-number">1.</span> <span class="toc-text">类与对象</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95"><span class="toc-number">1.1.</span> <span class="toc-text">构造方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E5%A4%A7%E7%89%B9%E6%80%A7"><span class="toc-number">2.</span> <span class="toc-text">三大特性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E5%A4%A7%E7%89%B9%E6%80%A7-1"><span class="toc-number">2.1.</span> <span class="toc-text">三大特性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%91%E4%B8%8A%E5%92%8C%E5%90%91%E4%B8%8B%E8%BD%AC%E5%9E%8B"><span class="toc-number">2.2.</span> <span class="toc-text">向上和向下转型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%87%8D%E8%BD%BD%E5%92%8C%E9%87%8D%E5%86%99"><span class="toc-number">3.</span> <span class="toc-text">重载和重写</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%BD%E8%B1%A1%E7%B1%BB%E5%92%8C%E6%8E%A5%E5%8F%A3"><span class="toc-number">4.</span> <span class="toc-text">抽象类和接口</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8A%BD%E8%B1%A1%E7%B1%BB"><span class="toc-number">4.1.</span> <span class="toc-text">抽象类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A5%E5%8F%A3"><span class="toc-number">4.2.</span> <span class="toc-text">接口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8A%BD%E8%B1%A1%E7%B1%BB%E5%92%8C%E6%8E%A5%E5%8F%A3%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">4.3.</span> <span class="toc-text">抽象类和接口的区别</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E7%A7%8D%E5%85%B3%E9%94%AE%E5%AD%97"><span class="toc-number">5.</span> <span class="toc-text">三种关键字</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://loudmute.github.io/2025/08/05/250805-Java-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://loudmute.github.io/2025/08/05/250805-Java-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/&text=Java-面向对象"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://loudmute.github.io/2025/08/05/250805-Java-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/&title=Java-面向对象"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://loudmute.github.io/2025/08/05/250805-Java-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/&is_video=false&description=Java-面向对象"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Java-面向对象&body=Check out this article: https://loudmute.github.io/2025/08/05/250805-Java-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://loudmute.github.io/2025/08/05/250805-Java-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/&title=Java-面向对象"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://loudmute.github.io/2025/08/05/250805-Java-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/&title=Java-面向对象"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://loudmute.github.io/2025/08/05/250805-Java-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/&title=Java-面向对象"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://loudmute.github.io/2025/08/05/250805-Java-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/&title=Java-面向对象"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://loudmute.github.io/2025/08/05/250805-Java-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/&name=Java-面向对象&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://loudmute.github.io/2025/08/05/250805-Java-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/&t=Java-面向对象"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2026
+    loudmute
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a href="/tags/">标签</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

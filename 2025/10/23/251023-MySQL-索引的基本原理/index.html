@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="主要是MySQL的InnoDB引擎下的索引相关原理。 数据页数据库中的一条条数据记录以数据页的形式存储在磁盘中的.idb文件，每个数据页16KB大小，存储多条记录，每条记录都是{key:value}形式，其中key为序号，value为data。每次，查找数据时，从磁盘中加载加载数据页，并逐条比对直到成功。最坏的情况下，要遍历磁盘中所有的数据页，时间复杂度为O(n)，而每一次磁盘I&#x2F;O都比">
+<meta property="og:type" content="article">
+<meta property="og:title" content="251023-MySQL-索引的基本原理">
+<meta property="og:url" content="https://loudmute.github.io/2025/10/23/251023-MySQL-%E7%B4%A2%E5%BC%95%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/index.html">
+<meta property="og:site_name" content="loudmute">
+<meta property="og:description" content="主要是MySQL的InnoDB引擎下的索引相关原理。 数据页数据库中的一条条数据记录以数据页的形式存储在磁盘中的.idb文件，每个数据页16KB大小，存储多条记录，每条记录都是{key:value}形式，其中key为序号，value为data。每次，查找数据时，从磁盘中加载加载数据页，并逐条比对直到成功。最坏的情况下，要遍历磁盘中所有的数据页，时间复杂度为O(n)，而每一次磁盘I&#x2F;O都比">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://pica.zhimg.com/80/v2-f70b513990a327b1e0e236db54e325ea_1440w.webp">
+<meta property="og:image" content="https://pica.zhimg.com/80/v2-afaee8a78e07d1e14fd863dad700457c_1440w.webp">
+<meta property="og:image" content="https://pic3.zhimg.com/80/v2-a33db3ebcea729266c66aef17830f7fa_1440w.webp">
+<meta property="article:published_time" content="2025-10-22T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-09T09:53:52.416Z">
+<meta property="article:author" content="loudmute">
+<meta property="article:tag" content="MySQL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pica.zhimg.com/80/v2-f70b513990a327b1e0e236db54e325ea_1440w.webp">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>251023-MySQL-索引的基本原理</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a href="/tags/">标签</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2026/04/20/260420-RocketMQ%E7%AE%80%E8%A6%81%E6%80%BB%E7%BB%93/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2025/10/10/251010-Java-JVM%E5%9F%BA%E7%A1%80/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://loudmute.github.io/2025/10/23/251023-MySQL-%E7%B4%A2%E5%BC%95%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://loudmute.github.io/2025/10/23/251023-MySQL-%E7%B4%A2%E5%BC%95%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/&text=251023-MySQL-索引的基本原理"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://loudmute.github.io/2025/10/23/251023-MySQL-%E7%B4%A2%E5%BC%95%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/&title=251023-MySQL-索引的基本原理"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://loudmute.github.io/2025/10/23/251023-MySQL-%E7%B4%A2%E5%BC%95%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/&is_video=false&description=251023-MySQL-索引的基本原理"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=251023-MySQL-索引的基本原理&body=Check out this article: https://loudmute.github.io/2025/10/23/251023-MySQL-%E7%B4%A2%E5%BC%95%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://loudmute.github.io/2025/10/23/251023-MySQL-%E7%B4%A2%E5%BC%95%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/&title=251023-MySQL-索引的基本原理"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://loudmute.github.io/2025/10/23/251023-MySQL-%E7%B4%A2%E5%BC%95%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/&title=251023-MySQL-索引的基本原理"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://loudmute.github.io/2025/10/23/251023-MySQL-%E7%B4%A2%E5%BC%95%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/&title=251023-MySQL-索引的基本原理"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://loudmute.github.io/2025/10/23/251023-MySQL-%E7%B4%A2%E5%BC%95%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/&title=251023-MySQL-索引的基本原理"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://loudmute.github.io/2025/10/23/251023-MySQL-%E7%B4%A2%E5%BC%95%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/&name=251023-MySQL-索引的基本原理&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://loudmute.github.io/2025/10/23/251023-MySQL-%E7%B4%A2%E5%BC%95%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/&t=251023-MySQL-索引的基本原理"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E9%A1%B5"><span class="toc-number">1.</span> <span class="toc-text">数据页</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95"><span class="toc-number">2.</span> <span class="toc-text">索引</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">3.</span> <span class="toc-text">索引的数据结构</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95%E5%88%86%E7%B1%BB"><span class="toc-number">4.</span> <span class="toc-text">索引分类</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        251023-MySQL-索引的基本原理
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">loudmute</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-10-22T16:00:00.000Z" class="dt-published" itemprop="datePublished">2025-10-23</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/">后端开发</a> › <a class="category-link" href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/MySQL/">MySQL</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/MySQL/" rel="tag">MySQL</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <p>主要是MySQL的InnoDB引擎下的索引相关原理。</p>
+<h1 id="数据页"><a href="#数据页" class="headerlink" title="数据页"></a>数据页</h1><p>数据库中的一条条数据记录以数据页的形式存储在磁盘中的.idb文件，每个数据页16KB大小，存储多条记录，每条记录都是{key:value}形式，其中key为序号，value为data。每次，查找数据时，从磁盘中加载加载数据页，并逐条比对直到成功。最坏的情况下，要遍历磁盘中所有的数据页，时间复杂度为O(n)，而每一次磁盘I&#x2F;O都比较耗费时间。问题来了，遍历所有数据的查找十分低效，有没有更高效的方法？</p>
+<p><img src="https://pica.zhimg.com/80/v2-f70b513990a327b1e0e236db54e325ea_1440w.webp" alt="img"></p>
+<h1 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h1><p>为了减少磁盘I&#x2F;O，提高查找数据页的效率，我们增加一种数据页，我们称之为索引，为了从逻辑上区分，我们只称呼存储数据库数据的数据页为数据页。就像一本书中的目录，索引不存储数据库中的数据，而是存储多个数据页的页号，每条数据中，value为数据页的页号，key为value对应的数据页中最小的序号；当查找磁盘中的记录时，首先加载磁盘中的索引，在索引中根据序号找到对应数据页号，再根据数据页号加载磁盘中对应的数据页。这样可以有效减少磁盘I&#x2F;O次数。需要注意的是，索然逻辑上，索引是如图这种指向关系，但是实际在磁盘中存储时，是比较杂乱的，没有逻辑上那么规整。</p>
+<p><img src="https://pica.zhimg.com/80/v2-afaee8a78e07d1e14fd863dad700457c_1440w.webp" alt="img"></p>
+<h1 id="索引的数据结构"><a href="#索引的数据结构" class="headerlink" title="索引的数据结构"></a>索引的数据结构</h1><p>没有索引时，查找数据是笨拙的“挨个找”，为此引入索引，查找数据变为了聪明的“跳着找”。但是引入了索引这种新型数据，就得考虑这种数据的结构。于是新的问题就来了，索引使用什么数据结构最合适？</p>
+<p>数据库中的索引，应该能够快速查找到数据或数据页号。在这方面有优势的结构，有哈希表和树形结构（BST树、AVL树、红黑树、B树、B+树）。</p>
+<p>哈希表的Hash函数在把key映射到index的过程中，为了分布均匀会放弃保序性，不适合顺序和范围查询；另外，哈希表中的buckeys是分散的，这就意味着数据在磁盘中的存储无法连续，而数据库中数据页内的数据是连续的，并且也不利于磁盘索引。</p>
+<p>BST树（二叉查找树）的平衡程度决定了查找效率，在最坏情况下会退化为链表，时间复杂度会来到O(n)。</p>
+<p>AVL树（自平衡二叉查找树）需要进行频繁的旋转操作来保持平衡，这增加了计算开销；其每个节点能存储的数据较少，浪费了数据页的存储，树高也较高，磁盘I&#x2F;O次数也多；红黑树相比AVL树，不追求绝对平衡旋转操作不太频繁，但因此树的高度也较高，磁盘I&#x2F;O次数也较多。</p>
+<p>BST树、AVL树、红黑树这些树形结构，问题在于，每个节点的分支为必须是2，这导致节点中只有一个key，指向的子节点最多两个，一个节点表示的信息密度较小，并不适配数据页的存储结构会浪费许多空间，树的的层级较多树高较高，磁盘I&#x2F;O次数也会增加。二叉树在磁盘读取上的表现不行，需要一种树，一次I&#x2F;O可以获取大量信息，树高较低，一个节点差不多能够占一页的存储空间，于是便有了B树（B-Tree，Balanced m-way Search Tree）。</p>
+<p><img src="https://pic3.zhimg.com/80/v2-a33db3ebcea729266c66aef17830f7fa_1440w.webp" alt="img"></p>
+<p>B树实现了这些目标：1）多路，一个节点有多个key，对应多个分支；2）平衡，所有叶子节点在同一层；3）页对齐，一个节点大致为一个磁盘叶。它的特点有：1）节点存key + pointers（孩子指针），所有节点可能存data（记录指针&#x2F;记录本身）；2）插入或删除自动分裂或合并；3）树高约为LogmN；在磁盘中，每个节点对应一个数据页，页与页之间通过指针关联。</p>
+<p>但是B树也存在一些不足：1）范围查询不够高效，由于所有节点都可能存data，范围查询需要跨节点、回溯，磁盘扫描不够连续（逻辑&#x2F;物理连续，数据之间指针关联&#x2F;物理相邻），比如查找3-17的数据就需要27-&gt;14-&gt;3-&gt;14-&gt;17的路径；2）树高较高，由于所有节点都可以存data，非叶节点存data的空间占据了存key的空间，分支就不足够多，树高就高，就意味着磁盘I&#x2F;O次数较多。因此，B+树对B树做了改进。</p>
+<p>B+树的改进有：1）非叶节点不存Data，增加每个节点中的key，降低树的高度；2）所有Data放在叶子节点，这里的Data是记录指针&#x2F;记录本身；3）叶子节点之间用双向联表关联，便于范围查询。</p>
+<h1 id="索引分类"><a href="#索引分类" class="headerlink" title="索引分类"></a>索引分类</h1><p>按底层存储方式分类：</p>
+<p>1）聚簇索引，叶子节点中存放的是数据本身，一条条记录，一个表只有一个，主键索引就是聚簇索引。</p>
+<p>2）非聚簇索引，叶子节点存放的是数据对应的主键，返回主键，再根据主键索引进行查询，二级索引（辅助索引）就是非聚簇索引。</p>
+<p>按应用维度分类：</p>
+<p>1）主键索引：表中只有一个，加速查询，列值唯一不为null</p>
+<p>2）普通索引：加速查询</p>
+<p>3）唯一索引：加速查询，列值唯一可为null</p>
+<p>4）覆盖索引：索引包含需要查询字段，之间通过索引叶子节点中的key值返回，无需再根据主键值走主键索引</p>
+<p>5）联合索引：多个字段组成一个索引，用于组合多个条件进行查询，效率大于多个索引的合并。使用联合索引时，要符合最左前缀撇配原则。</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/about/">关于</a></li>
+        
+          <li><a href="/archives/">文章</a></li>
+        
+          <li><a href="/categories/">分类</a></li>
+        
+          <li><a href="/tags/">标签</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E9%A1%B5"><span class="toc-number">1.</span> <span class="toc-text">数据页</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95"><span class="toc-number">2.</span> <span class="toc-text">索引</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">3.</span> <span class="toc-text">索引的数据结构</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95%E5%88%86%E7%B1%BB"><span class="toc-number">4.</span> <span class="toc-text">索引分类</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://loudmute.github.io/2025/10/23/251023-MySQL-%E7%B4%A2%E5%BC%95%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://loudmute.github.io/2025/10/23/251023-MySQL-%E7%B4%A2%E5%BC%95%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/&text=251023-MySQL-索引的基本原理"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://loudmute.github.io/2025/10/23/251023-MySQL-%E7%B4%A2%E5%BC%95%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/&title=251023-MySQL-索引的基本原理"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://loudmute.github.io/2025/10/23/251023-MySQL-%E7%B4%A2%E5%BC%95%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/&is_video=false&description=251023-MySQL-索引的基本原理"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=251023-MySQL-索引的基本原理&body=Check out this article: https://loudmute.github.io/2025/10/23/251023-MySQL-%E7%B4%A2%E5%BC%95%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://loudmute.github.io/2025/10/23/251023-MySQL-%E7%B4%A2%E5%BC%95%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/&title=251023-MySQL-索引的基本原理"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://loudmute.github.io/2025/10/23/251023-MySQL-%E7%B4%A2%E5%BC%95%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/&title=251023-MySQL-索引的基本原理"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://loudmute.github.io/2025/10/23/251023-MySQL-%E7%B4%A2%E5%BC%95%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/&title=251023-MySQL-索引的基本原理"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://loudmute.github.io/2025/10/23/251023-MySQL-%E7%B4%A2%E5%BC%95%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/&title=251023-MySQL-索引的基本原理"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://loudmute.github.io/2025/10/23/251023-MySQL-%E7%B4%A2%E5%BC%95%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/&name=251023-MySQL-索引的基本原理&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://loudmute.github.io/2025/10/23/251023-MySQL-%E7%B4%A2%E5%BC%95%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/&t=251023-MySQL-索引的基本原理"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2026
+    loudmute
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a href="/tags/">标签</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

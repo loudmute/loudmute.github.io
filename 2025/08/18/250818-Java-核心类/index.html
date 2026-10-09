@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Objectjava.lang.Object是所有类的的根父类。不写extends，也默认继承它。 Object有很多方法，也就是所有类的通用方法，比较重要的有： &#x3D;&#x3D; 和 equals()&#x3D;&#x3D;用于比较基本数据类型和引用类型的变量：  对于基本数据类型，&#x3D;&#x3D;比较的是值是否相等 对于引用数据类型，&#x3D;&#x3D;比较的是引用指向的对象是否相同   实际上，&#x3D;&#x3D;比较的都是值，只不过引用变量的值虽然用于标识指向的对">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java-核心类">
+<meta property="og:url" content="https://loudmute.github.io/2025/08/18/250818-Java-%E6%A0%B8%E5%BF%83%E7%B1%BB/index.html">
+<meta property="og:site_name" content="loudmute">
+<meta property="og:description" content="Objectjava.lang.Object是所有类的的根父类。不写extends，也默认继承它。 Object有很多方法，也就是所有类的通用方法，比较重要的有： &#x3D;&#x3D; 和 equals()&#x3D;&#x3D;用于比较基本数据类型和引用类型的变量：  对于基本数据类型，&#x3D;&#x3D;比较的是值是否相等 对于引用数据类型，&#x3D;&#x3D;比较的是引用指向的对象是否相同   实际上，&#x3D;&#x3D;比较的都是值，只不过引用变量的值虽然用于标识指向的对">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://pica.zhimg.com/80/v2-2686a7612bbe5e16637193779f57ee68_1440w.webp">
+<meta property="og:image" content="https://picx.zhimg.com/80/v2-5ebb3aab65466378c8b50e7028613961_1440w.webp">
+<meta property="article:published_time" content="2025-08-17T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-09T09:42:00.690Z">
+<meta property="article:author" content="loudmute">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pica.zhimg.com/80/v2-2686a7612bbe5e16637193779f57ee68_1440w.webp">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Java-核心类</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a href="/tags/">标签</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2025/08/28/250828-Java-%E9%9B%86%E5%90%88/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2025/08/05/250805-Java-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://loudmute.github.io/2025/08/18/250818-Java-%E6%A0%B8%E5%BF%83%E7%B1%BB/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://loudmute.github.io/2025/08/18/250818-Java-%E6%A0%B8%E5%BF%83%E7%B1%BB/&text=Java-核心类"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://loudmute.github.io/2025/08/18/250818-Java-%E6%A0%B8%E5%BF%83%E7%B1%BB/&title=Java-核心类"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://loudmute.github.io/2025/08/18/250818-Java-%E6%A0%B8%E5%BF%83%E7%B1%BB/&is_video=false&description=Java-核心类"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Java-核心类&body=Check out this article: https://loudmute.github.io/2025/08/18/250818-Java-%E6%A0%B8%E5%BF%83%E7%B1%BB/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://loudmute.github.io/2025/08/18/250818-Java-%E6%A0%B8%E5%BF%83%E7%B1%BB/&title=Java-核心类"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://loudmute.github.io/2025/08/18/250818-Java-%E6%A0%B8%E5%BF%83%E7%B1%BB/&title=Java-核心类"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://loudmute.github.io/2025/08/18/250818-Java-%E6%A0%B8%E5%BF%83%E7%B1%BB/&title=Java-核心类"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://loudmute.github.io/2025/08/18/250818-Java-%E6%A0%B8%E5%BF%83%E7%B1%BB/&title=Java-核心类"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://loudmute.github.io/2025/08/18/250818-Java-%E6%A0%B8%E5%BF%83%E7%B1%BB/&name=Java-核心类&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://loudmute.github.io/2025/08/18/250818-Java-%E6%A0%B8%E5%BF%83%E7%B1%BB/&t=Java-核心类"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Object"><span class="toc-number">1.</span> <span class="toc-text">Object</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%92%8C-equals"><span class="toc-number">1.1.</span> <span class="toc-text">&#x3D;&#x3D; 和 equals()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hashCode-%E6%96%B9%E6%B3%95"><span class="toc-number">1.2.</span> <span class="toc-text">hashCode()方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%B3%95toString"><span class="toc-number">1.3.</span> <span class="toc-text">方法toString()</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#String"><span class="toc-number">2.</span> <span class="toc-text">String</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">2.1.</span> <span class="toc-text">是什么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E5%8F%AF%E5%8F%98"><span class="toc-number">2.2.</span> <span class="toc-text">为什么不可变</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%8E%9F%E7%90%86"><span class="toc-number">2.3.</span> <span class="toc-text">内存原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8B%BC%E6%8E%A5"><span class="toc-number">2.4.</span> <span class="toc-text">拼接</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Java-核心类
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">loudmute</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-08-17T16:00:00.000Z" class="dt-published" itemprop="datePublished">2025-08-18</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/">后端开发</a> › <a class="category-link" href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Java/">Java</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Java/" rel="tag">Java</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h2 id="Object"><a href="#Object" class="headerlink" title="Object"></a>Object</h2><p><code>java.lang.Object</code>是所有类的的根父类。不写<code>extends</code>，也默认继承它。</p>
+<p>Object有很多方法，也就是所有类的通用方法，比较重要的有：</p>
+<h3 id="和-equals"><a href="#和-equals" class="headerlink" title="== 和 equals()"></a><strong><code>==</code></strong> <strong>和</strong> <strong><code>equals()</code></strong></h3><p><code>==</code>用于比较基本数据类型和引用类型的变量：</p>
+<ul>
+<li>对于基本数据类型，<code>==</code>比较的是值是否相等</li>
+<li>对于引用数据类型，<code>==</code>比较的是引用指向的对象是否相同</li>
+</ul>
+<blockquote>
+<p>实际上，<code>==</code>比较的都是值，只不过<strong>引用变量的值虽然用于标识指向的对象，但是Java语言不将其定义为可见的物理内存地址。</strong></p>
+</blockquote>
+<p><code>equals()</code>只用于比较引用类型的变量，而所有引用类型都是Object的子类，都具有equals方法。</p>
+<ul>
+<li>类没有重写<code>equals()</code>，比较的是对象是否相同，即默认的<code>Object</code>的<code>equals()</code>方法</li>
+<li>类重写了<code>equals()</code>，比较的一般是对象的内容是否相等，即重写方法的逻辑</li>
+</ul>
+<p>Object默认的equals()方法为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">equals</span><span class="params">(Object obj)</span> &#123;</span><br><span class="line">     <span class="keyword">return</span> (<span class="built_in">this</span> == obj);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="hashCode-方法"><a href="#hashCode-方法" class="headerlink" title="hashCode()方法"></a><strong>hashCode()方法</strong></h3><p><code>hashCode()</code>方法，是为了对象可能作为哈希表中的key而准备的，使用hashCode()方法计算出对象对应的哈希值，大大缩减了哈希表的查找范围，提升了查找效率。</p>
+<p><code>hashCode()</code>计算哈希值：</p>
+<ul>
+<li>Object默认的hashCode()：根据对象身份(和对象的内存地址有关)，不看字段内容；</li>
+<li>重写后的hashCode()：根据重写后的<code>equals()</code>方法用到的字段，String中是对每个字符累加:<code>h = 31 * h + char[i]</code></li>
+</ul>
+<p><strong>哈希表</strong></p>
+<img src="https://pica.zhimg.com/80/v2-2686a7612bbe5e16637193779f57ee68_1440w.webp" alt="img" style="zoom: 50%;" />
+
+<p>哈希表的结构是由数组和联表&#x2F;树组成的，每个数组的元素可能是null或者跟着一个链表&#x2F;树，称之为一个<code>桶</code>，桶中的每个节点存着键值对<code>&lt;key，value&gt; </code>，并且key是唯一的。</p>
+<blockquote>
+<p>这里的key唯一取决于key对象的equals方法：</p>
+<p>若是比较对象相同，则key的对象唯一</p>
+<p>若是比较对象内容相等，则key的内容唯一</p>
+</blockquote>
+<p>根据一个key，找到哈希表中对应的键值对&lt;key, value&gt;的过程如下：</p>
+<p>1）key通过hashCode()方法转化为哈希值，再简单转换为数组对应的下标，找到对应的桶；</p>
+<p>2）key通过equals()方法与桶中的节点的key比较，最终找到对应的键值对。</p>
+<p><strong>为什么重写equlas()方法，也要重写hashCode()方法？</strong></p>
+<p>因为重写之前，<code>hashCode()</code>方法是根据对象身份计算哈希值的，如果重写<code>equals()</code>方法比较的是两个对象的内容，不重写<code>hashCode()</code>则会因为两个对象不相同导致哈希值不同，在哈希表查找过程的第一步往往就会进错桶（除非哈希碰撞），也就无法比较两个对象的内容。</p>
+<h3 id="方法toString"><a href="#方法toString" class="headerlink" title="方法toString()"></a>方法toString()</h3><p><code>toString()</code>方法用于返回对象的字符串描述，方便打印、拼日志、调试。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Object`类默认打印的值格式：`类名@哈希值的十六位进制</span><br><span class="line"><span class="type">User</span> <span class="variable">u</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">User</span>();</span><br><span class="line">System.out.println(u);  <span class="comment">// 等价于打印 u.toString()</span></span><br><span class="line"><span class="comment">// 可能类似：com.xxx.User@1a2b3c4d</span></span><br></pre></td></tr></table></figure>
+
+<p>为了能够打印出对人类便于理解且有效的信息，常常重写<code>toString()</code>方法：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="title class_">String</span> <span class="title function_">toString</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;User&#123;id=&quot;</span> + id + <span class="string">&quot;, name=&quot;</span> + name + <span class="string">&quot;&#125;&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="String"><a href="#String" class="headerlink" title="String"></a>String</h2><p>是什么 -&gt; 不可变 -&gt; 字面量 VS new -&gt; 比较 -&gt; 拼接</p>
+<h3 id="是什么"><a href="#是什么" class="headerlink" title="是什么"></a>是什么</h3><p>String是不可变的字符序列：</p>
+<ul>
+<li><code>final class</code>不可被继承</li>
+<li>内部是<code>private final</code>数组（jdk8及以前多为char[]；jdk9及以后多为byte[]+编码标记）</li>
+<li>实现了<code>java.io.Serializable</code>, <code>Comparable&lt;String&gt;</code>, <code>CharSequence</code>等类</li>
+</ul>
+<p>一旦修改，对象不再改变，看起来像改变的操作，都是返回了新的String对象。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">class</span> <span class="title class_">String</span> <span class="keyword">implements</span> </span><br><span class="line"><span class="title class_">java</span>.io.Serializable, Comparable&lt;String&gt;, CharSequence &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">char</span> value[];</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="为什么不可变"><a href="#为什么不可变" class="headerlink" title="为什么不可变"></a>为什么不可变</h3><p><strong>设计意图：</strong></p>
+<p>String 被设计为不可变，主要解决了四个核心问题。</p>
+<p><strong>第一，安全性。</strong> 字符串广泛承载敏感信息，比如文件路径、数据库连接串、类名、权限标识。如果可变，这些关键值就可能被篡改，导致安全漏洞。不可变天然形成了一道安全屏障。</p>
+<p><strong>第二，线程安全。</strong> 不可变对象状态永不改变，多线程并发读写完全不需要加锁，这是并发编程里最理想的安全模式。</p>
+<p><strong>第三，字符串常量池的共享。</strong> 常量池依赖不可变性来复用相同字面量。如果可变，一个引用修改内容，所有共享该对象的引用都会被污染，常量池就失去了意义。</p>
+<p><strong>第四，作为 HashMap 键的可靠性。</strong> String 是最常用的 Map key，它的哈希值一旦计算就被缓存，内容不变则哈希值永远稳定。如果可变，存入 Map 后改了内容，哈希值就变了，会导致数据丢失、查找失败。</p>
+<p>这四个原因叠加，让 String 的不可变性成为整个 Java 平台安全与性能的基石。</p>
+<p><strong>源码实现：</strong></p>
+<ol>
+<li><p>内部数组是<code>private final</code>的，并且<code>String</code>没有提供修改的方法</p>
+</li>
+<li><p><code>String</code>类是<code>final</code>的，避免了子类继承破坏约定</p>
+</li>
+</ol>
+<h3 id="内存原理"><a href="#内存原理" class="headerlink" title="内存原理"></a>内存原理</h3><img src="https://picx.zhimg.com/80/v2-5ebb3aab65466378c8b50e7028613961_1440w.webp" alt="img" style="zoom: 50%;" />
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">String</span> s1 = <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;abc&quot;</span>);</span><br><span class="line"><span class="title class_">String</span> s2 = <span class="string">&quot;abc&quot;</span>;</span><br><span class="line"><span class="title class_">String</span> s3 = <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;abc&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>这段代码执行时发生了什么：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">s1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;abc&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>1）JVM去字符常量池中查找<code>&quot;abc&quot;</code>对应的映射，首次执行并没有查找，在内存中创建一个新的String对象B(池对象P)，该对象内部的<code>value</code>字段指向在堆中新建的一个字符数组<code>[&#39;a&#39;,&#39;b&#39;,&#39;c&#39;]</code>，并在常量池中进行登记映射键值对<code>&lt;&quot;abc&quot;，对象B的引用地址&gt;</code></p>
+<p>2）JVM看到<code>new</code>关键字，会在堆中新建一个String对象A(堆对象1)，调用String构造函数，将String对象B作为传参传入，String对象A内部的<code>value</code>字段指向String对象B内部的<code>value</code>字段所指的字符数组，返回对象A的引用地址给变量s1</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">s2</span> <span class="operator">=</span> <span class="string">&quot;abc&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>3）JVM看到<code>&quot;abc&quot;</code>，去常量池中查找存在映射，不再新建，将对象B的引用地址返回给变量s2</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">s3</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;abc&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>4）JVM看到<code>&quot;abc&quot;</code>，去常量池中查找存在映射，不再新建；</p>
+<p>5）JVM看到<code>new</code>关键字，创建新的对象C，并传入对象B的地址作为构造函数的参数，对象C内部<code>value</code>字段指向已存在的字符数组，返回对象C的地址给变量s3</p>
+<p><strong>字符串常量池</strong></p>
+<p>字符串常量池（String Constant Pool）主要解决的是<strong>避免重复创建相同内容的字符串对象，从而节省内存并提高性能</strong>的问题，其存在于JVM的堆内存中。</p>
+<p>字符串常量池在底层实现上是一个StringTable，本质上是一个哈希表，将<code>字符串字面量</code>（编译时期代码中的双引号中的字符串）<strong>映射</strong>到<code>String对象引用地址</code>，比如上述代码过程中的<code>&lt;&quot;abc&quot;，对象B的引用地址&gt;</code></p>
+<p>当通过字面量重复创建字符串对象时，会共享同一个字符串对象，通过new创建相同内容的字符串对象时，虽然会不会共享同一个字符串对象，但是相同内容的字符串对象共享同一个字符数组。</p>
+<p><strong>方法<code>intern()</code></strong></p>
+<ul>
+<li>返回值：总是返回常量池中该字符串对象的引用。</li>
+<li>执行逻辑：<ul>
+<li>如果池里没有：把当前字符串对象的引用添加到池里，然后返回这个对象的引用。</li>
+<li>如果池里有：直接返回池里已有对象的引用。</li>
+</ul>
+</li>
+</ul>
+<h3 id="拼接"><a href="#拼接" class="headerlink" title="拼接"></a>拼接</h3><p>把多个字符串（或与其他类型）连成一个新字符串。</p>
+<p>因为 String 不可变，拼接往往意味着：准备内容 → 得到新的 String，而不是改原来的对象。</p>
+<p><strong>关键字”+”</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> <span class="string">&quot;a&quot;</span> + <span class="string">&quot;b&quot;</span>;</span><br><span class="line"><span class="type">String</span> <span class="variable">t</span> <span class="operator">=</span> x + y;        <span class="comment">// x、y 是变量</span></span><br><span class="line"><span class="type">String</span> <span class="variable">u</span> <span class="operator">=</span> <span class="string">&quot;id=&quot;</span> + <span class="number">100</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>编译期能定死的常量：编译器直接合成一个字面量，如 <code>&quot;a&quot;+&quot;b&quot;</code> → <code>&quot;ab&quot;</code>，走常量池逻辑。</li>
+<li>有变量、在循环里：编译器一般变成 <code>StringBuilder</code>（或类似）的 <code>append</code>，再 <code>toString()</code>。</li>
+<li>循环里反复 <code>s = s + xxx</code>：每次循环仍可能新建 Builder &#x2F; 中间字符串，效率差，应在循环外自己建一个 <code>StringBuilder</code>。</li>
+</ul>
+<blockquote>
+<p>循环里 <code>s = s + …</code> 时，每一轮都是一次独立拼接，会反复产生新的字符串结果；在 Java 8 里这通常编译成每轮 <code>new StringBuilder</code> 再 <code>toString</code>，所以又慢又产生大量临时对象。JDK9+ 实现可能变，但「每轮重新拼一整份」的问题还在。因此大量拼接应自己维护一个 StringBuilder。</p>
+</blockquote>
+<p><strong>关键字”concat”</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;a&quot;</span>.concat(<span class="string">&quot;b&quot;</span>);  <span class="comment">// &quot;ab&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>只能拼 String，<code>null</code> 会 NPE；实现上通常是复制到新数组再 new String。少量拼接可用，不如 <code>+</code> 灵活，大量拼接仍不如 Builder。</p>
+<p><strong>关键字”StringBuilder”（单线程首选）</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">StringBuilder</span> <span class="variable">sb</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuilder</span>();</span><br><span class="line">sb.append(<span class="string">&quot;a&quot;</span>).append(<span class="string">&quot;b&quot;</span>).append(<span class="number">100</span>);</span><br><span class="line"><span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> sb.toString();</span><br></pre></td></tr></table></figure>
+
+<p>内部是可变缓冲区，多次 <code>append</code> 改同一块（不够再扩容），最后一次性变成 String。 循环、大量拼接用它。</p>
+<p><strong>关键字”StringBuffer”（多线程）</strong></p>
+<p>和 Builder 用法几乎一样，但方法带 <code>synchronized</code>，线程安全、单线程更慢。 多线程共享同一个拼接器才考虑；现在更常见是线程内用 Builder，或用别的并发结构。</p>
+<p><strong>其他</strong></p>
+<ul>
+<li><code>String.join(&quot;.&quot;, &quot;a&quot;, &quot;b&quot;)</code> → <code>&quot;a.b&quot;</code></li>
+<li><code>StringJoiner</code>、Stream <code>Collectors.joining</code> 适合带分隔符的场景，底层仍多是 Builder。</li>
+</ul>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/about/">关于</a></li>
+        
+          <li><a href="/archives/">文章</a></li>
+        
+          <li><a href="/categories/">分类</a></li>
+        
+          <li><a href="/tags/">标签</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Object"><span class="toc-number">1.</span> <span class="toc-text">Object</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%92%8C-equals"><span class="toc-number">1.1.</span> <span class="toc-text">&#x3D;&#x3D; 和 equals()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hashCode-%E6%96%B9%E6%B3%95"><span class="toc-number">1.2.</span> <span class="toc-text">hashCode()方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%B3%95toString"><span class="toc-number">1.3.</span> <span class="toc-text">方法toString()</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#String"><span class="toc-number">2.</span> <span class="toc-text">String</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">2.1.</span> <span class="toc-text">是什么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E5%8F%AF%E5%8F%98"><span class="toc-number">2.2.</span> <span class="toc-text">为什么不可变</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%8E%9F%E7%90%86"><span class="toc-number">2.3.</span> <span class="toc-text">内存原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8B%BC%E6%8E%A5"><span class="toc-number">2.4.</span> <span class="toc-text">拼接</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://loudmute.github.io/2025/08/18/250818-Java-%E6%A0%B8%E5%BF%83%E7%B1%BB/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://loudmute.github.io/2025/08/18/250818-Java-%E6%A0%B8%E5%BF%83%E7%B1%BB/&text=Java-核心类"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://loudmute.github.io/2025/08/18/250818-Java-%E6%A0%B8%E5%BF%83%E7%B1%BB/&title=Java-核心类"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://loudmute.github.io/2025/08/18/250818-Java-%E6%A0%B8%E5%BF%83%E7%B1%BB/&is_video=false&description=Java-核心类"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Java-核心类&body=Check out this article: https://loudmute.github.io/2025/08/18/250818-Java-%E6%A0%B8%E5%BF%83%E7%B1%BB/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://loudmute.github.io/2025/08/18/250818-Java-%E6%A0%B8%E5%BF%83%E7%B1%BB/&title=Java-核心类"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://loudmute.github.io/2025/08/18/250818-Java-%E6%A0%B8%E5%BF%83%E7%B1%BB/&title=Java-核心类"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://loudmute.github.io/2025/08/18/250818-Java-%E6%A0%B8%E5%BF%83%E7%B1%BB/&title=Java-核心类"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://loudmute.github.io/2025/08/18/250818-Java-%E6%A0%B8%E5%BF%83%E7%B1%BB/&title=Java-核心类"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://loudmute.github.io/2025/08/18/250818-Java-%E6%A0%B8%E5%BF%83%E7%B1%BB/&name=Java-核心类&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://loudmute.github.io/2025/08/18/250818-Java-%E6%A0%B8%E5%BF%83%E7%B1%BB/&t=Java-核心类"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2026
+    loudmute
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a href="/tags/">标签</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
