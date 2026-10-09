@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="一 从 2D卷积到3D卷积1.1 2D单通道卷积  如图，这是一个2D单通道卷积，我们重点看卷积的维度。 这里的输入图像有两个维度：高度h，宽度w；卷积核大小也有两个维度：高度h，宽度w；最终输出图像是二维的，也有两个维度：高度h，宽度w。 1.2 2D多通道卷积  如图，这是一个2D多通道卷积。输入图像有三个维度：高度h，宽度w，通道数c；卷积核也有三个维度：高度k，宽度k，通道数c；最终输出图">
+<meta property="og:type" content="article">
+<meta property="og:title" content="3D Conv:立体卷积">
+<meta property="og:url" content="https://loudmute.github.io/2023/07/11/230711-3D-Conv-%E7%AB%8B%E4%BD%93%E5%8D%B7%E7%A7%AF/index.html">
+<meta property="og:site_name" content="loudmute">
+<meta property="og:description" content="一 从 2D卷积到3D卷积1.1 2D单通道卷积  如图，这是一个2D单通道卷积，我们重点看卷积的维度。 这里的输入图像有两个维度：高度h，宽度w；卷积核大小也有两个维度：高度h，宽度w；最终输出图像是二维的，也有两个维度：高度h，宽度w。 1.2 2D多通道卷积  如图，这是一个2D多通道卷积。输入图像有三个维度：高度h，宽度w，通道数c；卷积核也有三个维度：高度k，宽度k，通道数c；最终输出图">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.imgur.com/aA11Kk2.gif">
+<meta property="og:image" content="https://i.imgur.com/G5ucH6L.png">
+<meta property="og:image" content="https://i.imgur.com/3n6YDZm.png">
+<meta property="og:image" content="https://i.imgur.com/rjuXvXr.gif">
+<meta property="og:image" content="https://i.imgur.com/cPOvkTK.png">
+<meta property="og:image" content="https://i.imgur.com/EtumWZl.gif">
+<meta property="og:image" content="https://i.imgur.com/7a1DGu6.png">
+<meta property="og:image" content="https://i.imgur.com/iZsvx24.png">
+<meta property="og:image" content="https://i.imgur.com/NozwieE.png">
+<meta property="article:published_time" content="2023-07-10T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-09T08:49:03.596Z">
+<meta property="article:author" content="loudmute">
+<meta property="article:tag" content="人工智能">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/aA11Kk2.gif">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>3D Conv:立体卷积</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a href="/tags/">标签</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2023/07/11/230711-RNN-%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2023/07/08/230708-3D-UX-Net%EF%BC%9A%E7%94%A8%E4%BA%8E%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2%E7%9A%84%E5%A4%A7%E6%A0%B8%E4%BD%93%E5%8D%B7%E7%A7%AF%E7%8E%B0%E4%BB%A3%E5%8C%96%E5%88%86%E5%B1%82Transformer/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://loudmute.github.io/2023/07/11/230711-3D-Conv-%E7%AB%8B%E4%BD%93%E5%8D%B7%E7%A7%AF/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://loudmute.github.io/2023/07/11/230711-3D-Conv-%E7%AB%8B%E4%BD%93%E5%8D%B7%E7%A7%AF/&text=3D Conv:立体卷积"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://loudmute.github.io/2023/07/11/230711-3D-Conv-%E7%AB%8B%E4%BD%93%E5%8D%B7%E7%A7%AF/&title=3D Conv:立体卷积"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://loudmute.github.io/2023/07/11/230711-3D-Conv-%E7%AB%8B%E4%BD%93%E5%8D%B7%E7%A7%AF/&is_video=false&description=3D Conv:立体卷积"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=3D Conv:立体卷积&body=Check out this article: https://loudmute.github.io/2023/07/11/230711-3D-Conv-%E7%AB%8B%E4%BD%93%E5%8D%B7%E7%A7%AF/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://loudmute.github.io/2023/07/11/230711-3D-Conv-%E7%AB%8B%E4%BD%93%E5%8D%B7%E7%A7%AF/&title=3D Conv:立体卷积"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://loudmute.github.io/2023/07/11/230711-3D-Conv-%E7%AB%8B%E4%BD%93%E5%8D%B7%E7%A7%AF/&title=3D Conv:立体卷积"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://loudmute.github.io/2023/07/11/230711-3D-Conv-%E7%AB%8B%E4%BD%93%E5%8D%B7%E7%A7%AF/&title=3D Conv:立体卷积"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://loudmute.github.io/2023/07/11/230711-3D-Conv-%E7%AB%8B%E4%BD%93%E5%8D%B7%E7%A7%AF/&title=3D Conv:立体卷积"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://loudmute.github.io/2023/07/11/230711-3D-Conv-%E7%AB%8B%E4%BD%93%E5%8D%B7%E7%A7%AF/&name=3D Conv:立体卷积&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://loudmute.github.io/2023/07/11/230711-3D-Conv-%E7%AB%8B%E4%BD%93%E5%8D%B7%E7%A7%AF/&t=3D Conv:立体卷积"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80-%E4%BB%8E-2D%E5%8D%B7%E7%A7%AF%E5%88%B03D%E5%8D%B7%E7%A7%AF"><span class="toc-number">1.</span> <span class="toc-text">一 从 2D卷积到3D卷积</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-2D%E5%8D%95%E9%80%9A%E9%81%93%E5%8D%B7%E7%A7%AF"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 2D单通道卷积</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-2D%E5%A4%9A%E9%80%9A%E9%81%93%E5%8D%B7%E7%A7%AF"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 2D多通道卷积</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-3D%E5%8D%95%E9%80%9A%E9%81%93%E5%8D%B7%E7%A7%AF"><span class="toc-number">1.3.</span> <span class="toc-text">1.3 3D单通道卷积</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-3D%E5%A4%9A%E9%80%9A%E9%81%93%E5%8D%B7%E7%A7%AF"><span class="toc-number">1.4.</span> <span class="toc-text">1.4 3D多通道卷积</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C-3D%E5%8D%B7%E7%A7%AF%E7%9A%84%E8%BF%90%E7%AE%97"><span class="toc-number">2.</span> <span class="toc-text">二 3D卷积的运算</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89-3D-CNN"><span class="toc-number">3.</span> <span class="toc-text">三 3D CNN</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E8%BE%93%E5%85%A5%E5%B1%82%EF%BC%88input%EF%BC%89"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 输入层（input）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E7%A1%AC%E7%BA%BF%E5%B1%82%EF%BC%88hardwired-H1%EF%BC%89"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 硬线层（hardwired, H1）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E5%8D%B7%E7%A7%AF%E5%B1%82%EF%BC%88Convolution-C2%EF%BC%89"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 卷积层（Convolution, C2）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-%E9%99%8D%E9%87%87%E6%A0%B7%E5%B1%82%EF%BC%88Sub-sampling-S3%EF%BC%89"><span class="toc-number">3.4.</span> <span class="toc-text">3.4 降采样层（Sub-sampling, S3）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5-%E5%8D%B7%E7%A7%AF%E5%B1%82%EF%BC%88Convolution-C4%EF%BC%89"><span class="toc-number">3.5.</span> <span class="toc-text">3.5 卷积层（Convolution, C4）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-6-%E9%99%8D%E9%87%87%E6%A0%B7%E5%B1%82%EF%BC%88Sub-sampling-S5%EF%BC%89"><span class="toc-number">3.6.</span> <span class="toc-text">3.6 降采样层（Sub-sampling, S5）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-7-%E5%8D%B7%E7%A7%AF%E5%B1%82%EF%BC%88Convolution-C6%EF%BC%89"><span class="toc-number">3.7.</span> <span class="toc-text">3.7 卷积层（Convolution, C6）</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        3D Conv:立体卷积
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">loudmute</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2023-07-10T16:00:00.000Z" class="dt-published" itemprop="datePublished">2023-07-11</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/">人工智能</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" rel="tag">人工智能</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h2 id="一-从-2D卷积到3D卷积"><a href="#一-从-2D卷积到3D卷积" class="headerlink" title="一 从 2D卷积到3D卷积"></a>一 从 2D卷积到3D卷积</h2><h3 id="1-1-2D单通道卷积"><a href="#1-1-2D单通道卷积" class="headerlink" title="1.1 2D单通道卷积"></a>1.1 2D单通道卷积</h3><img src="https://i.imgur.com/aA11Kk2.gif" alt="3d conv - 4" style="zoom: 80%;" />
+
+<p>如图，这是一个2D单通道卷积，我们重点看卷积的维度。</p>
+<p>这里的输入图像有两个维度：高度h，宽度w；卷积核大小也有两个维度：高度h，宽度w；最终输出图像是二维的，也有两个维度：高度h，宽度w。</p>
+<h3 id="1-2-2D多通道卷积"><a href="#1-2-2D多通道卷积" class="headerlink" title="1.2 2D多通道卷积"></a>1.2 2D多通道卷积</h3><img src="https://i.imgur.com/G5ucH6L.png" alt="屏幕截图 2023-04-12 205451" style="zoom: 25%;" />
+
+<p>如图，这是一个2D多通道卷积。输入图像有三个维度：高度h，宽度w，通道数c；卷积核也有三个维度：高度k，宽度k，通道数c；最终输出图像是二维的，有两个维度：高度h，宽度w。</p>
+<p>这里我们可以把输入图像看作一个高度为h，宽为w，长为c的立方体，卷积核看作一个高度为k，宽度为k，长度为c的立方体。卷积核立方体再输入图像的立方体上面做二维的滑动运动，输出的是一个二维的图像。</p>
+<p>运算过程可以参考下图，</p>
+<img src="https://i.imgur.com/3n6YDZm.png" alt="3d conv - 6" style="zoom:50%;" />
+
+<h3 id="1-3-3D单通道卷积"><a href="#1-3-3D单通道卷积" class="headerlink" title="1.3 3D单通道卷积"></a>1.3 3D单通道卷积</h3><img src="https://i.imgur.com/rjuXvXr.gif" alt="3d conv - 5" style="zoom: 80%;" />
+
+<p>无论是视频还是3D图像，实际上都是对二维图像的堆叠，来达到现实中三维的效果。</p>
+<p>假设我们这里输入的是一个视频，那么有层数为红、绿、蓝三层可以理解为我们的视频图像是RGB图像，而每个颜色层有也有三个图片可以理解为是三个RGB图像在每个颜色通道上进行了堆叠，所以输入的视频是三张RGB图像的堆叠。</p>
+<p>我们仍旧认为输入图像有三个维度：高度h，宽度w，深度l（这里的l也可以表示时间）；卷积核也有三个维度：高度h，宽度w，深度d（d &lt; l）；输出的图像是个二维的，有三个维度：高度h，宽度w，深度l（这个l和输入图像的l不等）。</p>
+<p>三维卷积也把输入看作是一个立方体，卷积核看作是一个立方体，这和2D多通道卷积看起来很像，但是输出的是一个三维结果，这是为什么呢？</p>
+<p>原因在于，三维卷积中的卷积核深度d &lt; l，这使得卷积核不仅能在高和宽的二维方向做滑动运动，也可以在深度第三个维度上做滑动运动。</p>
+<p>可以这么认为，<strong>输出结果的维度取决于卷积核滑动运动的维度</strong>。</p>
+<h3 id="1-4-3D多通道卷积"><a href="#1-4-3D多通道卷积" class="headerlink" title="1.4 3D多通道卷积"></a>1.4 3D多通道卷积</h3><p>当我们输入的是一个三维RGB图像时，我们会发现，输入图像的维度有四个：高度h，宽度w，深度l，通道数c。那么我们的多通道3D卷积如何运算？</p>
+<img src="https://i.imgur.com/cPOvkTK.png" alt="image-20230414203557552" style="zoom:50%;" />
+
+<p>如图所示，由于有三个通道的三维图像，所以我们用一个k * k * k的卷积核分别对这三个三维图像进行卷积的时候，我们也会得到三个三维特诊图像，但是我们不这样做，而是将每个通道的卷积核卷积后的结果融合到一个输出结果，那么我们得到的输出图像就是一个融合了三个通道特征的三维图像。</p>
+<h2 id="二-3D卷积的运算"><a href="#二-3D卷积的运算" class="headerlink" title="二 3D卷积的运算"></a>二 3D卷积的运算</h2><img src="https://i.imgur.com/EtumWZl.gif" alt="3d conv - 5" style="zoom:50%;" />
+
+<p>我们已经只管感受过了3D卷积，具体运算可以参考下图：</p>
+<img src="https://i.imgur.com/7a1DGu6.png" alt="3d conv - 1" style="zoom:50%;" />
+
+<p>输入的视频是四张图片在时间顺序上的堆叠，我们按时间顺序对堆叠的四张图片依次命名为p1，p2，p3，p4；卷积核其实是两个二维卷积核的堆叠，按深度对其命名为k1，k2；我们以深度记录卷积，。运算过程如下：</p>
+<ul>
+<li>第一次卷积（黑色线）：k1在p1上做二维卷积，k2在p2上做二维卷积，乘积求和得到第一个二维的输出图片。</li>
+<li>第二次卷积（红色线）：k1在p2上做二维卷积，k2在p3上做二维卷积，乘积求和得到第二个二维的输出图片。</li>
+<li>第三次卷积（蓝色线）：k1在p3上做二维卷积，k2在p4上做二维卷积，乘积求和的得到第三个二维的输出图片。</li>
+</ul>
+<p>可以看出，三维卷积核是现在高度h和宽度w的二维维度上滑动，然后再在深度l的维度上滑动，然后在进行二维滑动……每次二维滑动卷积输出的二维图片在一维滑动中堆叠，最终形成三维结果。这样，也很好的捕捉到了视频的动作特征。</p>
+<h2 id="三-3D-CNN"><a href="#三-3D-CNN" class="headerlink" title="三 3D CNN"></a>三 3D CNN</h2><img src="https://i.imgur.com/iZsvx24.png" alt="3d conv - 2" style="zoom: 80%;" />
+
+<p>如图所示，这是一个3D CNN的结构。各层的过程如下：</p>
+<h3 id="3-1-输入层（input）"><a href="#3-1-输入层（input）" class="headerlink" title="3.1 输入层（input）"></a>3.1 输入层（input）</h3><p>连续的大小为 60 * 40 的视频帧图像作为输入</p>
+<h3 id="3-2-硬线层（hardwired-H1）"><a href="#3-2-硬线层（hardwired-H1）" class="headerlink" title="3.2 硬线层（hardwired, H1）"></a>3.2 硬线层（hardwired, H1）</h3><p>每帧提取5个通道信息：灰度gray，横坐标梯度gradient-x，纵坐标梯度gradient-y，x光流optflow-x ，y光流optflow-y。灰度，横坐标梯度，纵坐标梯度三个通道的信息可以直接从每帧中操作提取，光流（x, y）则需要用两帧的信息才能提取。</p>
+<ul>
+<li>光流：出现在连续视频帧图像中，用来刻画运动物体瞬时的运动状态（运动方向和运动偏移量）</li>
+</ul>
+<p>H1层的特征maps数量为：7 + 7 + 7 + 6 + 6 &#x3D; 33，大小为 60 * 40</p>
+<h3 id="3-3-卷积层（Convolution-C2）"><a href="#3-3-卷积层（Convolution-C2）" class="headerlink" title="3.3 卷积层（Convolution, C2）"></a>3.3 卷积层（Convolution, C2）</h3><p>H1层的输出作为C2层的输入。</p>
+<p>用2个大小为 7 * 7 * 3的3D卷积核对输入的五个通道信息进行卷积操作。用2个卷积核是为了增加特征。</p>
+<p>C2层的特征maps数量为：2 * （（（7 - 3）+ 1）* 3 + （（6 - 3）+ 1）* 2）&#x3D;  2 * （5 * 3 + 4 * 2）&#x3D; 2 * 23，特征大小为：54 * 34</p>
+<h3 id="3-4-降采样层（Sub-sampling-S3）"><a href="#3-4-降采样层（Sub-sampling-S3）" class="headerlink" title="3.4 降采样层（Sub-sampling, S3）"></a>3.4 降采样层（Sub-sampling, S3）</h3><p>C2层输出作为S3层输入。</p>
+<p>S3层特征maps数量为：23 * 2,大小为27 * 17</p>
+<h3 id="3-5-卷积层（Convolution-C4）"><a href="#3-5-卷积层（Convolution-C4）" class="headerlink" title="3.5 卷积层（Convolution, C4）"></a>3.5 卷积层（Convolution, C4）</h3><p>S3层输出作为C4层输入。</p>
+<p>用3个大小为7 * 6 * 3的卷积核对输入进行操作。</p>
+<p>C4层的特征maps数量为：2  * 3 * （（（5 - 3）+ 1）* 3 + （（4 - 3）+ 1）* 2）&#x3D; 2 * 3 * （3 * 3 + 2 * 2）&#x3D; 2 * 3 * 13，特征大小为：21 * 12</p>
+<h3 id="3-6-降采样层（Sub-sampling-S5）"><a href="#3-6-降采样层（Sub-sampling-S5）" class="headerlink" title="3.6 降采样层（Sub-sampling, S5）"></a>3.6 降采样层（Sub-sampling, S5）</h3><p>C4层输出作为S5层输入。</p>
+<p>特征maps数量为：2 * 3 * 13，大小为：7 * 4。</p>
+<h3 id="3-7-卷积层（Convolution-C6）"><a href="#3-7-卷积层（Convolution-C6）" class="headerlink" title="3.7 卷积层（Convolution, C6）"></a>3.7 卷积层（Convolution, C6）</h3><p>对每个特征maps采用7 * 4的2D卷积核进行卷积。</p>
+<p>特征maps数量为:128，大小为1 * 1。</p>
+<p>具体可以参照下图：</p>
+<img src="https://i.imgur.com/NozwieE.png" alt="3d conv - 3" style="zoom: 67%;" />
+
+
+
+<p>参考链接：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://t.csdn.cn/wCzJK">http://t.csdn.cn/wCzJK</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/AUTO1993/article/details/70948249">https://blog.csdn.net/AUTO1993/article/details/70948249</a></li>
+<li><a target="_blank" rel="noopener" href="http://t.csdn.cn/yAjeJ">http://t.csdn.cn/yAjeJ</a></li>
+</ul>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/about/">关于</a></li>
+        
+          <li><a href="/archives/">文章</a></li>
+        
+          <li><a href="/categories/">分类</a></li>
+        
+          <li><a href="/tags/">标签</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80-%E4%BB%8E-2D%E5%8D%B7%E7%A7%AF%E5%88%B03D%E5%8D%B7%E7%A7%AF"><span class="toc-number">1.</span> <span class="toc-text">一 从 2D卷积到3D卷积</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-2D%E5%8D%95%E9%80%9A%E9%81%93%E5%8D%B7%E7%A7%AF"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 2D单通道卷积</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-2D%E5%A4%9A%E9%80%9A%E9%81%93%E5%8D%B7%E7%A7%AF"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 2D多通道卷积</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-3D%E5%8D%95%E9%80%9A%E9%81%93%E5%8D%B7%E7%A7%AF"><span class="toc-number">1.3.</span> <span class="toc-text">1.3 3D单通道卷积</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-3D%E5%A4%9A%E9%80%9A%E9%81%93%E5%8D%B7%E7%A7%AF"><span class="toc-number">1.4.</span> <span class="toc-text">1.4 3D多通道卷积</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C-3D%E5%8D%B7%E7%A7%AF%E7%9A%84%E8%BF%90%E7%AE%97"><span class="toc-number">2.</span> <span class="toc-text">二 3D卷积的运算</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89-3D-CNN"><span class="toc-number">3.</span> <span class="toc-text">三 3D CNN</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E8%BE%93%E5%85%A5%E5%B1%82%EF%BC%88input%EF%BC%89"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 输入层（input）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E7%A1%AC%E7%BA%BF%E5%B1%82%EF%BC%88hardwired-H1%EF%BC%89"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 硬线层（hardwired, H1）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E5%8D%B7%E7%A7%AF%E5%B1%82%EF%BC%88Convolution-C2%EF%BC%89"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 卷积层（Convolution, C2）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-%E9%99%8D%E9%87%87%E6%A0%B7%E5%B1%82%EF%BC%88Sub-sampling-S3%EF%BC%89"><span class="toc-number">3.4.</span> <span class="toc-text">3.4 降采样层（Sub-sampling, S3）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5-%E5%8D%B7%E7%A7%AF%E5%B1%82%EF%BC%88Convolution-C4%EF%BC%89"><span class="toc-number">3.5.</span> <span class="toc-text">3.5 卷积层（Convolution, C4）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-6-%E9%99%8D%E9%87%87%E6%A0%B7%E5%B1%82%EF%BC%88Sub-sampling-S5%EF%BC%89"><span class="toc-number">3.6.</span> <span class="toc-text">3.6 降采样层（Sub-sampling, S5）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-7-%E5%8D%B7%E7%A7%AF%E5%B1%82%EF%BC%88Convolution-C6%EF%BC%89"><span class="toc-number">3.7.</span> <span class="toc-text">3.7 卷积层（Convolution, C6）</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://loudmute.github.io/2023/07/11/230711-3D-Conv-%E7%AB%8B%E4%BD%93%E5%8D%B7%E7%A7%AF/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://loudmute.github.io/2023/07/11/230711-3D-Conv-%E7%AB%8B%E4%BD%93%E5%8D%B7%E7%A7%AF/&text=3D Conv:立体卷积"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://loudmute.github.io/2023/07/11/230711-3D-Conv-%E7%AB%8B%E4%BD%93%E5%8D%B7%E7%A7%AF/&title=3D Conv:立体卷积"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://loudmute.github.io/2023/07/11/230711-3D-Conv-%E7%AB%8B%E4%BD%93%E5%8D%B7%E7%A7%AF/&is_video=false&description=3D Conv:立体卷积"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=3D Conv:立体卷积&body=Check out this article: https://loudmute.github.io/2023/07/11/230711-3D-Conv-%E7%AB%8B%E4%BD%93%E5%8D%B7%E7%A7%AF/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://loudmute.github.io/2023/07/11/230711-3D-Conv-%E7%AB%8B%E4%BD%93%E5%8D%B7%E7%A7%AF/&title=3D Conv:立体卷积"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://loudmute.github.io/2023/07/11/230711-3D-Conv-%E7%AB%8B%E4%BD%93%E5%8D%B7%E7%A7%AF/&title=3D Conv:立体卷积"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://loudmute.github.io/2023/07/11/230711-3D-Conv-%E7%AB%8B%E4%BD%93%E5%8D%B7%E7%A7%AF/&title=3D Conv:立体卷积"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://loudmute.github.io/2023/07/11/230711-3D-Conv-%E7%AB%8B%E4%BD%93%E5%8D%B7%E7%A7%AF/&title=3D Conv:立体卷积"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://loudmute.github.io/2023/07/11/230711-3D-Conv-%E7%AB%8B%E4%BD%93%E5%8D%B7%E7%A7%AF/&name=3D Conv:立体卷积&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://loudmute.github.io/2023/07/11/230711-3D-Conv-%E7%AB%8B%E4%BD%93%E5%8D%B7%E7%A7%AF/&t=3D Conv:立体卷积"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2026
+    loudmute
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a href="/tags/">标签</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="题目：《Deep Covariance Alignment for Domain Adaptive Remote Sensing Image Segmentation》（领域域自适应遥感图像分割的深度协方差对齐）  github：https:&#x2F;&#x2F;github.com&#x2F;Luffy03&#x2F;DCA  数据集：LoveDA dataset      Abstract-无监督领域自适应（UDA）图像分割">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DCA：领域自适应遥感图像分割的深度协方差对齐">
+<meta property="og:url" content="https://loudmute.github.io/2023/07/06/230706-DCA-%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E9%81%A5%E6%84%9F%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2%E7%9A%84%E6%B7%B1%E5%BA%A6%E5%8D%8F%E6%96%B9%E5%B7%AE%E5%AF%B9%E9%BD%90/index.html">
+<meta property="og:site_name" content="loudmute">
+<meta property="og:description" content="题目：《Deep Covariance Alignment for Domain Adaptive Remote Sensing Image Segmentation》（领域域自适应遥感图像分割的深度协方差对齐）  github：https:&#x2F;&#x2F;github.com&#x2F;Luffy03&#x2F;DCA  数据集：LoveDA dataset      Abstract-无监督领域自适应（UDA）图像分割">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.imgur.com/a6DyIdi.png">
+<meta property="og:image" content="https://i.imgur.com/ZrdMkQk.png">
+<meta property="og:image" content="https://i.imgur.com/aPyQXl8.png">
+<meta property="og:image" content="https://i.imgur.com/3fGdL2X.png">
+<meta property="og:image" content="https://i.imgur.com/WH2RQYM.png">
+<meta property="og:image" content="https://i.imgur.com/4KI60xL.png">
+<meta property="og:image" content="https://i.imgur.com/NFYN9ZC.png">
+<meta property="og:image" content="https://i.imgur.com/CHrlQnf.png">
+<meta property="og:image" content="https://i.imgur.com/9bU9Pak.png">
+<meta property="og:image" content="https://i.imgur.com/OKnU2OL.png">
+<meta property="og:image" content="https://i.imgur.com/Liv9qYm.png">
+<meta property="og:image" content="https://i.imgur.com/J4aosEG.png">
+<meta property="og:image" content="https://i.imgur.com/55SLlZ6.png">
+<meta property="og:image" content="https://i.imgur.com/huJo0Aa.png">
+<meta property="og:image" content="https://i.imgur.com/uTEMSLO.png">
+<meta property="og:image" content="https://i.imgur.com/yGtImr4.png">
+<meta property="og:image" content="https://i.imgur.com/Nnv7hrU.png">
+<meta property="og:image" content="https://i.imgur.com/WmF0HUG.png">
+<meta property="og:image" content="https://i.imgur.com/K73zwax.png">
+<meta property="og:image" content="https://i.imgur.com/1i2tO1y.png">
+<meta property="article:published_time" content="2023-07-05T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-09T08:39:33.719Z">
+<meta property="article:author" content="loudmute">
+<meta property="article:tag" content="人工智能">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/a6DyIdi.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>DCA：领域自适应遥感图像分割的深度协方差对齐</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a href="/tags/">标签</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2023/07/07/230707-Numpy%E6%80%BB%E7%BB%93-5-%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2023/07/03/230703-Hello-World/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://loudmute.github.io/2023/07/06/230706-DCA-%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E9%81%A5%E6%84%9F%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2%E7%9A%84%E6%B7%B1%E5%BA%A6%E5%8D%8F%E6%96%B9%E5%B7%AE%E5%AF%B9%E9%BD%90/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://loudmute.github.io/2023/07/06/230706-DCA-%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E9%81%A5%E6%84%9F%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2%E7%9A%84%E6%B7%B1%E5%BA%A6%E5%8D%8F%E6%96%B9%E5%B7%AE%E5%AF%B9%E9%BD%90/&text=DCA：领域自适应遥感图像分割的深度协方差对齐"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://loudmute.github.io/2023/07/06/230706-DCA-%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E9%81%A5%E6%84%9F%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2%E7%9A%84%E6%B7%B1%E5%BA%A6%E5%8D%8F%E6%96%B9%E5%B7%AE%E5%AF%B9%E9%BD%90/&title=DCA：领域自适应遥感图像分割的深度协方差对齐"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://loudmute.github.io/2023/07/06/230706-DCA-%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E9%81%A5%E6%84%9F%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2%E7%9A%84%E6%B7%B1%E5%BA%A6%E5%8D%8F%E6%96%B9%E5%B7%AE%E5%AF%B9%E9%BD%90/&is_video=false&description=DCA：领域自适应遥感图像分割的深度协方差对齐"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=DCA：领域自适应遥感图像分割的深度协方差对齐&body=Check out this article: https://loudmute.github.io/2023/07/06/230706-DCA-%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E9%81%A5%E6%84%9F%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2%E7%9A%84%E6%B7%B1%E5%BA%A6%E5%8D%8F%E6%96%B9%E5%B7%AE%E5%AF%B9%E9%BD%90/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://loudmute.github.io/2023/07/06/230706-DCA-%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E9%81%A5%E6%84%9F%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2%E7%9A%84%E6%B7%B1%E5%BA%A6%E5%8D%8F%E6%96%B9%E5%B7%AE%E5%AF%B9%E9%BD%90/&title=DCA：领域自适应遥感图像分割的深度协方差对齐"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://loudmute.github.io/2023/07/06/230706-DCA-%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E9%81%A5%E6%84%9F%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2%E7%9A%84%E6%B7%B1%E5%BA%A6%E5%8D%8F%E6%96%B9%E5%B7%AE%E5%AF%B9%E9%BD%90/&title=DCA：领域自适应遥感图像分割的深度协方差对齐"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://loudmute.github.io/2023/07/06/230706-DCA-%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E9%81%A5%E6%84%9F%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2%E7%9A%84%E6%B7%B1%E5%BA%A6%E5%8D%8F%E6%96%B9%E5%B7%AE%E5%AF%B9%E9%BD%90/&title=DCA：领域自适应遥感图像分割的深度协方差对齐"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://loudmute.github.io/2023/07/06/230706-DCA-%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E9%81%A5%E6%84%9F%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2%E7%9A%84%E6%B7%B1%E5%BA%A6%E5%8D%8F%E6%96%B9%E5%B7%AE%E5%AF%B9%E9%BD%90/&title=DCA：领域自适应遥感图像分割的深度协方差对齐"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://loudmute.github.io/2023/07/06/230706-DCA-%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E9%81%A5%E6%84%9F%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2%E7%9A%84%E6%B7%B1%E5%BA%A6%E5%8D%8F%E6%96%B9%E5%B7%AE%E5%AF%B9%E9%BD%90/&name=DCA：领域自适应遥感图像分割的深度协方差对齐&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://loudmute.github.io/2023/07/06/230706-DCA-%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E9%81%A5%E6%84%9F%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2%E7%9A%84%E6%B7%B1%E5%BA%A6%E5%8D%8F%E6%96%B9%E5%B7%AE%E5%AF%B9%E9%BD%90/&t=DCA：领域自适应遥感图像分割的深度协方差对齐"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#I-INTRODUCTION"><span class="toc-number">1.</span> <span class="toc-text">I. INTRODUCTION</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#II-RELATED-WORK"><span class="toc-number">2.</span> <span class="toc-text">II. RELATED WORK</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#A-UDA-RSI-Segmentation"><span class="toc-number">2.1.</span> <span class="toc-text">A. UDA RSI Segmentation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#B-Category-Alignment-Methods-in-UDA"><span class="toc-number">2.2.</span> <span class="toc-text">B. Category Alignment Methods in UDA</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#III-PROPOSED-DCA-METHOD"><span class="toc-number">3.</span> <span class="toc-text">III. PROPOSED DCA METHOD</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#A-CFP-Module"><span class="toc-number">3.1.</span> <span class="toc-text">A. CFP Module</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#B-Covariance-Regularization-CR"><span class="toc-number">3.2.</span> <span class="toc-text">B. Covariance Regularization (CR)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-Motivations-of-CR"><span class="toc-number">3.2.1.</span> <span class="toc-text">1)  Motivations of CR</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%EF%BC%89Intradomain-CR-and-Cross-Domain-CR"><span class="toc-number">3.2.2.</span> <span class="toc-text">2）Intradomain CR and Cross-Domain CR</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#C-Training-of-DCA"><span class="toc-number">3.3.</span> <span class="toc-text">C. Training of DCA</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IV-RESULTS-OF-EXPERIMENTS"><span class="toc-number">4.</span> <span class="toc-text">IV. RESULTS OF EXPERIMENTS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#V-CONCLUSION"><span class="toc-number">5.</span> <span class="toc-text">V. CONCLUSION</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        DCA：领域自适应遥感图像分割的深度协方差对齐
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">loudmute</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2023-07-05T16:00:00.000Z" class="dt-published" itemprop="datePublished">2023-07-06</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/">人工智能</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" rel="tag">人工智能</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <img src = "https://i.imgur.com/8ype1WY.png">
+
+<ul>
+<li><p>题目：《Deep Covariance Alignment for Domain Adaptive Remote Sensing Image Segmentation》（领域域自适应遥感图像分割的深度协方差对齐）</p>
+</li>
+<li><p>github：<a target="_blank" rel="noopener" href="https://github.com/Luffy03/DCA">https://github.com/Luffy03/DCA</a></p>
+</li>
+<li><p>数据集：LoveDA dataset</p>
+</li>
+</ul>
+<img src="https://i.imgur.com/a6DyIdi.png" style="zoom:50%;" />
+
+<ul>
+<li><p><strong>Abstract</strong>-无监督领域自适应（UDA）图像分割备受关注，其旨在提升从源域到目标域知识迁移的泛化能力。</p>
+<p>  在高分辨率遥感（RSI）图像中，不同领域的相同类别表现出非常不一致的分布，这严重限制了UDA的准确性。</p>
+<p>  为解决这个问题，我们提出了为UDA SRI分割提出了深度协方差对齐（DCA）模型。DCA模型可以显示地对齐类别特征来学习共享的域不变判别特征表示，这增强了模型的泛化能力。特别的，类别特征池（CFP）模型第一次被用于提取类别特征，通过粗输出和深特征。然后，充分利用协方差正则化（CR）来使类内特征（intracategory）更加接近，使类间特征（intercategory）进一步分离。</p>
+<p>  相比于目前存在的类别对齐方法，我们的CR模型通过将不同尺寸大小特征间的关系正则化，在处理分布不平衡和不一致的不同类别特征时，表现得更加坚挺。</p>
+<p>  最后，我们提出一种逐段回归（stagewise procedure）方法来训练DCA模型来减小误差。</p>
+<p>  我们使用LoveDA dataset来进行 乡村到城市 和 城市到乡村两种场景的实验，来证明DCA模型的优越性能。</p>
+</li>
+</ul>
+<h2 id="I-INTRODUCTION"><a href="#I-INTRODUCTION" class="headerlink" title="I. INTRODUCTION"></a>I. INTRODUCTION</h2><p>遥感图像分割（RSI segmentation: remote sensing image segmentation）旨在为图像的每一个像素分配一个响应的土地覆盖类型，这在许多应用上都有重要意义。然而，对标签训练样本的大量需求和地理区域之间的差异严重限制了遥感图像分割的发展。对于数据的缺失和差异，一种常见的解决方法是无监督领域自适应（UDA：unsupervised domain adaptive）。</p>
+<p>随着基于深度卷积网络的语义分割方法的成功，UDA segmentation得到了快速发展，相关的UDA segmentaiton大致可以分为两类：对抗训练（AT:adversarial traing）方法和自训练（ST）方法。AT的大部分方法都是基于生成对抗网络（GAN:generative adversarial network ），很难训练。ST常采用由粗到细的工作方式，用阶梯机制来训练。</p>
+<p>目前，大部分用于RSI segmentation的方法属于ST方法，然而很少一部分不错的成果，但这些方法的进展仍然被限制，原因如下：1.遥感图像中，不同地理区域的相同类别的土地覆盖特征不同。如下图（a）所示，乡村(rural)和城市(urban)的相同类别存在较大差异。2.遥感图像中的类别分布不一致，如下图（b）所示。这使提高模型的泛化能力困难加大。</p>
+<img src="https://i.imgur.com/ZrdMkQk.png" style="zoom:80%;" />
+
+<p>为了解决这个问题，一个方向是对齐两个不同域的类别特征。前人提出了一些方法，但是这仍然存在问题：1.两个不同域的大的类内差异和不一致的类分布会严重影响不同类别特征的距离的计算。2.当同时调整类内和类间的相对大小时，学习不到决策边界，往往需要手动设置阈值。</p>
+<p>为解决上述问题，我们提出了用于UDA RSI分割的方法：深度协方差对齐（DCA:deep covariance alignment）。DCA模型可以通过对齐类别特征来学习从源域到目标域的共享域不变特征知识。其大致结构如下：</p>
+<ul>
+<li>类别特征池（CFP:category feature pooling）：通过粗输出和深特征来提取类别特征</li>
+<li>协方差正则化（CR:covariance regularization）：利用CR来靠拢类内特征和分离类间特征，相比于现存的方法，CR更加鲁棒性更高，训练无需手动设置阈值</li>
+<li>阶梯过程训练</li>
+</ul>
+<h2 id="II-RELATED-WORK"><a href="#II-RELATED-WORK" class="headerlink" title="II. RELATED WORK"></a>II. RELATED WORK</h2><h3 id="A-UDA-RSI-Segmentation"><a href="#A-UDA-RSI-Segmentation" class="headerlink" title="A. UDA RSI Segmentation"></a>A. UDA RSI Segmentation</h3><p>目前的分割方法大致分为两类：ST和AT。ST方法的缺陷在于：难以训练，知识对齐不同域的分布，并没有提取不同域特征间的映射；AT方法的缺陷在于：易错伪标签会误导分类，造成错误累计，限制了ST方法的效率。</p>
+<p>以上的这些方法大多忽视了不同地理领域的地域风格不同。特别对于乡村和城市，土地覆盖的呈现形式十分不同，为了提高UDA RSI分割模型的泛化能力，LoveDA数据集被制作了出来。</p>
+<h3 id="B-Category-Alignment-Methods-in-UDA"><a href="#B-Category-Alignment-Methods-in-UDA" class="headerlink" title="B. Category Alignment Methods in UDA"></a>B. Category Alignment Methods in UDA</h3><p>基于生成对抗网络的AT方法，提出了隐式的类别对齐，但相比之下，一些显示的类别对齐表现更好。</p>
+<p>对于不同域间的相同类别的特征f1和f2，我们可以求二者之间的欧几里得距离：<br>$$<br>d(f1, f2) &#x3D; || f1 - f2||<br>$$<br>其中，|| ||表示欧几里德距离。</p>
+<p>然后，我们便可定义f1和f2之间的差异：<br>$$<br>L_{mse}(f1, f2) &#x3D; \frac{1}{N * N}\sum_{i}^{N}d(f^i_1, f^i_2)<br>$$<br>其中i代表不同域的第i个相同类别，N代表类别数量。由此，我们可以通过降低该损失来时类内特征。</p>
+<p>我们还可以定义三重损失，来衡量不同类别间特征的差异：</p>
+<img src = "https://i.imgur.com/8iw6GWu.png" height = '65'>
+
+<p>其中，alpha为预测边缘，需手动设置。通过这个损失，我们可以让类间特征分离。</p>
+<h2 id="III-PROPOSED-DCA-METHOD"><a href="#III-PROPOSED-DCA-METHOD" class="headerlink" title="III. PROPOSED DCA METHOD"></a>III. PROPOSED DCA METHOD</h2><h3 id="A-CFP-Module"><a href="#A-CFP-Module" class="headerlink" title="A. CFP Module"></a>A. CFP Module</h3><img src="https://i.imgur.com/aPyQXl8.png" style="zoom:50%;" />
+
+<p>我们使用Deeplab v2作为基础的分割模型，其编码器部分为ResNet50。</p>
+<p>同一类别的特征在特征空间中聚类，类别聚类的质心可以代表类别特征分布。因此，我们提出CFP模型，其通过粗操输出和深层特征方式来提取特征，如上图所示，输入一个图片X，提取到的深度特征为Enc(X)属于R^(C * H * W)，并且粗糙的输出一个分类Y’属于R^(N * H * W)，然后得到类别特征f属于R^(N * C),其计算如下：</p>
+<img src="https://i.imgur.com/3fGdL2X.png" style="zoom:50%;" />
+
+<img src="https://i.imgur.com/WH2RQYM.png" style="zoom:50%;" />
+
+<p>同样的，由CFP模型提取出来的类别特征f也代表类别特征的分布。值得注意的时f的计算只在一批图像中，而不是所有图像。并且，我们也不用标签Y来纠正类别特征f，因为Y’已经由真实标签Y来纠正。</p>
+<h3 id="B-Covariance-Regularization-CR"><a href="#B-Covariance-Regularization-CR" class="headerlink" title="B. Covariance Regularization (CR)"></a>B. Covariance Regularization (CR)</h3><h4 id="1-Motivations-of-CR"><a href="#1-Motivations-of-CR" class="headerlink" title="1)  Motivations of CR"></a>1)  Motivations of CR</h4><p>为了对齐类别特征，我们希望类内特征聚合以及类间特征分离，由CFP模型提取得到的两个特征f1和f2，我们可以通过提出的CR方法来对齐特征，其定义如下：</p>
+<img src="https://i.imgur.com/4KI60xL.png" style="zoom:50%;" />
+
+<p>其中delta_f1和delta_f2分别代表f1和f2的特征值,u_f1和u_f2分别代表f1和f2的方差，E代表期望函数，corr(f1,f2)构造了一个N * N的协方差矩阵来代表不同类别特征之间的关系，corr(f1, f2)也称线性相关函数，是马氏距离，而不是上述提到的欧氏距离。</p>
+<p>为了进一步说明CR模型，这里给出一个实验实例：</p>
+<img src="https://i.imgur.com/NFYN9ZC.png" style="zoom: 80%;" />
+
+<p>如图所示，我们分别用给用源域预训练好的网络输入两组源域的图片，通过CFP模型得到两组类别特征f1和f2，分别通过欧几里得距离和本文提出的协方差矩阵来进行特征对齐，其效果如图所示，我们发现CR可以有效的聚合类内特征，分离类间特征。</p>
+<img src="https://i.imgur.com/CHrlQnf.png" style="zoom:80%;" />
+
+<p>如上图所示，我们又给网络输入源域数据和目标域图片来计算协方差矩阵，源域和目标域之间的差异可以清楚的用协方差矩阵表示出来。并且，在协方差矩阵中，我们希望对角线的元素接近1，非对角线元素接近2，CR的表达式如下：</p>
+<img src="https://i.imgur.com/9bU9Pak.png" style="zoom:50%;" />
+
+<p>其中，看着像“属于”的符号表示接近于0的数，避免在log运算中出现0的对数的情况。</p>
+<p>最后，我们将CR这种对齐方法与现有的方法MSE和 Triplet进行对比。</p>
+ <img src="https://i.imgur.com/OKnU2OL.png" style="zoom: 50%;" />
+
+<p>其中，MSE方法无法对齐不同类别的特征；Triplet方法难以找到决策边界，需手动设置；相比之下，CR模型不仅可以对齐不同类别的特征，也省去了手动设置边界的步骤，因为当协方差为0时，便是一个天然的边界，当协方差&gt;0时，就是线性相关的，当协方差&lt;&#x3D;0时，就是不相关或负相关的。</p>
+<h4 id="2）Intradomain-CR-and-Cross-Domain-CR"><a href="#2）Intradomain-CR-and-Cross-Domain-CR" class="headerlink" title="2）Intradomain CR and Cross-Domain CR"></a>2）Intradomain CR and Cross-Domain CR</h4><img src = 'https://i.imgur.com/BpUMI4D.png'>
+
+<p>对于域内类别特征对齐，我们有ICR，如上图（a）所示，给定一批图片，我们随机将其分为两组送入网络，利用CR来对两组类别特征进行正则化。受stop gradient的启发，我们使用停止梯度的方法保留coarse outputs部分的参数，防止其在方向传播的过程中更新参数，因为这部分的输出Y’受真实标签Y的监督，更加准确。损失表达式为：</p>
+<img src="https://i.imgur.com/Liv9qYm.png" style="zoom:50%;" />
+
+<p>其中，f1^s 和 f2^s分别代表源域两组不同的类别特征。</p>
+<p>对于不同域类别特征对齐，我们有CCR，如上图（b）所示，两个域的粗糙输出和源域特征学习的梯度都被停止，因为源域的数据标签，更加可信准确，可以作为参考，将目标域和源域对齐。损失表达式为：</p>
+<img src="https://i.imgur.com/J4aosEG.png" style="zoom:50%;" />
+
+<p>其中fs和ft分别代表源域和目标域的类别特征。</p>
+<h3 id="C-Training-of-DCA"><a href="#C-Training-of-DCA" class="headerlink" title="C. Training of DCA"></a>C. Training of DCA</h3><p>与前述的ST方法类似，我们在训练DCA模型时采用阶梯式过程（stagewise procedure），逐步更新模型以减少误差。其具体过程如下图所示：</p>
+<img src="https://i.imgur.com/55SLlZ6.png" style="zoom:50%;" />
+
+<ul>
+<li><p>首先，在源域与训练分割模型，我们使用标准的交叉熵损失函数来作为监督：</p>
+  <img src="https://i.imgur.com/huJo0Aa.png" alt="image-20230706164642508" style="zoom:50%;" />
+
+  <img src="https://i.imgur.com/uTEMSLO.png" style="zoom:50%;" />
+</li>
+<li><p>同时，ICR用于对齐源域的类别特征。在每一步的开始，我们生成或更新一个伪标签Y_t^p来目标预测Y_t’，表达式如下：</p>
+  <img src="https://i.imgur.com/yGtImr4.png" alt="image-20230706165050800" style="zoom:50%;" />
+</li>
+<li><p>然后，我们用L_CE^s， L_CE^t，L_ICR，L_CCR在几个阶段中训练DCA模型：</p>
+  <img src="https://i.imgur.com/Nnv7hrU.png" alt="image-20230706165351624" style="zoom:50%;" /></li>
+</ul>
+<h2 id="IV-RESULTS-OF-EXPERIMENTS"><a href="#IV-RESULTS-OF-EXPERIMENTS" class="headerlink" title="IV. RESULTS OF EXPERIMENTS"></a>IV. RESULTS OF EXPERIMENTS</h2><img src="https://i.imgur.com/WmF0HUG.png" alt="image-20230706165734700" style="zoom:50%;" />
+
+<img src="https://i.imgur.com/K73zwax.png" alt="image-20230706165801726" style="zoom:50%;" />
+
+<img src="https://i.imgur.com/1i2tO1y.png" alt="image-20230706165828911" style="zoom:50%;" />
+
+<img src = "https://i.imgur.com/Vl6ZHnD.png">
+
+<h2 id="V-CONCLUSION"><a href="#V-CONCLUSION" class="headerlink" title="V. CONCLUSION"></a>V. CONCLUSION</h2><p>在这片文章中，我们提出了用于UDA RSI segmentation的DCA模型，其使用协方差正则化（CR）来聚合类内特征以及分离类间特征，显示地提取共享的域不变特征来增强模型的泛化能力。在LoveDA数据机所做的实验很好的证明了DCA的模型的良好表现。</p>
+<p>在未来，我们将探索用定量的实验来分心DCA结果的可视化和解释，并于其他方法比较。此外，我们将研究领域自适应任务在RSI图像分割中的熟练程度，并且进一步探索其他方法来提高分割性能。</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/about/">关于</a></li>
+        
+          <li><a href="/archives/">文章</a></li>
+        
+          <li><a href="/categories/">分类</a></li>
+        
+          <li><a href="/tags/">标签</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#I-INTRODUCTION"><span class="toc-number">1.</span> <span class="toc-text">I. INTRODUCTION</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#II-RELATED-WORK"><span class="toc-number">2.</span> <span class="toc-text">II. RELATED WORK</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#A-UDA-RSI-Segmentation"><span class="toc-number">2.1.</span> <span class="toc-text">A. UDA RSI Segmentation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#B-Category-Alignment-Methods-in-UDA"><span class="toc-number">2.2.</span> <span class="toc-text">B. Category Alignment Methods in UDA</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#III-PROPOSED-DCA-METHOD"><span class="toc-number">3.</span> <span class="toc-text">III. PROPOSED DCA METHOD</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#A-CFP-Module"><span class="toc-number">3.1.</span> <span class="toc-text">A. CFP Module</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#B-Covariance-Regularization-CR"><span class="toc-number">3.2.</span> <span class="toc-text">B. Covariance Regularization (CR)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-Motivations-of-CR"><span class="toc-number">3.2.1.</span> <span class="toc-text">1)  Motivations of CR</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%EF%BC%89Intradomain-CR-and-Cross-Domain-CR"><span class="toc-number">3.2.2.</span> <span class="toc-text">2）Intradomain CR and Cross-Domain CR</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#C-Training-of-DCA"><span class="toc-number">3.3.</span> <span class="toc-text">C. Training of DCA</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IV-RESULTS-OF-EXPERIMENTS"><span class="toc-number">4.</span> <span class="toc-text">IV. RESULTS OF EXPERIMENTS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#V-CONCLUSION"><span class="toc-number">5.</span> <span class="toc-text">V. CONCLUSION</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://loudmute.github.io/2023/07/06/230706-DCA-%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E9%81%A5%E6%84%9F%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2%E7%9A%84%E6%B7%B1%E5%BA%A6%E5%8D%8F%E6%96%B9%E5%B7%AE%E5%AF%B9%E9%BD%90/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://loudmute.github.io/2023/07/06/230706-DCA-%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E9%81%A5%E6%84%9F%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2%E7%9A%84%E6%B7%B1%E5%BA%A6%E5%8D%8F%E6%96%B9%E5%B7%AE%E5%AF%B9%E9%BD%90/&text=DCA：领域自适应遥感图像分割的深度协方差对齐"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://loudmute.github.io/2023/07/06/230706-DCA-%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E9%81%A5%E6%84%9F%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2%E7%9A%84%E6%B7%B1%E5%BA%A6%E5%8D%8F%E6%96%B9%E5%B7%AE%E5%AF%B9%E9%BD%90/&title=DCA：领域自适应遥感图像分割的深度协方差对齐"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://loudmute.github.io/2023/07/06/230706-DCA-%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E9%81%A5%E6%84%9F%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2%E7%9A%84%E6%B7%B1%E5%BA%A6%E5%8D%8F%E6%96%B9%E5%B7%AE%E5%AF%B9%E9%BD%90/&is_video=false&description=DCA：领域自适应遥感图像分割的深度协方差对齐"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=DCA：领域自适应遥感图像分割的深度协方差对齐&body=Check out this article: https://loudmute.github.io/2023/07/06/230706-DCA-%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E9%81%A5%E6%84%9F%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2%E7%9A%84%E6%B7%B1%E5%BA%A6%E5%8D%8F%E6%96%B9%E5%B7%AE%E5%AF%B9%E9%BD%90/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://loudmute.github.io/2023/07/06/230706-DCA-%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E9%81%A5%E6%84%9F%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2%E7%9A%84%E6%B7%B1%E5%BA%A6%E5%8D%8F%E6%96%B9%E5%B7%AE%E5%AF%B9%E9%BD%90/&title=DCA：领域自适应遥感图像分割的深度协方差对齐"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://loudmute.github.io/2023/07/06/230706-DCA-%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E9%81%A5%E6%84%9F%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2%E7%9A%84%E6%B7%B1%E5%BA%A6%E5%8D%8F%E6%96%B9%E5%B7%AE%E5%AF%B9%E9%BD%90/&title=DCA：领域自适应遥感图像分割的深度协方差对齐"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://loudmute.github.io/2023/07/06/230706-DCA-%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E9%81%A5%E6%84%9F%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2%E7%9A%84%E6%B7%B1%E5%BA%A6%E5%8D%8F%E6%96%B9%E5%B7%AE%E5%AF%B9%E9%BD%90/&title=DCA：领域自适应遥感图像分割的深度协方差对齐"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://loudmute.github.io/2023/07/06/230706-DCA-%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E9%81%A5%E6%84%9F%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2%E7%9A%84%E6%B7%B1%E5%BA%A6%E5%8D%8F%E6%96%B9%E5%B7%AE%E5%AF%B9%E9%BD%90/&title=DCA：领域自适应遥感图像分割的深度协方差对齐"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://loudmute.github.io/2023/07/06/230706-DCA-%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E9%81%A5%E6%84%9F%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2%E7%9A%84%E6%B7%B1%E5%BA%A6%E5%8D%8F%E6%96%B9%E5%B7%AE%E5%AF%B9%E9%BD%90/&name=DCA：领域自适应遥感图像分割的深度协方差对齐&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://loudmute.github.io/2023/07/06/230706-DCA-%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E9%81%A5%E6%84%9F%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2%E7%9A%84%E6%B7%B1%E5%BA%A6%E5%8D%8F%E6%96%B9%E5%B7%AE%E5%AF%B9%E9%BD%90/&t=DCA：领域自适应遥感图像分割的深度协方差对齐"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2026
+    loudmute
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a href="/tags/">标签</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

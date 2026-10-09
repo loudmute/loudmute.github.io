@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="瓦片地图瓦片地图将世界作为一个个网格，每个网格单元可以设置不同的精灵。 1 创建瓦片地图创建一个瓦片地图：在Hierarchy窗口中，2D Object -&gt; Tilemap -&gt; Rectangular（矩形，一般常用） 创建的瓦片地图组成如下： 父物体为Grid，是放置游戏对象的网格；子物体为Tilemap，由瓦片（Tiles）组成，用于填充网格，可以将瓦片理解为特殊的精灵。 2">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2D冒险小游戏相关问题总结">
+<meta property="og:url" content="https://loudmute.github.io/2025/03/05/250305-UnityLab-2D%E5%86%92%E9%99%A9%E5%B0%8F%E6%B8%B8%E6%88%8F%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:site_name" content="loudmute">
+<meta property="og:description" content="瓦片地图瓦片地图将世界作为一个个网格，每个网格单元可以设置不同的精灵。 1 创建瓦片地图创建一个瓦片地图：在Hierarchy窗口中，2D Object -&gt; Tilemap -&gt; Rectangular（矩形，一般常用） 创建的瓦片地图组成如下： 父物体为Grid，是放置游戏对象的网格；子物体为Tilemap，由瓦片（Tiles）组成，用于填充网格，可以将瓦片理解为特殊的精灵。 2">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.imgur.com/4x2VHJX.png">
+<meta property="og:image" content="https://i.imgur.com/PphXn2d.png">
+<meta property="og:image" content="https://learn-public.cdn.u3d.cn/20220207/learn/images/c490fc38-a1a3-4f06-9a75-949bca76e4ae_image.png">
+<meta property="og:image" content="https://learn-public.cdn.u3d.cn/20220207/learn/images/c4879d2c-92a9-4050-b260-3dfa57bb9832_image.png">
+<meta property="og:image" content="https://learn-public.cdn.u3d.cn/20220207/learn/images/4195177d-b2a5-4eeb-a296-e13b5fce6289_image.png">
+<meta property="og:image" content="https://learn-public.cdn.u3d.cn/20220207/learn/images/bcabed37-d1d4-4023-bad3-f81348839a89_image.png">
+<meta property="og:image" content="https://i.imgur.com/aRI6TpN.png">
+<meta property="og:image" content="https://i.imgur.com/fu0SXho.png">
+<meta property="og:image" content="https://learn-public.cdn.u3d.cn/20220207/learn/images/ea2c5d4f-8c78-4473-bf51-157ce87010f3_image.png">
+<meta property="og:image" content="https://learn-public.cdn.u3d.cn/20220207/learn/images/92fe558f-6bd6-4dc5-9e69-60c2a8c46fa5_image.png">
+<meta property="og:image" content="https://learn-public.cdn.u3d.cn/20220207/learn/images/36fa468b-2071-425d-a843-d4c6d7894922_image.png">
+<meta property="og:image" content="https://learn-public.cdn.u3d.cn/20220207/learn/images/aa1f0089-82af-439d-93a7-2727b955712b_image.png">
+<meta property="og:image" content="https://learn-public.cdn.u3d.cn/20220207/learn/images/066869e9-5a8a-4edc-bb18-2b01f470efe9_b5d6f106_a20f_4373_bef8_3ce9e57a52b1_image3.png.2000x0x1.png">
+<meta property="og:image" content="https://learn-public.cdn.u3d.cn/20220207/learn/images/8a5e1826-6aa8-49ae-b917-ec598386e42d_image.png">
+<meta property="og:image" content="https://learn-public.cdn.u3d.cn/20220207/learn/images/0151fb02-414f-464f-9d4b-950484320657_image.png">
+<meta property="og:image" content="https://learn-public.cdn.u3d.cn/20220207/learn/images/8700015e-2c20-4008-b40a-85ab0a28cd82_image.png">
+<meta property="og:image" content="https://i.imgur.com/dRR4OZr.png">
+<meta property="article:published_time" content="2025-03-04T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-09T09:00:23.071Z">
+<meta property="article:author" content="loudmute">
+<meta property="article:tag" content="C#">
+<meta property="article:tag" content="Unity">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/4x2VHJX.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>2D冒险小游戏相关问题总结</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a href="/tags/">标签</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2025/04/05/250405-%E5%85%AB%E8%82%A1%E4%B9%8B%E6%88%91%E8%A7%81/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2025/02/21/250221-UnityNote6-%E5%8A%A8%E7%94%BB%E7%B3%BB%E7%BB%9F/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://loudmute.github.io/2025/03/05/250305-UnityLab-2D%E5%86%92%E9%99%A9%E5%B0%8F%E6%B8%B8%E6%88%8F%E6%80%BB%E7%BB%93/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://loudmute.github.io/2025/03/05/250305-UnityLab-2D%E5%86%92%E9%99%A9%E5%B0%8F%E6%B8%B8%E6%88%8F%E6%80%BB%E7%BB%93/&text=2D冒险小游戏相关问题总结"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://loudmute.github.io/2025/03/05/250305-UnityLab-2D%E5%86%92%E9%99%A9%E5%B0%8F%E6%B8%B8%E6%88%8F%E6%80%BB%E7%BB%93/&title=2D冒险小游戏相关问题总结"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://loudmute.github.io/2025/03/05/250305-UnityLab-2D%E5%86%92%E9%99%A9%E5%B0%8F%E6%B8%B8%E6%88%8F%E6%80%BB%E7%BB%93/&is_video=false&description=2D冒险小游戏相关问题总结"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=2D冒险小游戏相关问题总结&body=Check out this article: https://loudmute.github.io/2025/03/05/250305-UnityLab-2D%E5%86%92%E9%99%A9%E5%B0%8F%E6%B8%B8%E6%88%8F%E6%80%BB%E7%BB%93/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://loudmute.github.io/2025/03/05/250305-UnityLab-2D%E5%86%92%E9%99%A9%E5%B0%8F%E6%B8%B8%E6%88%8F%E6%80%BB%E7%BB%93/&title=2D冒险小游戏相关问题总结"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://loudmute.github.io/2025/03/05/250305-UnityLab-2D%E5%86%92%E9%99%A9%E5%B0%8F%E6%B8%B8%E6%88%8F%E6%80%BB%E7%BB%93/&title=2D冒险小游戏相关问题总结"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://loudmute.github.io/2025/03/05/250305-UnityLab-2D%E5%86%92%E9%99%A9%E5%B0%8F%E6%B8%B8%E6%88%8F%E6%80%BB%E7%BB%93/&title=2D冒险小游戏相关问题总结"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://loudmute.github.io/2025/03/05/250305-UnityLab-2D%E5%86%92%E9%99%A9%E5%B0%8F%E6%B8%B8%E6%88%8F%E6%80%BB%E7%BB%93/&title=2D冒险小游戏相关问题总结"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://loudmute.github.io/2025/03/05/250305-UnityLab-2D%E5%86%92%E9%99%A9%E5%B0%8F%E6%B8%B8%E6%88%8F%E6%80%BB%E7%BB%93/&name=2D冒险小游戏相关问题总结&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://loudmute.github.io/2025/03/05/250305-UnityLab-2D%E5%86%92%E9%99%A9%E5%B0%8F%E6%B8%B8%E6%88%8F%E6%80%BB%E7%BB%93/&t=2D冒险小游戏相关问题总结"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%93%A6%E7%89%87%E5%9C%B0%E5%9B%BE"><span class="toc-number">1.</span> <span class="toc-text">瓦片地图</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%88%9B%E5%BB%BA%E7%93%A6%E7%89%87%E5%9C%B0%E5%9B%BE"><span class="toc-number">1.1.</span> <span class="toc-text">1 创建瓦片地图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%88%9B%E5%BB%BA%E7%93%A6%E7%89%87"><span class="toc-number">1.2.</span> <span class="toc-text">2 创建瓦片</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E9%9D%A2%E6%9D%BF%EF%BC%88Palette%EF%BC%89"><span class="toc-number">1.3.</span> <span class="toc-text">3 面板（Palette）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E7%93%A6%E7%89%87%E7%B2%BE%E7%81%B5%E9%80%82%E5%BA%94%E7%BD%91%E6%A0%BC"><span class="toc-number">1.4.</span> <span class="toc-text">4 瓦片精灵适应网格</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E7%93%A6%E7%89%87%E5%9C%B0%E5%9B%BE%E7%A2%B0%E6%92%9E"><span class="toc-number">1.5.</span> <span class="toc-text">6 瓦片地图碰撞</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A2%9E%E5%8A%A0%E7%A2%B0%E6%92%9E%E4%BD%93"><span class="toc-number">1.5.1.</span> <span class="toc-text">增加碰撞体</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BC%98%E5%8C%96%E7%93%A6%E7%89%87%E5%9C%B0%E5%9B%BE%E7%A2%B0%E6%92%9E%E4%BD%93"><span class="toc-number">1.5.2.</span> <span class="toc-text">优化瓦片地图碰撞体</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%BE%E5%B1%82%E4%B8%8E%E5%9B%BE%E5%BD%A2"><span class="toc-number">2.</span> <span class="toc-text">图层与图形</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%9B%BE%E5%B1%82%E6%8E%92%E5%BA%8F"><span class="toc-number">2.1.</span> <span class="toc-text">1 图层排序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E7%A2%B0%E6%92%9E%E8%AE%BE%E7%BD%AE"><span class="toc-number">2.2.</span> <span class="toc-text">2 碰撞设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%9B%BE%E5%BD%A2%E7%BB%98%E5%88%B6"><span class="toc-number">2.3.</span> <span class="toc-text">3 图形绘制</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-%E5%90%8C%E4%B8%80%E5%9B%BE%E5%B1%82%E7%BB%98%E5%88%B6%E9%A1%BA%E5%BA%8F"><span class="toc-number">2.3.1.</span> <span class="toc-text">3.1 同一图层绘制顺序</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-%E9%80%8F%E8%A7%86%E6%95%88%E6%9E%9C"><span class="toc-number">2.3.2.</span> <span class="toc-text">3.2  透视效果</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%9B%B4%E6%94%B9%E5%9B%BE%E5%BD%A2%E8%AE%BE%E7%BD%AE"><span class="toc-number">2.3.2.1.</span> <span class="toc-text">更改图形设置</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%B0%83%E6%95%B4%E7%B2%BE%E7%81%B5%E8%AE%BE%E7%BD%AE"><span class="toc-number">2.3.2.2.</span> <span class="toc-text">调整精灵设置</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%B0%83%E6%95%B4%E5%8D%95%E4%B8%AA%E7%B2%BE%E7%81%B5%E8%BD%B4%E5%BF%83"><span class="toc-number">2.3.2.3.</span> <span class="toc-text">调整单个精灵轴心</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-Sprite-Editor-%E6%9D%A5%E6%9B%B4%E6%94%B9%E8%BD%B4%E5%BF%83"><span class="toc-number">2.3.2.4.</span> <span class="toc-text">使用 Sprite Editor 来更改轴心</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E7%B2%BE%E7%81%B5%E5%B9%B3%E9%93%BA"><span class="toc-number">2.4.</span> <span class="toc-text">4 精灵平铺</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%91%84%E5%83%8F%E6%9C%BA"><span class="toc-number">3.</span> <span class="toc-text">摄像机</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Cinemachine%E8%AE%BE%E7%BD%AE"><span class="toc-number">3.1.</span> <span class="toc-text">1 Cinemachine设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%91%84%E5%83%8F%E6%9C%BA%E8%BE%B9%E7%95%8C"><span class="toc-number">3.2.</span> <span class="toc-text">2 摄像机边界</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        2D冒险小游戏相关问题总结
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">loudmute</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-03-04T16:00:00.000Z" class="dt-published" itemprop="datePublished">2025-03-05</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/">游戏开发</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/C/" rel="tag">C#</a>, <a class="p-category" href="/tags/Unity/" rel="tag">Unity</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h2 id="瓦片地图"><a href="#瓦片地图" class="headerlink" title="瓦片地图"></a>瓦片地图</h2><p>瓦片地图将世界作为一个个网格，每个网格单元可以设置不同的精灵。</p>
+<h3 id="1-创建瓦片地图"><a href="#1-创建瓦片地图" class="headerlink" title="1 创建瓦片地图"></a>1 创建瓦片地图</h3><p>创建一个瓦片地图：在<code>Hierarchy</code>窗口中，<code>2D Object</code> -&gt; <code>Tilemap</code> -&gt; <code>Rectangular</code>（矩形，一般常用）</p>
+<p>创建的瓦片地图组成如下：</p>
+<p>父物体为Grid，是放置游戏对象的网格；子物体为Tilemap，由瓦片（Tiles）组成，用于填充网格，可以将瓦片理解为特殊的精灵。</p>
+<h3 id="2-创建瓦片"><a href="#2-创建瓦片" class="headerlink" title="2 创建瓦片"></a>2 创建瓦片</h3><p>创建瓦片：在Project窗口中，<code>Create</code> -&gt; <code>2D</code> -&gt; <code>Tiles</code> -&gt; <code>Rule Tile</code>（一般常用）</p>
+<p>可以看到瓦片文件的Inspector窗口显示如下，其中Default Sprite正是我们要绘制的精灵，可以将任意的一个精灵分配给该瓦片：<img src="https://i.imgur.com/4x2VHJX.png" alt="image-20250305094106769" style="zoom: 33%;" /></p>
+<h3 id="3-面板（Palette）"><a href="#3-面板（Palette）" class="headerlink" title="3 面板（Palette）"></a>3 面板（Palette）</h3><p>Unity使用面板来在瓦片地图的网格上渲染瓦片，打个比方：瓦片地图就是画布，瓦片是颜料，面板则是调色版（存放瓦片）和绘画工具（提供画笔、橡皮檫等）。</p>
+<p>创建一个面板：</p>
+<ol>
+<li><p>打开Tile Palette窗口：<code>Window</code> -&gt; <code>2D</code> -&gt; <code>Tile Palette</code></p>
+</li>
+<li><p>在Tile Palette窗口创建新面板：<code>Create New Tile Palette</code> -&gt; <code>Create</code> -&gt; <code>保存在指定文件夹</code></p>
+ <img src="https://i.imgur.com/PphXn2d.png" alt="image-20250305105249688" style="zoom:50%;" />
+</li>
+<li><p>将Project窗口中的指定拖拽到面板中心，即可使用面板操作瓦片绘制网格</p>
+</li>
+</ol>
+<h3 id="4-瓦片精灵适应网格"><a href="#4-瓦片精灵适应网格" class="headerlink" title="4 瓦片精灵适应网格"></a>4 瓦片精灵适应网格</h3><p>在一个精灵的Inspector窗口中，可以看到<code>Pixels Per Unity</code>选项，它指定了精灵在场景中的大小即 <code>像素/每单位</code>，如果精灵本身像素是64*64，而Pixel Per Unity设置为100，则精灵就小于一个单位。</p>
+<p>瓦片地图的父物体Grid，可以设置一个网格的宽度和高度，假如都为1，则一个网格的大小就是<code>1单位*1单位</code>。</p>
+<p>在Unity场景中，衡量大小的标准就是 <strong>单位</strong>，看精灵和网格是否匹配，就看精灵和网格的单位大小是不是一样。</p>
+<p>这里的例子中，为了使精灵恰好填充网格，就得将精灵Pixel Per Unity设置为64*64</p>
+<h3 id="6-瓦片地图碰撞"><a href="#6-瓦片地图碰撞" class="headerlink" title="6 瓦片地图碰撞"></a>6 瓦片地图碰撞</h3><h4 id="增加碰撞体"><a href="#增加碰撞体" class="headerlink" title="增加碰撞体"></a>增加碰撞体</h4><p>现在，你的角色会与我们具有<strong>碰撞体</strong>的所有<strong>游戏对象</strong>碰撞。但是她仍然可以在水上行走，因此你应该让她与水面瓦片碰撞，使她不能在水上行走。但如何才能做到呢？</p>
+<p>你可以在空<strong>游戏对象</strong>上添加一个<strong>碰撞体</strong>，然后调整碰撞体大小以涵盖水面。但这个过程容易出错，如果你想将水面重新绘制得更大、更小或绘成其他形状，则必须手动更改<strong>碰撞体</strong>。请注意，这种情况下通过<strong>瓦片地图</strong>可以轻松快速地更改世界。</p>
+<p>幸好，瓦片地图也可以具有<strong>碰撞体</strong>。无论是否应该碰撞，每个<strong>瓦片</strong>都可以存储起来，并且<strong>瓦片地图碰撞体</strong>将为所有要设置以进行碰撞的<strong>瓦片</strong>创建<strong>碰撞体</strong>。</p>
+<p>要设置<strong>瓦片地图碰撞体</strong>，请执行以下操作：  </p>
+<p><strong>1.</strong>  在 <strong>Hierarchy</strong> 中，选择 <strong>Tilemap 游戏对象</strong>。   </p>
+<p><strong>2.</strong> 在 <strong>Inspector</strong> 中，单击 <strong>Add Component</strong> 按钮。    </p>
+<p><strong>3.</strong> 搜索“<strong>Tilemap Collider 2D</strong>”，然后选择此组件。你会看到在 <strong>Scene 视图</strong>中为所有瓦片添加绿色<strong>碰撞体</strong>方块：</p>
+<img src="https://learn-public.cdn.u3d.cn/20220207/learn/images/c490fc38-a1a3-4f06-9a75-949bca76e4ae_image.png" alt="img" style="zoom: 50%;" />
+
+<p>这是因为现在所有的<strong>瓦片</strong>都已设置为进行碰撞。   </p>
+<p><strong>4.<strong>在 <strong>Project 窗口</strong>中，找到 <strong>Tile</strong> 文件夹。选择所有</strong>不是水</strong>的瓦片。（你可以单击一个瓦片，然后按住 <strong>Shift</strong> 并单击列表中的最后一个<strong>瓦片</strong>来全部选中。） </p>
+<p>**5.**在 Inspector 中，找到 <strong>Collider Type</strong> 属性，然后将该属性从 <strong>Sprite</strong>（目前值）更改为 <strong>None</strong>。</p>
+<img src="https://learn-public.cdn.u3d.cn/20220207/learn/images/c4879d2c-92a9-4050-b260-3dfa57bb9832_image.png" alt="img" style="zoom:50%;" />
+
+<p>现在，你选择的<strong>瓦片</strong>不再被视为<strong>碰撞体</strong>。如果在 <strong>Hierarchy</strong> 中选择 <strong>Tilemap</strong>，你将在 <strong>Scene 视图</strong>中看到只有水面<strong>瓦片</strong>具有绿色方块。</p>
+<img src="https://learn-public.cdn.u3d.cn/20220207/learn/images/4195177d-b2a5-4eeb-a296-e13b5fce6289_image.png" alt="img" style="zoom:50%;" />
+
+<p>**6.**保存所做的更改。   </p>
+<p><strong>7.</strong> 单击 <strong>Play</strong> 以进入<strong>运行模式</strong>，并尝试让 Ruby 在水上行走。她现在应该会与边界发生碰撞。</p>
+<h4 id="优化瓦片地图碰撞体"><a href="#优化瓦片地图碰撞体" class="headerlink" title="优化瓦片地图碰撞体"></a><strong>优化瓦片地图碰撞体</strong></h4><p>最后一小步是设置<strong>瓦片地图碰撞体</strong>。目前，正如在 <strong>Scene 视图</strong>中看到的，每个瓦片都是一个单独的<strong>碰撞体</strong>。  这种方法效果良好，但会产生两个问题：</p>
+<ul>
+<li>物理系统的计算量更大；如果你的世界很大，可能会减慢你的游戏速度。   </li>
+<li>在瓦片之间的边界上会产生小问题。由于瓦片是两个并排的<strong>碰撞体</strong>，并且两者之间存在微小间隙，因此有时计算上的微小误差也可能导致仍会发生碰撞的罕见情况。</li>
+</ul>
+<p>为了解决这些问题，<strong>Unity</strong> 提供了一个名为 <strong>Composite Collider 2D</strong> 的组件。此组件可以获取对象（或对象的子对象）上的所有碰撞体，并由此创建一个大<strong>碰撞体</strong>。</p>
+<p>让我们来添加并配置此组件：  </p>
+<p><strong>1.</strong>  在 <strong>Hierarchy</strong> 中，选择 <strong>Tilemap 游戏对象</strong>。   </p>
+<p><strong>2.</strong> 在 <strong>Inspector</strong> 中，单击 <strong>Add Component</strong> 按钮。   </p>
+<p><strong>3.</strong> 搜索“<strong>Composite Collider 2D</strong>”，然后选择此组件。</p>
+<p>你会看到自动添加 <strong>Rigidbody 2D</strong> 组件，因为复合<strong>碰撞体</strong>需要 <strong>Rigidbody 2D</strong> 才能正常运行。</p>
+<p><strong>4.</strong> 在 <strong>Tilemap Collider 2D</strong> 组件中，启用 <strong>Used By Composite</strong> 复选框。   </p>
+<p><strong>5.<strong>在 <strong>Rigidbody 2D</strong> 组件中，将 <strong>Rigidbody Body Type</strong> 属性设置为 <strong>Static</strong>。  将此属性设置为 <strong>Static</strong> 将阻止你的世界移动。此外还有助于</strong>物理系统</strong>优化计算，因为它现在知道<strong>刚体</strong>不能移动。</p>
+<img src="https://learn-public.cdn.u3d.cn/20220207/learn/images/bcabed37-d1d4-4023-bad3-f81348839a89_image.png" alt="img" style="zoom:50%;" />
+
+<p>现在，围绕水面瓦片的<strong>碰撞体</strong>是一个大矩形（你可以在<strong>瓦片地图碰撞体 (Tilemap Collider)</strong> 上启用和禁用 <strong>Used by Composite</strong> 以便在 <strong>Scene 视图</strong>中进行比较）。</p>
+<p>如果你绘制新的水面<strong>瓦片</strong>，<strong>Unity</strong> 会自动更新<strong>瓦片地图</strong>的<strong>复合碰撞体 (Composite Collider)</strong> 以便包含新的<strong>碰撞体</strong>。</p>
+<h2 id="图层与图形"><a href="#图层与图形" class="headerlink" title="图层与图形"></a>图层与图形</h2><p>PS：万万没想到，在图层的问题上踩了个坑，以至于出现了一个改了一天的bug，这个游戏里涉及图层的问题都在这里了。</p>
+<h3 id="1-图层排序"><a href="#1-图层排序" class="headerlink" title="1 图层排序"></a>1 图层排序</h3><p>一个游戏对象可以选择不同的图层，如图所示，点击Add Layer可以增添自定义的图层。</p>
+<img src="https://i.imgur.com/aRI6TpN.png" alt="image-20250305151252152" style="zoom:50%;" />
+
+<h3 id="2-碰撞设置"><a href="#2-碰撞设置" class="headerlink" title="2 碰撞设置"></a>2 碰撞设置</h3><p>不同图层之间有一个碰撞矩阵，可以进行勾选是否碰撞。</p>
+<p>该设置位置在：<code>Edit</code> -&gt; <code>Project Settings</code> -&gt; <code>Physics 2D</code> -&gt; <code>Layer Collision Matrix</code><img src="https://i.imgur.com/fu0SXho.png" alt="image-20250305151414540" style="zoom:50%;" /></p>
+<p>该设置里的<code>confiner</code>是我虚拟摄像机的边界游戏物体，在我脑残删了文件又重建时，忘了修改图层碰撞关系，酿成了醇香的BUG……</p>
+<h3 id="3-图形绘制"><a href="#3-图形绘制" class="headerlink" title="3 图形绘制"></a>3 图形绘制</h3><h4 id="3-1-同一图层绘制顺序"><a href="#3-1-同一图层绘制顺序" class="headerlink" title="3.1 同一图层绘制顺序"></a>3.1 同一图层绘制顺序</h4><p>在Unity中，不同<strong>物体</strong>可能位于相同或者不同的<strong>图层</strong>中。在<strong>同一图层</strong>中，游戏对象的<strong>绘制顺序</strong>也不同：编号大的后绘制，即编号大的对象显示位于编号小的之上。</p>
+<p>为了使地图绘制后，再绘制角色，可以更改瓦片地图的绘制顺序：<code>Tilemap游戏对象</code> -&gt; <code>Inspector窗口</code> -&gt; <code>Tilemap Renderer</code> -&gt; <code>Order in Layer</code> -&gt; <code>修改该值小一些</code></p>
+<h4 id="3-2-透视效果"><a href="#3-2-透视效果" class="headerlink" title="3.2  透视效果"></a>3.2  透视效果</h4><p>有时候再<strong>绘制图形</strong>时，我们并不希望一个<strong>游戏对象</strong>总是在另一对象之上。比如，角色在箱子后边时，我们希望隐藏主角和箱子重叠的部分，营造一种<strong>透视效果</strong>，看上去主角在箱子后边。即我们希望，Unity根据y轴坐标决定对象的绘制顺序，在上方的先绘制，在下方的后绘制。</p>
+<h5 id="更改图形设置"><a href="#更改图形设置" class="headerlink" title="更改图形设置"></a>更改图形设置</h5><p>要指示 <strong>Unity</strong> 根据游戏对象的 y 坐标来绘制<strong>游戏对象</strong>，请执行以下操作：</p>
+<p>**1.**选择 <strong>Edit &gt; Project Settings</strong>。  </p>
+<p><strong>2.</strong> 在左侧类别菜单中，单击 <strong>Graphics</strong>。  </p>
+<p><strong>3.<strong>在 <strong>Camera Settings</strong> 中，找到 <strong>Transparency Sort Mode</strong> 字段。此字段决定了</strong>精灵</strong>的绘制顺序。使用下拉菜单将此设置从 <strong>Default</strong> 更改为 <strong>Custom Axis</strong>。</p>
+<img src="https://learn-public.cdn.u3d.cn/20220207/learn/images/ea2c5d4f-8c78-4473-bf51-157ce87010f3_image.png" alt="img" style="zoom: 50%;" />
+
+<p>**4.**在 <strong>Transparency Sort Axis</strong> 中添加以下坐标：</p>
+<ul>
+<li><strong>x</strong> &#x3D; 0</li>
+<li><strong>y</strong> &#x3D; 1</li>
+<li><strong>z</strong> &#x3D; 0</li>
+</ul>
+<p>此设置告诉 <strong>Unity</strong> 在 <strong>y 轴</strong>上基于精灵的位置来绘制<strong>精灵</strong>。</p>
+<h5 id="调整精灵设置"><a href="#调整精灵设置" class="headerlink" title="调整精灵设置"></a><strong>调整精灵设置</strong></h5><p>让我们来看看 Ruby 的 <strong>Sprite Renderer</strong>：</p>
+<p>**1.**在 <strong>Hierarchy</strong> 中，选择 <strong>Ruby 游戏对象</strong>。</p>
+<p><strong>2.</strong> 在 <strong>Inspector</strong> 中，找到该游戏对象的 <strong>Sprite Renderer</strong> 组件。</p>
+<p><strong>3.</strong> 找到 <strong>Sprite Sort Point</strong> 字段。目前，此字段设置为 <strong>Center</strong>，这意味着会使用<strong>精灵</strong>的中心点来决定这个游戏对象应该在另一个<strong>游戏对象</strong>的前面还是后面。  </p>
+<p>**4.**将 <strong>Sprite Sort Point</strong> 更改为 <strong>Pivot</strong>。</p>
+<img src="https://learn-public.cdn.u3d.cn/20220207/learn/images/92fe558f-6bd6-4dc5-9e69-60c2a8c46fa5_image.png" alt="img" style="zoom:50%;" />
+
+<h5 id="调整单个精灵轴心"><a href="#调整单个精灵轴心" class="headerlink" title="调整单个精灵轴心"></a><strong>调整单个精灵轴心</strong></h5><p><strong>轴心</strong>是你可以手动定义的特殊点，充当<strong>精灵</strong>的“锚点”。如果你旋转<strong>精灵</strong>，精灵将围绕这个点旋转。这个点也是用于放置<strong>精灵</strong>的点。这意味着，如果<strong>游戏对象</strong>位于 (<strong>0,0</strong>)，并且将 <strong>Pivot</strong> 设置为角色的头部，则会在 (<strong>0,0</strong>) 绘制头部。如果轴心在双脚上，则会在 (<strong>0,0</strong>) 绘制双脚。</p>
+<p>你需要更改 <strong>Ruby</strong> 和 <strong>MetalCube</strong> 精灵的<strong>轴心</strong>，以便将精灵放置在所需的位置。  </p>
+<p>要更改单个<strong>精灵轴心</strong>，请执行以下操作：  </p>
+<p><strong>1.</strong>  在 <strong>Project 窗口</strong>中，选择 <strong>Assets &gt; Art &gt; Sprites &gt; Environment</strong>。选择 <strong>MetalCube</strong> 精灵。   </p>
+<p>**2.**在 Inspector 中，找到 <strong>Pivot</strong> 字段。使用下拉菜单将此字段设置为 <strong>Bottom</strong>。</p>
+<img src="https://learn-public.cdn.u3d.cn/20220207/learn/images/36fa468b-2071-425d-a843-d4c6d7894922_image.png" alt="img" style="zoom:50%;" />
+
+<p>**3.**单击 <strong>Inspector</strong> 底部的 <strong>Apply</strong> 按钮。   </p>
+<p>这样就会将<strong>轴心</strong>置于<strong>精灵</strong>的底部，而不是先前的中部。</p>
+<h5 id="使用-Sprite-Editor-来更改轴心"><a href="#使用-Sprite-Editor-来更改轴心" class="headerlink" title="使用 Sprite Editor 来更改轴心"></a><strong>使用 Sprite Editor 来更改轴心</strong></h5><p>你刚才遵循的流程仅对单个<strong>精灵</strong>有效，例如，无法用于更改<strong>瓦片集</strong>的<strong>轴心</strong>。 </p>
+<p>更改<strong>轴心</strong>的另一种方法是使用 <strong>Sprite Editor</strong>：   </p>
+<p><strong>1.</strong>  在 <strong>Project 窗口</strong>中，选择 <strong>Assets &gt; Art &gt; Sprites</strong>。选择 <strong>Ruby</strong> <strong>精灵</strong>。</p>
+<p><strong>2.</strong> 在 <strong>Inspector</strong> 中，单击 <strong>Sprite Editor</strong> 按钮。此时将打开你在先前教程中使用的 <strong>Sprite Editor</strong>。   </p>
+<p><strong>3.</strong> 单击图像以显示<strong>精灵</strong>边框。你应该会在中心看到一个小的<strong>蓝色圆圈</strong>。这是<strong>轴心</strong>的当前位置。</p>
+<img src="https://learn-public.cdn.u3d.cn/20220207/learn/images/aa1f0089-82af-439d-93a7-2727b955712b_image.png" alt="img" style="zoom: 33%;" />
+
+<p><strong>Sprite Editor</strong> 允许你将此蓝色圆圈拖放到<strong>精灵</strong>中任何所需的位置。</p>
+<p>或者，在灰色的 <strong>Sprite</strong> 窗口中，你可以：</p>
+<ul>
+<li>在 <strong>Pivot</strong> 下拉选单中设置为 <strong>Center</strong>。</li>
+<li>将 <strong>Pivot</strong> 设置为 <strong>Custom</strong> 并手动设置 <strong>Custom Pivot</strong>。</li>
+</ul>
+<p>**4.**将 <strong>Custom Pivot</strong> 设置为 0.5（x 轴）和 0（y 轴）。由于 <strong>Pivot Unit Mode</strong> 设置为 <strong>Normalized</strong>，0 是最小值（因此，x 为左侧，y 为底部），1 是最大值（x 为右侧，y 为顶部），0.5 位于中间。</p>
+<p>**5.**单击 <strong>Apply</strong> 以保存你的更改。  </p>
+<p><strong>6.<strong>单击 <strong>Play</strong> 以进入</strong>运行模式</strong>，然后试玩游戏。现在，一切都应该可以正确显示！</p>
+<h3 id="4-精灵平铺"><a href="#4-精灵平铺" class="headerlink" title="4 精灵平铺"></a>4 精灵平铺</h3><p>介绍<strong>精灵渲染器 (Sprite Renderer)</strong> 的功能。现在，如果你想通过使用<strong>矩形工具</strong>（<strong>T 键</strong>）调整伤害区域的大小来创建更大的伤害区域，则<strong>精灵</strong>会拉伸而显得很难看：</p>
+<img src="https://learn-public.cdn.u3d.cn/20220207/learn/images/066869e9-5a8a-4edc-bb18-2b01f470efe9_b5d6f106_a20f_4373_bef8_3ce9e57a52b1_image3.png.2000x0x1.png" alt="img" style="zoom:50%;" />
+
+<p>但是，你可以让 <strong>Sprite Renderer</strong> 平铺（而不是拉伸）<strong>精灵</strong>。因此，如果将伤害区域的大小调整到足以将<strong>精灵</strong>容纳两次，则 <strong>Sprite Renderer</strong> 会多次并排绘制<strong>精灵</strong>：</p>
+<p>为此需要执行以下操作：</p>
+<ul>
+<li>首先，确保<strong>游戏对象</strong>的缩放在 <strong>Transform 组件</strong>中设置为 <strong>1</strong>,<strong>1</strong>,<strong>1</strong>。</li>
+<li>然后在 <strong>Sprite Renderer</strong> 组件中将 <strong>Draw Mode</strong> 设置为 <strong>Tiled</strong>，并将 <strong>Tile Mode</strong> 更改为 <strong>Adaptive</strong>。</li>
+</ul>
+<img src="https://learn-public.cdn.u3d.cn/20220207/learn/images/8a5e1826-6aa8-49ae-b917-ec598386e42d_image.png" alt="img" style="zoom:50%;" />
+
+<p>此时将显示警告，告诉你<strong>精灵</strong>可能显示有误。</p>
+<p>可以遵循相关说明来解决此问题。在 <strong>Project 窗口</strong>中选择 <strong>Damageable 精灵</strong>，并将 <strong>Mesh Type</strong> 更改为 <strong>Full Rect</strong>。</p>
+<img src="https://learn-public.cdn.u3d.cn/20220207/learn/images/0151fb02-414f-464f-9d4b-950484320657_image.png" alt="img" style="zoom:50%;" />
+
+<p>按下 <strong>Inspector</strong> 底部的 <strong>Apply</strong>。现在，如果单击 <strong>Hierarchy</strong> 中的 <strong>Damage Zone</strong>，<strong>Inspector</strong> 应该不再显示警告。</p>
+<p>现在，当你使用<strong>矩形工具</strong>调整<strong>游戏对象</strong>的大小时，你会看到游戏对象拉伸到可以容纳<strong>两个精灵</strong>的程度，然后显示<strong>两个精灵</strong>而不是过度拉伸！<strong>注意：<strong>仅在你使用</strong>矩形工具</strong>而不是缩放工具时才有效，因为缩放会更改<strong>游戏对象</strong>的比例，不再是 <strong>Sprite Renderer Inspector</strong> 中的 <strong>Draw Mode</strong> 字段下可以看到的平铺大小。</p>
+<img src="https://learn-public.cdn.u3d.cn/20220207/learn/images/8700015e-2c20-4008-b40a-85ab0a28cd82_image.png" alt="img" style="zoom:50%;" />
+
+<p>但是你会发现自己的<strong>碰撞体</strong>没有按比例缩放。请选中 <strong>Box Collider 2D</strong> 组件的 <strong>Auto Tiling</strong> 属性，以便碰撞体随<strong>精灵</strong>一起平铺。</p>
+<h2 id="摄像机"><a href="#摄像机" class="headerlink" title="摄像机"></a>摄像机</h2><p>一般情况下，我们创建项目时自带的摄像机是个静态摄像机。要想让镜头跟随角色移动，我们可以通过编写脚本控制摄像机，或者，使用<strong>Cinemachine</strong>，这是一个Unity包，可以在Package Manager中下载。</p>
+<h3 id="1-Cinemachine设置"><a href="#1-Cinemachine设置" class="headerlink" title="1 Cinemachine设置"></a>1 Cinemachine设置</h3><p>使用<strong>Cinemachine</strong>，可以创建多个不同的虚拟摄像机，Cinemachine 可与多个摄像机配合使用，并根据游戏的需要在多个摄像机之间进行切换。在实摄像机（Main Camera）中，可以复制虚拟摄像机的设置。</p>
+<p><strong>创建虚拟摄像机</strong>：在Hierarchy窗口中，<code>右键</code> -&gt; <code>Cinemachine</code> -&gt; <code>Create 2D Camera</code></p>
+<p><strong>跟随对象</strong>：在虚拟摄像机物体的<strong>Cineamachine Virtual Camera</strong>组件中，属性<strong>Follow</strong>用于设置跟随对象</p>
+<h3 id="2-摄像机边界"><a href="#2-摄像机边界" class="headerlink" title="2 摄像机边界"></a>2 摄像机边界</h3><p>为了防止摄像机显示地图之外的内容，需要给虚拟摄像机物体<strong>增加边界</strong>：<code>虚拟摄像机物体</code>  -&gt; <code>Cineamachine Virtual Camera组件</code> -&gt; <code>Add Extension</code> -&gt; <code>CinemachineConfiner</code></p>
+<img src="https://i.imgur.com/dRR4OZr.png" alt="image-20250305160222692" style="zoom:50%;" />
+
+<p>边界需要指定一个摄像边界物体，为此，我们<strong>创建一个空游戏物体并添加Polygon Collider 2D组件</strong>。</p>
+<p><strong>修改图层</strong>：这时候需要创建一个Confiner图层并赋给摄像边界物体，在碰撞矩阵中，取消有关Confiner图层的设置（否则任何含碰撞体组件的物体将会在游戏开始时被平等的创飞到摄像边界）。</p>
+<p>参考教程：<a target="_blank" rel="noopener" href="https://learn.u3d.cn/tutorial/unity-ruby-adventure?chapterId=63562b27edca72001f21d0af#61f1065860cc34001f190d21">https://learn.u3d.cn/tutorial/unity-ruby-adventure?chapterId=63562b27edca72001f21d0af#61f1065860cc34001f190d21</a></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/about/">关于</a></li>
+        
+          <li><a href="/archives/">文章</a></li>
+        
+          <li><a href="/categories/">分类</a></li>
+        
+          <li><a href="/tags/">标签</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%93%A6%E7%89%87%E5%9C%B0%E5%9B%BE"><span class="toc-number">1.</span> <span class="toc-text">瓦片地图</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%88%9B%E5%BB%BA%E7%93%A6%E7%89%87%E5%9C%B0%E5%9B%BE"><span class="toc-number">1.1.</span> <span class="toc-text">1 创建瓦片地图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%88%9B%E5%BB%BA%E7%93%A6%E7%89%87"><span class="toc-number">1.2.</span> <span class="toc-text">2 创建瓦片</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E9%9D%A2%E6%9D%BF%EF%BC%88Palette%EF%BC%89"><span class="toc-number">1.3.</span> <span class="toc-text">3 面板（Palette）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E7%93%A6%E7%89%87%E7%B2%BE%E7%81%B5%E9%80%82%E5%BA%94%E7%BD%91%E6%A0%BC"><span class="toc-number">1.4.</span> <span class="toc-text">4 瓦片精灵适应网格</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E7%93%A6%E7%89%87%E5%9C%B0%E5%9B%BE%E7%A2%B0%E6%92%9E"><span class="toc-number">1.5.</span> <span class="toc-text">6 瓦片地图碰撞</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A2%9E%E5%8A%A0%E7%A2%B0%E6%92%9E%E4%BD%93"><span class="toc-number">1.5.1.</span> <span class="toc-text">增加碰撞体</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BC%98%E5%8C%96%E7%93%A6%E7%89%87%E5%9C%B0%E5%9B%BE%E7%A2%B0%E6%92%9E%E4%BD%93"><span class="toc-number">1.5.2.</span> <span class="toc-text">优化瓦片地图碰撞体</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%BE%E5%B1%82%E4%B8%8E%E5%9B%BE%E5%BD%A2"><span class="toc-number">2.</span> <span class="toc-text">图层与图形</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%9B%BE%E5%B1%82%E6%8E%92%E5%BA%8F"><span class="toc-number">2.1.</span> <span class="toc-text">1 图层排序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E7%A2%B0%E6%92%9E%E8%AE%BE%E7%BD%AE"><span class="toc-number">2.2.</span> <span class="toc-text">2 碰撞设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%9B%BE%E5%BD%A2%E7%BB%98%E5%88%B6"><span class="toc-number">2.3.</span> <span class="toc-text">3 图形绘制</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-%E5%90%8C%E4%B8%80%E5%9B%BE%E5%B1%82%E7%BB%98%E5%88%B6%E9%A1%BA%E5%BA%8F"><span class="toc-number">2.3.1.</span> <span class="toc-text">3.1 同一图层绘制顺序</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-%E9%80%8F%E8%A7%86%E6%95%88%E6%9E%9C"><span class="toc-number">2.3.2.</span> <span class="toc-text">3.2  透视效果</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%9B%B4%E6%94%B9%E5%9B%BE%E5%BD%A2%E8%AE%BE%E7%BD%AE"><span class="toc-number">2.3.2.1.</span> <span class="toc-text">更改图形设置</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%B0%83%E6%95%B4%E7%B2%BE%E7%81%B5%E8%AE%BE%E7%BD%AE"><span class="toc-number">2.3.2.2.</span> <span class="toc-text">调整精灵设置</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%B0%83%E6%95%B4%E5%8D%95%E4%B8%AA%E7%B2%BE%E7%81%B5%E8%BD%B4%E5%BF%83"><span class="toc-number">2.3.2.3.</span> <span class="toc-text">调整单个精灵轴心</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-Sprite-Editor-%E6%9D%A5%E6%9B%B4%E6%94%B9%E8%BD%B4%E5%BF%83"><span class="toc-number">2.3.2.4.</span> <span class="toc-text">使用 Sprite Editor 来更改轴心</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E7%B2%BE%E7%81%B5%E5%B9%B3%E9%93%BA"><span class="toc-number">2.4.</span> <span class="toc-text">4 精灵平铺</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%91%84%E5%83%8F%E6%9C%BA"><span class="toc-number">3.</span> <span class="toc-text">摄像机</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Cinemachine%E8%AE%BE%E7%BD%AE"><span class="toc-number">3.1.</span> <span class="toc-text">1 Cinemachine设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%91%84%E5%83%8F%E6%9C%BA%E8%BE%B9%E7%95%8C"><span class="toc-number">3.2.</span> <span class="toc-text">2 摄像机边界</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://loudmute.github.io/2025/03/05/250305-UnityLab-2D%E5%86%92%E9%99%A9%E5%B0%8F%E6%B8%B8%E6%88%8F%E6%80%BB%E7%BB%93/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://loudmute.github.io/2025/03/05/250305-UnityLab-2D%E5%86%92%E9%99%A9%E5%B0%8F%E6%B8%B8%E6%88%8F%E6%80%BB%E7%BB%93/&text=2D冒险小游戏相关问题总结"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://loudmute.github.io/2025/03/05/250305-UnityLab-2D%E5%86%92%E9%99%A9%E5%B0%8F%E6%B8%B8%E6%88%8F%E6%80%BB%E7%BB%93/&title=2D冒险小游戏相关问题总结"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://loudmute.github.io/2025/03/05/250305-UnityLab-2D%E5%86%92%E9%99%A9%E5%B0%8F%E6%B8%B8%E6%88%8F%E6%80%BB%E7%BB%93/&is_video=false&description=2D冒险小游戏相关问题总结"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=2D冒险小游戏相关问题总结&body=Check out this article: https://loudmute.github.io/2025/03/05/250305-UnityLab-2D%E5%86%92%E9%99%A9%E5%B0%8F%E6%B8%B8%E6%88%8F%E6%80%BB%E7%BB%93/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://loudmute.github.io/2025/03/05/250305-UnityLab-2D%E5%86%92%E9%99%A9%E5%B0%8F%E6%B8%B8%E6%88%8F%E6%80%BB%E7%BB%93/&title=2D冒险小游戏相关问题总结"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://loudmute.github.io/2025/03/05/250305-UnityLab-2D%E5%86%92%E9%99%A9%E5%B0%8F%E6%B8%B8%E6%88%8F%E6%80%BB%E7%BB%93/&title=2D冒险小游戏相关问题总结"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://loudmute.github.io/2025/03/05/250305-UnityLab-2D%E5%86%92%E9%99%A9%E5%B0%8F%E6%B8%B8%E6%88%8F%E6%80%BB%E7%BB%93/&title=2D冒险小游戏相关问题总结"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://loudmute.github.io/2025/03/05/250305-UnityLab-2D%E5%86%92%E9%99%A9%E5%B0%8F%E6%B8%B8%E6%88%8F%E6%80%BB%E7%BB%93/&title=2D冒险小游戏相关问题总结"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://loudmute.github.io/2025/03/05/250305-UnityLab-2D%E5%86%92%E9%99%A9%E5%B0%8F%E6%B8%B8%E6%88%8F%E6%80%BB%E7%BB%93/&name=2D冒险小游戏相关问题总结&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://loudmute.github.io/2025/03/05/250305-UnityLab-2D%E5%86%92%E9%99%A9%E5%B0%8F%E6%B8%B8%E6%88%8F%E6%80%BB%E7%BB%93/&t=2D冒险小游戏相关问题总结"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2026
+    loudmute
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a href="/tags/">标签</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

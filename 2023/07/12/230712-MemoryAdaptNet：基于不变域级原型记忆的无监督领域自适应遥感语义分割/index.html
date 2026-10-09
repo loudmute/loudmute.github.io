@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="题目：《Unsupervised Domain Adaptation Semantic Segmentation of High-Resolution Remote Sensing Imagery With Invariant Domain-Level Prototype Memory》  github：https:&#x2F;&#x2F;github.com&#x2F;RS-CSU&#x2F;MemoryAdaptNet-mas">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MemoryAdaptNet：基于不变域级原型记忆的无监督领域自适应遥感语义分割">
+<meta property="og:url" content="https://loudmute.github.io/2023/07/12/230712-MemoryAdaptNet%EF%BC%9A%E5%9F%BA%E4%BA%8E%E4%B8%8D%E5%8F%98%E5%9F%9F%E7%BA%A7%E5%8E%9F%E5%9E%8B%E8%AE%B0%E5%BF%86%E7%9A%84%E6%97%A0%E7%9B%91%E7%9D%A3%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E9%81%A5%E6%84%9F%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2/index.html">
+<meta property="og:site_name" content="loudmute">
+<meta property="og:description" content="题目：《Unsupervised Domain Adaptation Semantic Segmentation of High-Resolution Remote Sensing Imagery With Invariant Domain-Level Prototype Memory》  github：https:&#x2F;&#x2F;github.com&#x2F;RS-CSU&#x2F;MemoryAdaptNet-mas">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.imgur.com/7XduoJF.png">
+<meta property="og:image" content="https://i.imgur.com/xqifVgS.png">
+<meta property="og:image" content="https://i.imgur.com/oG0iio1.png">
+<meta property="og:image" content="https://i.imgur.com/1ko97Me.png">
+<meta property="og:image" content="https://i.imgur.com/O4gXc1j.png">
+<meta property="og:image" content="https://i.imgur.com/LtVu9nC.png">
+<meta property="og:image" content="https://i.imgur.com/zQCdcJR.png">
+<meta property="og:image" content="https://i.imgur.com/seH050V.png">
+<meta property="og:image" content="https://i.imgur.com/eG09Tsr.png">
+<meta property="og:image" content="https://i.imgur.com/ROdd5kT.png">
+<meta property="og:image" content="https://i.imgur.com/JOZaLS1.png">
+<meta property="og:image" content="https://i.imgur.com/5aiiKJ7.png">
+<meta property="og:image" content="https://i.imgur.com/HlVnHuk.png">
+<meta property="og:image" content="https://i.imgur.com/eQp8TNM.png">
+<meta property="og:image" content="https://i.imgur.com/ySEgAr3.png">
+<meta property="og:image" content="https://i.imgur.com/pULni6A.png">
+<meta property="og:image" content="https://i.imgur.com/ihbFu8V.png">
+<meta property="og:image" content="https://i.imgur.com/2z52Jv5.png">
+<meta property="og:image" content="https://i.imgur.com/Zao7jYs.png">
+<meta property="og:image" content="https://i.imgur.com/YGfIY53.png">
+<meta property="og:image" content="https://i.imgur.com/b1EVHk9.png">
+<meta property="og:image" content="https://i.imgur.com/isopTBE.png">
+<meta property="og:image" content="https://i.imgur.com/FnHl5Ff.png">
+<meta property="og:image" content="https://i.imgur.com/qetFn7L.png">
+<meta property="og:image" content="https://i.imgur.com/45e3ktf.png">
+<meta property="og:image" content="https://i.imgur.com/c4RIPZV.png">
+<meta property="og:image" content="https://i.imgur.com/A75m0ZC.png">
+<meta property="og:image" content="https://i.imgur.com/qVECBBR.png">
+<meta property="og:image" content="https://i.imgur.com/QUFYhXU.png">
+<meta property="og:image" content="https://i.imgur.com/5cCNLZx.png">
+<meta property="og:image" content="https://i.imgur.com/0dRQyyy.png">
+<meta property="og:image" content="https://i.imgur.com/vn0P0g7.png">
+<meta property="og:image" content="https://i.imgur.com/D02oIUe.png">
+<meta property="og:image" content="https://i.imgur.com/qiIsQY8.png">
+<meta property="og:image" content="https://i.imgur.com/SEVgqTQ.png">
+<meta property="article:published_time" content="2023-07-11T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-09T08:50:00.251Z">
+<meta property="article:author" content="loudmute">
+<meta property="article:tag" content="人工智能">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/7XduoJF.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>MemoryAdaptNet：基于不变域级原型记忆的无监督领域自适应遥感语义分割</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a href="/tags/">标签</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2023/07/12/230712-Transformer/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2023/07/11/230711-RNN-%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://loudmute.github.io/2023/07/12/230712-MemoryAdaptNet%EF%BC%9A%E5%9F%BA%E4%BA%8E%E4%B8%8D%E5%8F%98%E5%9F%9F%E7%BA%A7%E5%8E%9F%E5%9E%8B%E8%AE%B0%E5%BF%86%E7%9A%84%E6%97%A0%E7%9B%91%E7%9D%A3%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E9%81%A5%E6%84%9F%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://loudmute.github.io/2023/07/12/230712-MemoryAdaptNet%EF%BC%9A%E5%9F%BA%E4%BA%8E%E4%B8%8D%E5%8F%98%E5%9F%9F%E7%BA%A7%E5%8E%9F%E5%9E%8B%E8%AE%B0%E5%BF%86%E7%9A%84%E6%97%A0%E7%9B%91%E7%9D%A3%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E9%81%A5%E6%84%9F%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2/&text=MemoryAdaptNet：基于不变域级原型记忆的无监督领域自适应遥感语义分割"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://loudmute.github.io/2023/07/12/230712-MemoryAdaptNet%EF%BC%9A%E5%9F%BA%E4%BA%8E%E4%B8%8D%E5%8F%98%E5%9F%9F%E7%BA%A7%E5%8E%9F%E5%9E%8B%E8%AE%B0%E5%BF%86%E7%9A%84%E6%97%A0%E7%9B%91%E7%9D%A3%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E9%81%A5%E6%84%9F%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2/&title=MemoryAdaptNet：基于不变域级原型记忆的无监督领域自适应遥感语义分割"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://loudmute.github.io/2023/07/12/230712-MemoryAdaptNet%EF%BC%9A%E5%9F%BA%E4%BA%8E%E4%B8%8D%E5%8F%98%E5%9F%9F%E7%BA%A7%E5%8E%9F%E5%9E%8B%E8%AE%B0%E5%BF%86%E7%9A%84%E6%97%A0%E7%9B%91%E7%9D%A3%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E9%81%A5%E6%84%9F%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2/&is_video=false&description=MemoryAdaptNet：基于不变域级原型记忆的无监督领域自适应遥感语义分割"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=MemoryAdaptNet：基于不变域级原型记忆的无监督领域自适应遥感语义分割&body=Check out this article: https://loudmute.github.io/2023/07/12/230712-MemoryAdaptNet%EF%BC%9A%E5%9F%BA%E4%BA%8E%E4%B8%8D%E5%8F%98%E5%9F%9F%E7%BA%A7%E5%8E%9F%E5%9E%8B%E8%AE%B0%E5%BF%86%E7%9A%84%E6%97%A0%E7%9B%91%E7%9D%A3%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E9%81%A5%E6%84%9F%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://loudmute.github.io/2023/07/12/230712-MemoryAdaptNet%EF%BC%9A%E5%9F%BA%E4%BA%8E%E4%B8%8D%E5%8F%98%E5%9F%9F%E7%BA%A7%E5%8E%9F%E5%9E%8B%E8%AE%B0%E5%BF%86%E7%9A%84%E6%97%A0%E7%9B%91%E7%9D%A3%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E9%81%A5%E6%84%9F%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2/&title=MemoryAdaptNet：基于不变域级原型记忆的无监督领域自适应遥感语义分割"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://loudmute.github.io/2023/07/12/230712-MemoryAdaptNet%EF%BC%9A%E5%9F%BA%E4%BA%8E%E4%B8%8D%E5%8F%98%E5%9F%9F%E7%BA%A7%E5%8E%9F%E5%9E%8B%E8%AE%B0%E5%BF%86%E7%9A%84%E6%97%A0%E7%9B%91%E7%9D%A3%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E9%81%A5%E6%84%9F%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2/&title=MemoryAdaptNet：基于不变域级原型记忆的无监督领域自适应遥感语义分割"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://loudmute.github.io/2023/07/12/230712-MemoryAdaptNet%EF%BC%9A%E5%9F%BA%E4%BA%8E%E4%B8%8D%E5%8F%98%E5%9F%9F%E7%BA%A7%E5%8E%9F%E5%9E%8B%E8%AE%B0%E5%BF%86%E7%9A%84%E6%97%A0%E7%9B%91%E7%9D%A3%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E9%81%A5%E6%84%9F%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2/&title=MemoryAdaptNet：基于不变域级原型记忆的无监督领域自适应遥感语义分割"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://loudmute.github.io/2023/07/12/230712-MemoryAdaptNet%EF%BC%9A%E5%9F%BA%E4%BA%8E%E4%B8%8D%E5%8F%98%E5%9F%9F%E7%BA%A7%E5%8E%9F%E5%9E%8B%E8%AE%B0%E5%BF%86%E7%9A%84%E6%97%A0%E7%9B%91%E7%9D%A3%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E9%81%A5%E6%84%9F%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2/&title=MemoryAdaptNet：基于不变域级原型记忆的无监督领域自适应遥感语义分割"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://loudmute.github.io/2023/07/12/230712-MemoryAdaptNet%EF%BC%9A%E5%9F%BA%E4%BA%8E%E4%B8%8D%E5%8F%98%E5%9F%9F%E7%BA%A7%E5%8E%9F%E5%9E%8B%E8%AE%B0%E5%BF%86%E7%9A%84%E6%97%A0%E7%9B%91%E7%9D%A3%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E9%81%A5%E6%84%9F%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2/&name=MemoryAdaptNet：基于不变域级原型记忆的无监督领域自适应遥感语义分割&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://loudmute.github.io/2023/07/12/230712-MemoryAdaptNet%EF%BC%9A%E5%9F%BA%E4%BA%8E%E4%B8%8D%E5%8F%98%E5%9F%9F%E7%BA%A7%E5%8E%9F%E5%9E%8B%E8%AE%B0%E5%BF%86%E7%9A%84%E6%97%A0%E7%9B%91%E7%9D%A3%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E9%81%A5%E6%84%9F%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2/&t=MemoryAdaptNet：基于不变域级原型记忆的无监督领域自适应遥感语义分割"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%95%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">引言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#I-INTRODUCTION"><span class="toc-number">2.</span> <span class="toc-text">I. INTRODUCTION</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#II-RELATED-WORK"><span class="toc-number">3.</span> <span class="toc-text">II. RELATED WORK</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#A-UDA-Semantic-Segmentation-in-the-Computer-Vision-Field"><span class="toc-number">3.1.</span> <span class="toc-text">A. UDA Semantic Segmentation in the Computer Vision Field</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#B-UDA-Semantic-Segmentation-in-Remote-Sensing-Field"><span class="toc-number">3.2.</span> <span class="toc-text">B. UDA Semantic Segmentation in Remote Sensing Field</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#C-Memory-Module"><span class="toc-number">3.3.</span> <span class="toc-text">C. Memory Module</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#III-METHODOLOGY"><span class="toc-number">4.</span> <span class="toc-text">III. METHODOLOGY</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#A-Domain-Feature-Alignment"><span class="toc-number">4.1.</span> <span class="toc-text">A. Domain Feature Alignment</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#B-Invariant-Domain-Level-Memory-Aggregation"><span class="toc-number">4.2.</span> <span class="toc-text">B. Invariant Domain-Level Memory Aggregation</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-Invariant-Domain-Prototype-Memory-Module"><span class="toc-number">4.2.1.</span> <span class="toc-text">1) Invariant Domain Prototype Memory Module</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-Category-Attention-Driven-IDMA-Module"><span class="toc-number">4.2.2.</span> <span class="toc-text">2) Category Attention-Driven IDMA Module</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#C-Entropy-Based-Pseudo-Label-Filterling"><span class="toc-number">4.3.</span> <span class="toc-text">C. Entropy-Based Pseudo Label Filterling</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#D-Network-Training"><span class="toc-number">4.4.</span> <span class="toc-text">D. Network Training</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-Step-1-DFA-Branch-Training"><span class="toc-number">4.4.1.</span> <span class="toc-text">1) Step 1 (DFA Branch Training)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-Step-2-DFA-Branch-and-IDMA-Branch-Training"><span class="toc-number">4.4.2.</span> <span class="toc-text">2) Step 2 (DFA Branch and IDMA Branch Training)</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IV-EXPERIMENTS-AND-RESULT-ANALYSIS"><span class="toc-number">5.</span> <span class="toc-text">IV. EXPERIMENTS AND RESULT ANALYSIS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#A-Experimental-Settings"><span class="toc-number">5.1.</span> <span class="toc-text">A. Experimental Settings</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#B-Comparative-Experimental-Result-Analysis"><span class="toc-number">5.2.</span> <span class="toc-text">B. Comparative Experimental Result Analysis</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        MemoryAdaptNet：基于不变域级原型记忆的无监督领域自适应遥感语义分割
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">loudmute</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2023-07-11T16:00:00.000Z" class="dt-published" itemprop="datePublished">2023-07-12</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/">人工智能</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" rel="tag">人工智能</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <img src = 'https://i.imgur.com/iJyLNfp.png'>
+
+<ul>
+<li><p>题目：《Unsupervised Domain Adaptation Semantic Segmentation of High-Resolution Remote Sensing Imagery With Invariant Domain-Level Prototype Memory》</p>
+</li>
+<li><p>github：<a target="_blank" rel="noopener" href="https://github.com/RS-CSU/MemoryAdaptNet-master">https://github.com/RS-CSU/MemoryAdaptNet-master</a></p>
+</li>
+</ul>
+<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>语义分割是高分辨率遥感图像自编码的关键技术，并且在遥感领域备受关注。深度卷积网络由于其分层次的特征表达能力，已经成功应用于遥感分割任务。</p>
+<p>然而，深度卷积网络的局限性：1.对大量标签标注数据的依赖；2.对数据分布差异的敏感，限制了卷积神经网络在遥感分割领域的应用。</p>
+<p>本文提出了一种用于遥感语义分割的无监督自适应语义分割网络：MemoryAdaptNet。</p>
+<h2 id="I-INTRODUCTION"><a href="#I-INTRODUCTION" class="headerlink" title="I. INTRODUCTION"></a>I. INTRODUCTION</h2><p>随着地球观测技术的快速发展，高分辨率遥感图像越来越多，这位地球观测提供了可能。高分辨率遥感图像的自译码在遥感分析领域扮演重要角色，语义分割是其重要工具。</p>
+<p>基于深度卷积网络的语义分割模型存在以下问题：</p>
+<p>（1） <strong>对大量的数据标注具有依赖性</strong>。尽管用大量数据标注的模型是可行的，但是往往局限在固定的区域或应用上。对数据的标注耗时又耗力。</p>
+<p>（2） <strong>对数据分布差异特别敏感</strong>。由于地理、成像传感器、观察照明等成像条件的不同，高分辨率图像的外观和结构特点也不同，如下图所示。这种情况使得用特定得高分辨率标签数据集训练得深度模型在处理不同成像条件产生的图片时失效。</p>
+<p>寻找一种能够准确有效处理域差异的遥感图像的语义分割模型至关重要。</p>
+<img src="https://i.imgur.com/7XduoJF.png" alt="image-20230710094536722" style="zoom:80%;" />
+
+<p>无监督领域自适应可以将从有数据标签源域学的知识迁移到无数据标签的目标域中，弥合源域和目标域的差距。备受关注的对抗学习已经应用到了无监督自适应中，根据数据生成对抗损失的等级，对抗自适应方法可以分为三个等级：像素（pixel）级，特征（feature）级，输出（output）级。</p>
+<p>虽然上述基于对抗学习的无监督自适应方法取得了一定成效，但他们大多数用于自然图像。鉴于自然图像和遥感图像有较大的差别，上面的方法不能直接用于遥感图像的语义分割。近年来，许多领域自适应语义分割方法用于遥感分割，大多数方法通过像素对齐或特征对齐来减少领域差异。<strong>现存的方法需要把大尺寸的遥感图像切成小尺寸的片（patch），然后成批地作为输入用于对抗训练。然而成批地源域或目标域的图像的数据分布并不能代表整个源域或目标域的数据分布，换句话说基于生成对抗损失的网络用成批图像来前向传播梯度，这导致提取的特征只能代表当前输入（该批次的源域或目标域的图片）的特征，并不能代表域不变特征，这种用当前输入提取的特征，我们称之为伪不变特征。理论上，伪不变特征和域不变特征之间存在一定的偏差和方差，这使得在源域上学到的知识无法最大程度的迁移到目标域上。我们的目标是，基于两个域的所有数据，通过领域自适应模型来表示域不变特征而不是伪不变特征。因此，如何从伪不变特征中提取域不变特征，对于交叉域的遥感语义分割至关重要。</strong></p>
+<p>为解决以上问题，本文提出了一种整合不变域级原型信息的无监督领域自适应遥感语义分割模型。鉴于output-leavel对抗自适应方法可以在输出空间保证特征的语义一致性，我们使用基于output-level的对抗机制来减小源域和目标域的差异并且提取具有语义一致性的伪不变特征。</p>
+<img src="https://i.imgur.com/xqifVgS.png" alt="image-20230710111305824" style="zoom: 50%;" />
+
+<p>如上图所示，我们用原型存储模型（prototype memory module）来存储历史源域或目标域图片的伪不变特征，同时，由于域不变特征和伪不变特征之间存在一定的偏差和方差，我们动态更新存储的伪不变特征来提取分类形式的域不变特征。我们用一个不变域级记忆聚合（IDMA）模型来自适应地合并原型存储模型中的域不变特征和当前的伪不变特征。当前的伪不变特征通过整合域不变特征得到了增强，使得模型可以最大化的将知识从源域迁移到到目标域，从而增强模型在目标域的表现。</p>
+<p>本文的贡献主要为一下几点：</p>
+<ol>
+<li>提出了不变域原型存储（invariant domain prototype memory）模型M来整合不变域级原型信息，M可以通过历史源域或目标域图片伪不变特征更新，提取不变域级原型信息。具体按类别的形式存储，以便对类别联合分布进行对齐。</li>
+<li>引进了类别注意力导向IDMA（invariant domain-level memory aggregation）模型更好的将域不变特征整合到伪不变特征，增强当前输入图片的特征特征表示。</li>
+<li>提出了基于熵的伪标签过滤机制以更好的更新模型M。特别的，保留熵小于等于阈值的预测值。</li>
+</ol>
+<h2 id="II-RELATED-WORK"><a href="#II-RELATED-WORK" class="headerlink" title="II. RELATED WORK"></a>II. RELATED WORK</h2><h3 id="A-UDA-Semantic-Segmentation-in-the-Computer-Vision-Field"><a href="#A-UDA-Semantic-Segmentation-in-the-Computer-Vision-Field" class="headerlink" title="A. UDA Semantic Segmentation in the Computer Vision Field"></a>A. UDA Semantic Segmentation in the Computer Vision Field</h3><p>介绍了UDA语义分割在计算机视觉领域的应用与发展。</p>
+<h3 id="B-UDA-Semantic-Segmentation-in-Remote-Sensing-Field"><a href="#B-UDA-Semantic-Segmentation-in-Remote-Sensing-Field" class="headerlink" title="B. UDA Semantic Segmentation in Remote Sensing Field"></a>B. UDA Semantic Segmentation in Remote Sensing Field</h3><p>介绍了UDA语义分割在遥感领域的应用与发展。</p>
+<h3 id="C-Memory-Module"><a href="#C-Memory-Module" class="headerlink" title="C. Memory Module"></a>C. Memory Module</h3><p>存储模型（memory module）使深度卷积网络可以存储超出局部小范围的变量和数据，被广泛应用于计算机视觉领域，如图像描述、运动物体检测、语义分割等。我们使用一种有效的特征记忆模块以分类的形式保留不变域级表示以保证分割网络获取比当前输入图片更多的域不变信息，增强在目标域图片的表现。</p>
+<h2 id="III-METHODOLOGY"><a href="#III-METHODOLOGY" class="headerlink" title="III. METHODOLOGY"></a>III. METHODOLOGY</h2><p>我们的目标是，通过在源域中有标签的数据的学习，最终可以将模型学到的知识应用到目标域的无标签数据中。</p>
+<img src="https://i.imgur.com/oG0iio1.png" alt="image-20230710161229099" style="zoom: 50%;" />
+
+<p>如上图所示，我们提出的MemoryAdaptNet由领域特征对齐（DFA：domain feature alignment）模块和不变域级记忆聚合（IDMA：invariant domain-level memory aggregation）模块。DFA模块通过输出空间的对抗学习来调整源域和目标域图片间的特征。在IDMA中，我们用memory module来存储当前输入将DFA产生的伪不变特征，并且动态更新以获得域不变表示，将域不变表示整合当前的特征表示以细化最终的分类概率分布。当用目标域作为当前输入来更新域不变表示时，我们用基于熵的伪标签过滤机制预测目标域图片的伪标签，这有助于每个目标类别预测的计算。</p>
+<h3 id="A-Domain-Feature-Alignment"><a href="#A-Domain-Feature-Alignment" class="headerlink" title="A. Domain Feature Alignment"></a>A. Domain Feature Alignment</h3><img src="https://i.imgur.com/1ko97Me.png" alt="image-20230710163033180" style="zoom: 80%;" />
+
+<p>如上图所示，这是DFA模块的结构。DFA包含一个特征提取器F，分类器C1，判别器D， 其中F和C1构成了一个分割网络G1。F从源域和目标域的图片中提取特征，可以是任意的卷积网络，为了充分发挥高质量分割效果，我们选用在ImageNet上预训练的ResNet-101作为F的主干。该残差网络由33个残差块组成，每三个卷积层进行一次跳跃连接。在最后的残差快，我们用rate &#x3D; 2的空洞卷积层（atrous convolution layer）来替代普通的3 * 3卷积层，为了提取更密集（更多）的特征映射和捕获更长范围的上下文。</p>
+<img src = 'https://i.imgur.com/LB7v1ut.png' height = '500'>
+
+<p>如图所示，这是具体细节。</p>
+<h3 id="B-Invariant-Domain-Level-Memory-Aggregation"><a href="#B-Invariant-Domain-Level-Memory-Aggregation" class="headerlink" title="B. Invariant Domain-Level Memory Aggregation"></a>B. Invariant Domain-Level Memory Aggregation</h3><p>由特征提取器F提取的特征只代表当前输入批次图片的特征，并不能代表两个域的不变特征，是伪不变特征，这不能使从源域学到的知识最大程度的迁移到目标域。</p>
+<p>memory模块可以是深度卷积网络的特征表达能力不知局限于当前的输入。我们使用calsswise memory模块将从DFA中获得的伪不变特征转换为域不变特征。具体的，就是把IDMA模块嵌入到DFA模块，</p>
+<img src="https://i.imgur.com/O4gXc1j.png" alt="image-20230710161229099" style="zoom: 50%;" />
+
+<p>如上图所示，有一个不变域原型记忆模块（invariant domain prototype memory module）M，一个IDMA模块A，一个分类器C2，其中F、M、A、C2构成了分割网络G2。M用来存储从F得到的伪不变特征，并不断更新这些特征，在动态更新的过程中，M集成到所有源域和目标域的图片的伪不变特征，这是就可以近似域不变特征。具体来说，M分类的形式存储这些特征，以增强类内相似性和类间差异。</p>
+<p>IDMA模块A将M中的不变域信息整合到当前输入图片的特征表示中来增强特征。然后我们用分类器C2来对增强的特征进行分类，以达到精确的分类预测。</p>
+<p>具体细节如下：</p>
+<h4 id="1-Invariant-Domain-Prototype-Memory-Module"><a href="#1-Invariant-Domain-Prototype-Memory-Module" class="headerlink" title="1) Invariant Domain Prototype Memory Module"></a>1) Invariant Domain Prototype Memory Module</h4><p>模块M存储的是大小为 Ck * C’ * 1的向量，其中C’是每个类别向量的大小，Ck为类别的数量。在训练时，首先从F得到一个随机特征，对它的每个类别求平均值，以此初始化M的向量。每次迭代，我们都用从F得到的伪不变特征的Fp &#x3D; (fp | fs, ft 属于 R ^ (C * H * W))的子集来更新M的向量。</p>
+<p>具体来讲，计算过程如下：</p>
+<ol>
+<li><p>给定一个伪不变特征fp，我们首先将其形状变为HW * C，即R ^ (C * H W)</p>
+</li>
+<li><p>然后计算fp中每个类别ck的表示：</p>
+ <img src="https://i.imgur.com/LtVu9nC.png" alt="image-20230711200859159" style="zoom:50%;" />
+
+<p> 其中，R_ck代表每个特征ck的表示，GT属于R^(H * W)代表类别标签的真值，N_ck代表ck在fp中像素标签的数量。</p>
+</li>
+<li><p>计算R_ck和每个类别存储M_ck的相似性S_ck:</p>
+ <img src="https://i.imgur.com/zQCdcJR.png" alt="image-20230711201616724" style="zoom:50%;" />
+</li>
+<li><p>然后更新ck的表示：</p>
+ <img src="https://i.imgur.com/seH050V.png" alt="image-20230711201651933" style="zoom:50%;" />
+</li>
+<li><p>利用移动平均法计算更新的内存：</p>
+ <img src="https://i.imgur.com/eG09Tsr.png" alt="image-20230711201813451" style="zoom:50%;" />
+
+<p> 其中m是个动量，我们用多项式退火策略更新它：</p>
+ <img src="https://i.imgur.com/ROdd5kT.png" alt="image-20230711201937626" style="zoom:50%;" /></li>
+</ol>
+<h4 id="2-Category-Attention-Driven-IDMA-Module"><a href="#2-Category-Attention-Driven-IDMA-Module" class="headerlink" title="2) Category Attention-Driven IDMA Module"></a>2) Category Attention-Driven IDMA Module</h4><img src = 'https://i.imgur.com/op0UrMq.png' height = '300'>
+
+<p>A的目的是为了将M中的域不变特征与当前输入的伪不变特征融合，为了防止引入不确定性和不正确的信息，我们设计了一种类别注意力机制来实现特征融合。如上图所示，M中给定了记忆特征M属于R^(Ck * C’ * 1)，当前伪不变特征Fp &#x3D; {fp|fs, ft属于R^(C * H * W)}，其中C为Fp中通道的数量。</p>
+<p>我们对M中存储特征和FP使用三个1 * 1的卷积得到三种特征：Q，K，V。然后我们重塑特征Q和K，用一个softmax函数来计算M中存储的特征于当前的输入的伪不变特征的亲和注意图（affinity attention map）S属于R^(HW * Ck)：</p>
+<img src="https://i.imgur.com/JOZaLS1.png" alt="image-20230711203239515" style="zoom:50%;" />
+
+<p>其中S_i,j属于S表示特征K的第i个类别存储和特征Q的第j个通道。</p>
+<p>我们对亲和注意力图S和特征V进行加权求和得到记忆特征M’的亲和注意力图S’，并将其重塑为R^(C * H * W)。当前输入的伪不变特征Fp和注意力图S’如下合在一起以获得增强特征F_T:</p>
+<img src="https://i.imgur.com/5aiiKJ7.png" alt="image-20230711204217614" style="zoom:50%;" />
+
+<p>增强特征F_T可以增强当前输入的伪不变特征的表示能力，分割网络可以获得不变特征不知局限于当前的输入。</p>
+<h3 id="C-Entropy-Based-Pseudo-Label-Filterling"><a href="#C-Entropy-Based-Pseudo-Label-Filterling" class="headerlink" title="C. Entropy-Based Pseudo Label Filterling"></a>C. Entropy-Based Pseudo Label Filterling</h3><p>上面关于M的更新中，需要用到标签。但是，目标域的数据是没有标签的，这样的话M中无法保留目标域的类别特征，网络将倾向于表示源域的上下文信息，难以表示目标域的特征分布。所以，目标域的伪不变特征必须在M中更新，我们可以用目标域图片的预测值作为伪标签，问题在于源域的图片预测值较好，具有较高的置信度和较低的损失熵，而目标域的图片则预测值较差，如下图所示：</p>
+<img src="https://i.imgur.com/HlVnHuk.png" alt="image-20230711213635382" style="zoom:50%;" />
+
+<p>因此，我们提出了一种基于熵的伪标签过滤机制来得到置信度较高的伪标签。这有助于更新目标域的不变存储特征，也可以使memory module更好的代表域不变特征，以此达到再目标域的良好分割表现。</p>
+<p>给定一个目标域的图片集 :<img src="https://i.imgur.com/eQp8TNM.png" alt="image-20230711214201395" style="zoom:50%;" />，其中Nt代表图片集的大小，t表明目标域，我们将每个图片 $x_{t,i}$ 输入MemoryAdaptNet中并且通过分类器C2得到一个softmax预测集<img src="https://i.imgur.com/ySEgAr3.png" alt="image-20230711214504669" style="zoom:50%;" />，其中有</p>
+<img src="https://i.imgur.com/pULni6A.png" alt="image-20230711214602390" style="zoom:50%;" />
+
+<p>我们用概率来关联像素与标签的关联程度，所以我们通过 $u &#x3D; max(P_{t,ck}^{(h,w)})$ 来计算最高概率值，$P_{t,ck}^{(h,w)}$ 并且将u的索引作为 $P_{t,i}$ (h, w)像素的类别，分类标签矩阵 $l_{t,i}$的计算如下：</p>
+<img src="https://i.imgur.com/ihbFu8V.png" alt="image-20230712100713788" style="zoom:50%;" />
+
+<p>给定的分类标签矩阵 $l_{t,i}$ 的像素只是相对最高的置信度，并不一定是高置信度，所以我们用熵映射来去除低置信度的像素，保留高置信度的像素。给定分类预测矩阵 $P_{t,i}$ ，熵映射 $E_i\in[0,1]^{H * W}$ 由独立像素熵组成：</p>
+<img src="https://i.imgur.com/2z52Jv5.png" alt="image-20230712102016634" style="zoom:50%;" /> 
+
+<p>其中 $E_i^{(h,w)}$ 代表 $E_i$中像素(h,w)的熵，高熵代表 $l_{t,i}$ 的低置信度，反之亦然。所以我们设定一个阈值来挑选高置信度的标签：</p>
+<img src="https://i.imgur.com/Zao7jYs.png" alt="image-20230712102326546" style="zoom:50%;" />
+
+<p>由此，我们得到了目标域的伪标签集GT_t，源域和目标域的标签集合在一起成为集合GT，用来更新memory module中的不变特征。</p>
+<h3 id="D-Network-Training"><a href="#D-Network-Training" class="headerlink" title="D. Network Training"></a>D. Network Training</h3><p>训练分两步走：</p>
+<ol>
+<li>用一些样本只训练DFA模块，以此来减少源域与目标域之间的域偏移</li>
+<li>同时训练DFA和IDMA模块，增强分割网络的表现</li>
+</ol>
+<h4 id="1-Step-1-DFA-Branch-Training"><a href="#1-Step-1-DFA-Branch-Training" class="headerlink" title="1) Step 1 (DFA Branch Training)"></a>1) Step 1 (DFA Branch Training)</h4><p>我们给定目标域图片x_s和源域图片x_t，通过特征提取器F得到特征映射f_s和f_t，然后通过分类器C1得到逐像素预测p_s和p_t，其中p_s域标签y_s结合来优化分割网络G1，我们采用交叉熵损失函数：</p>
+<img src="https://i.imgur.com/YGfIY53.png" alt="image-20230712103719707" style="zoom:50%;" />
+
+<p>处了分割损失之外，我们将p_t传给判别器D来获得对抗损失：</p>
+<img src="https://i.imgur.com/b1EVHk9.png" alt="image-20230712103914626" style="zoom:50%;" />
+
+<p>这使得特征提取器从源域和目标域提取的特征更加相似。</p>
+<p>总的来说，用于优化分割网络G1的损失函数为：</p>
+<img src="https://i.imgur.com/isopTBE.png" alt="image-20230712104110891" style="zoom:50%;" />
+
+<p>我们用p_s和p_t来优化判别器D，将p_s和p_t传给D，输出一个判断，当前的预测值是来自目标域还是源域（其中0代表来自目标域，1代表来自源域），使用的损失函数如下：</p>
+<img src="https://i.imgur.com/FnHl5Ff.png" alt="image-20230712104431057" style="zoom:50%;" />
+
+<h4 id="2-Step-2-DFA-Branch-and-IDMA-Branch-Training"><a href="#2-Step-2-DFA-Branch-and-IDMA-Branch-Training" class="headerlink" title="2) Step 2 (DFA Branch and IDMA Branch Training)"></a>2) Step 2 (DFA Branch and IDMA Branch Training)</h4><p>第二步是同时优化DFA和IDMA模块，其中DFA的优化同第一步。</p>
+<p>对于IDMA模块的优化，首先我们用从F得到的特征f_s和f_t来优化M，然后将当前的f_s和M中的向量传给A，将两种特征进行融合得到增强特征，增强特征传递给分类器C2，获得逐像素预测P_s’，其中损失函数如下：</p>
+<img src="https://i.imgur.com/qetFn7L.png" alt="image-20230712105029141" style="zoom:50%;" />
+
+
+
+<p>总体来说两步的优化如下：</p>
+<img src="https://i.imgur.com/45e3ktf.png" alt="image-20230712105117143" style="zoom:50%;" />
+
+<img src="https://i.imgur.com/c4RIPZV.png" alt="image-20230712105139070" style="zoom: 50%;" />
+
+<h2 id="IV-EXPERIMENTS-AND-RESULT-ANALYSIS"><a href="#IV-EXPERIMENTS-AND-RESULT-ANALYSIS" class="headerlink" title="IV. EXPERIMENTS AND RESULT ANALYSIS"></a>IV. EXPERIMENTS AND RESULT ANALYSIS</h2><h3 id="A-Experimental-Settings"><a href="#A-Experimental-Settings" class="headerlink" title="A. Experimental Settings"></a>A. Experimental Settings</h3><ul>
+<li><p>数据集：Vaihingen 2-D dataset and Potsdam 2-D dataset </p>
+</li>
+<li><p>任务设定：</p>
+<ul>
+<li>P2V_S task：Potsdam dataset with [IR, R, G]为源域，Vaihingen dataset with [IR, R, G]为目标域</li>
+<li>P2V_D task：Potsdam with [R, G, B]为源域，Vaihingen dataset with [IR, R, G]为目标域</li>
+<li>V2P task：Vaihingen dataset with [IR, R, G] channel 为源域，Potsdam dataset with [IR, R, G] 为目标域</li>
+</ul>
+<p>  在训练阶段，对Potsdam dataset裁剪为512 *  512大小的patches，每个Patches像素为256 * 256，共产生13310个patch；对Vaihingen dataset 裁剪为512 * 512大小的patches，每个patch像素为256* 256，共产生1700个patch。</p>
+<p>  在P2V_S和P2V_D任务中，我们用Potsdam dataset训练，Vaihingen dataset测试和验证；在V2P任务中，我们用Vaihingen dataset训练，Potsdam dataset测试和验证.</p>
+</li>
+<li><p>实现细节：</p>
+<ul>
+<li>显卡：RTX 3090 GPU with 24-GB memory</li>
+<li>初始参数值：<ul>
+<li>分割网络G1和G2:<ul>
+<li>initial learning rate：2.5 × 10−4</li>
+<li>momentum：0.9</li>
+</ul>
+</li>
+<li>判别器D:<ul>
+<li>initial learning rate: 10−4</li>
+<li>momentum：0.9 和 0.99</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>评价指标：</p>
+<ul>
+<li><p>F1-score：</p>
+  <img src="https://i.imgur.com/A75m0ZC.png" alt="image-20230712111140886" style="zoom:50%;" />
+
+  <img src="https://i.imgur.com/qVECBBR.png" alt="image-20230712111200355" style="zoom:50%;" />
+</li>
+<li><p>OA：</p>
+  <img src="https://i.imgur.com/QUFYhXU.png" alt="image-20230712111311131" style="zoom:50%;" />
+</li>
+<li><p>MA：</p>
+  <img src="https://i.imgur.com/5cCNLZx.png" alt="image-20230712111331500" style="zoom:50%;" />
+</li>
+<li><p>mIoU：</p>
+  <img src="https://i.imgur.com/0dRQyyy.png" alt="image-20230712111354790" style="zoom: 50%;" /></li>
+</ul>
+</li>
+</ul>
+<h3 id="B-Comparative-Experimental-Result-Analysis"><a href="#B-Comparative-Experimental-Result-Analysis" class="headerlink" title="B. Comparative Experimental Result Analysis"></a>B. Comparative Experimental Result Analysis</h3><p>（具体请看原文）</p>
+<img src="https://i.imgur.com/vn0P0g7.png" alt="image-20230712111510631" style="zoom:50%;" />
+
+<img src="https://i.imgur.com/D02oIUe.png" alt="image-20230712111608000" style="zoom:50%;" />
+
+<img src="https://i.imgur.com/qiIsQY8.png" alt="image-20230712111621641" style="zoom:50%;" />
+
+<img src="https://i.imgur.com/SEVgqTQ.png" alt="image-20230712111646137" style="zoom:50%;" />
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/about/">关于</a></li>
+        
+          <li><a href="/archives/">文章</a></li>
+        
+          <li><a href="/categories/">分类</a></li>
+        
+          <li><a href="/tags/">标签</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%95%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">引言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#I-INTRODUCTION"><span class="toc-number">2.</span> <span class="toc-text">I. INTRODUCTION</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#II-RELATED-WORK"><span class="toc-number">3.</span> <span class="toc-text">II. RELATED WORK</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#A-UDA-Semantic-Segmentation-in-the-Computer-Vision-Field"><span class="toc-number">3.1.</span> <span class="toc-text">A. UDA Semantic Segmentation in the Computer Vision Field</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#B-UDA-Semantic-Segmentation-in-Remote-Sensing-Field"><span class="toc-number">3.2.</span> <span class="toc-text">B. UDA Semantic Segmentation in Remote Sensing Field</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#C-Memory-Module"><span class="toc-number">3.3.</span> <span class="toc-text">C. Memory Module</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#III-METHODOLOGY"><span class="toc-number">4.</span> <span class="toc-text">III. METHODOLOGY</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#A-Domain-Feature-Alignment"><span class="toc-number">4.1.</span> <span class="toc-text">A. Domain Feature Alignment</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#B-Invariant-Domain-Level-Memory-Aggregation"><span class="toc-number">4.2.</span> <span class="toc-text">B. Invariant Domain-Level Memory Aggregation</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-Invariant-Domain-Prototype-Memory-Module"><span class="toc-number">4.2.1.</span> <span class="toc-text">1) Invariant Domain Prototype Memory Module</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-Category-Attention-Driven-IDMA-Module"><span class="toc-number">4.2.2.</span> <span class="toc-text">2) Category Attention-Driven IDMA Module</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#C-Entropy-Based-Pseudo-Label-Filterling"><span class="toc-number">4.3.</span> <span class="toc-text">C. Entropy-Based Pseudo Label Filterling</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#D-Network-Training"><span class="toc-number">4.4.</span> <span class="toc-text">D. Network Training</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-Step-1-DFA-Branch-Training"><span class="toc-number">4.4.1.</span> <span class="toc-text">1) Step 1 (DFA Branch Training)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-Step-2-DFA-Branch-and-IDMA-Branch-Training"><span class="toc-number">4.4.2.</span> <span class="toc-text">2) Step 2 (DFA Branch and IDMA Branch Training)</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IV-EXPERIMENTS-AND-RESULT-ANALYSIS"><span class="toc-number">5.</span> <span class="toc-text">IV. EXPERIMENTS AND RESULT ANALYSIS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#A-Experimental-Settings"><span class="toc-number">5.1.</span> <span class="toc-text">A. Experimental Settings</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#B-Comparative-Experimental-Result-Analysis"><span class="toc-number">5.2.</span> <span class="toc-text">B. Comparative Experimental Result Analysis</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://loudmute.github.io/2023/07/12/230712-MemoryAdaptNet%EF%BC%9A%E5%9F%BA%E4%BA%8E%E4%B8%8D%E5%8F%98%E5%9F%9F%E7%BA%A7%E5%8E%9F%E5%9E%8B%E8%AE%B0%E5%BF%86%E7%9A%84%E6%97%A0%E7%9B%91%E7%9D%A3%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E9%81%A5%E6%84%9F%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://loudmute.github.io/2023/07/12/230712-MemoryAdaptNet%EF%BC%9A%E5%9F%BA%E4%BA%8E%E4%B8%8D%E5%8F%98%E5%9F%9F%E7%BA%A7%E5%8E%9F%E5%9E%8B%E8%AE%B0%E5%BF%86%E7%9A%84%E6%97%A0%E7%9B%91%E7%9D%A3%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E9%81%A5%E6%84%9F%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2/&text=MemoryAdaptNet：基于不变域级原型记忆的无监督领域自适应遥感语义分割"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://loudmute.github.io/2023/07/12/230712-MemoryAdaptNet%EF%BC%9A%E5%9F%BA%E4%BA%8E%E4%B8%8D%E5%8F%98%E5%9F%9F%E7%BA%A7%E5%8E%9F%E5%9E%8B%E8%AE%B0%E5%BF%86%E7%9A%84%E6%97%A0%E7%9B%91%E7%9D%A3%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E9%81%A5%E6%84%9F%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2/&title=MemoryAdaptNet：基于不变域级原型记忆的无监督领域自适应遥感语义分割"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://loudmute.github.io/2023/07/12/230712-MemoryAdaptNet%EF%BC%9A%E5%9F%BA%E4%BA%8E%E4%B8%8D%E5%8F%98%E5%9F%9F%E7%BA%A7%E5%8E%9F%E5%9E%8B%E8%AE%B0%E5%BF%86%E7%9A%84%E6%97%A0%E7%9B%91%E7%9D%A3%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E9%81%A5%E6%84%9F%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2/&is_video=false&description=MemoryAdaptNet：基于不变域级原型记忆的无监督领域自适应遥感语义分割"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=MemoryAdaptNet：基于不变域级原型记忆的无监督领域自适应遥感语义分割&body=Check out this article: https://loudmute.github.io/2023/07/12/230712-MemoryAdaptNet%EF%BC%9A%E5%9F%BA%E4%BA%8E%E4%B8%8D%E5%8F%98%E5%9F%9F%E7%BA%A7%E5%8E%9F%E5%9E%8B%E8%AE%B0%E5%BF%86%E7%9A%84%E6%97%A0%E7%9B%91%E7%9D%A3%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E9%81%A5%E6%84%9F%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://loudmute.github.io/2023/07/12/230712-MemoryAdaptNet%EF%BC%9A%E5%9F%BA%E4%BA%8E%E4%B8%8D%E5%8F%98%E5%9F%9F%E7%BA%A7%E5%8E%9F%E5%9E%8B%E8%AE%B0%E5%BF%86%E7%9A%84%E6%97%A0%E7%9B%91%E7%9D%A3%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E9%81%A5%E6%84%9F%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2/&title=MemoryAdaptNet：基于不变域级原型记忆的无监督领域自适应遥感语义分割"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://loudmute.github.io/2023/07/12/230712-MemoryAdaptNet%EF%BC%9A%E5%9F%BA%E4%BA%8E%E4%B8%8D%E5%8F%98%E5%9F%9F%E7%BA%A7%E5%8E%9F%E5%9E%8B%E8%AE%B0%E5%BF%86%E7%9A%84%E6%97%A0%E7%9B%91%E7%9D%A3%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E9%81%A5%E6%84%9F%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2/&title=MemoryAdaptNet：基于不变域级原型记忆的无监督领域自适应遥感语义分割"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://loudmute.github.io/2023/07/12/230712-MemoryAdaptNet%EF%BC%9A%E5%9F%BA%E4%BA%8E%E4%B8%8D%E5%8F%98%E5%9F%9F%E7%BA%A7%E5%8E%9F%E5%9E%8B%E8%AE%B0%E5%BF%86%E7%9A%84%E6%97%A0%E7%9B%91%E7%9D%A3%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E9%81%A5%E6%84%9F%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2/&title=MemoryAdaptNet：基于不变域级原型记忆的无监督领域自适应遥感语义分割"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://loudmute.github.io/2023/07/12/230712-MemoryAdaptNet%EF%BC%9A%E5%9F%BA%E4%BA%8E%E4%B8%8D%E5%8F%98%E5%9F%9F%E7%BA%A7%E5%8E%9F%E5%9E%8B%E8%AE%B0%E5%BF%86%E7%9A%84%E6%97%A0%E7%9B%91%E7%9D%A3%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E9%81%A5%E6%84%9F%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2/&title=MemoryAdaptNet：基于不变域级原型记忆的无监督领域自适应遥感语义分割"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://loudmute.github.io/2023/07/12/230712-MemoryAdaptNet%EF%BC%9A%E5%9F%BA%E4%BA%8E%E4%B8%8D%E5%8F%98%E5%9F%9F%E7%BA%A7%E5%8E%9F%E5%9E%8B%E8%AE%B0%E5%BF%86%E7%9A%84%E6%97%A0%E7%9B%91%E7%9D%A3%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E9%81%A5%E6%84%9F%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2/&name=MemoryAdaptNet：基于不变域级原型记忆的无监督领域自适应遥感语义分割&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://loudmute.github.io/2023/07/12/230712-MemoryAdaptNet%EF%BC%9A%E5%9F%BA%E4%BA%8E%E4%B8%8D%E5%8F%98%E5%9F%9F%E7%BA%A7%E5%8E%9F%E5%9E%8B%E8%AE%B0%E5%BF%86%E7%9A%84%E6%97%A0%E7%9B%91%E7%9D%A3%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E9%81%A5%E6%84%9F%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2/&t=MemoryAdaptNet：基于不变域级原型记忆的无监督领域自适应遥感语义分割"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2026
+    loudmute
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a href="/tags/">标签</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
