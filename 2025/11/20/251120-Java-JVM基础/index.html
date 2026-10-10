@@ -9,7 +9,7 @@
     <meta name="description" content="JVM 基础这块，可以按一条主线串：  Java 怎么跑起来 → 跑的时候内存怎么分 → 对象怎么进堆、怎么被回收 → 类怎么加载进来 → 出了内存问题怎么认。  脉络： 1234567891011JVM 是什么、和 JRE&#x2F;JDK 关系        ↓运行时数据区（内存布局：堆 &#x2F; 栈 &#x2F; 方法区…）        ↓对象创建与内存分配（new 之后发生了什么）        ↓垃圾回收 GC">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java-JVM基础">
-<meta property="og:url" content="https://loudmute.github.io/2025/10/10/251010-Java-JVM%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:url" content="https://loudmute.github.io/2025/11/20/251120-Java-JVM%E5%9F%BA%E7%A1%80/index.html">
 <meta property="og:site_name" content="loudmute">
 <meta property="og:description" content="JVM 基础这块，可以按一条主线串：  Java 怎么跑起来 → 跑的时候内存怎么分 → 对象怎么进堆、怎么被回收 → 类怎么加载进来 → 出了内存问题怎么认。  脉络： 1234567891011JVM 是什么、和 JRE&#x2F;JDK 关系        ↓运行时数据区（内存布局：堆 &#x2F; 栈 &#x2F; 方法区…）        ↓对象创建与内存分配（new 之后发生了什么）        ↓垃圾回收 GC">
 <meta property="og:locale" content="zh_CN">
@@ -25,8 +25,8 @@
 <meta property="og:image" content="https://pic2.zhimg.com/80/v2-0555cf8d2e63aba712dd565907d87775_1440w.webp">
 <meta property="og:image" content="https://pica.zhimg.com/80/v2-58ea977a67d2ec288cfc2ffe065881b0_1440w.webp">
 <meta property="og:image" content="https://pica.zhimg.com/80/v2-58ea977a67d2ec288cfc2ffe065881b0_1440w.webp">
-<meta property="article:published_time" content="2025-10-09T16:00:00.000Z">
-<meta property="article:modified_time" content="2026-10-09T09:51:59.151Z">
+<meta property="article:published_time" content="2025-11-19T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-10T07:21:53.208Z">
 <meta property="article:author" content="loudmute">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
@@ -97,10 +97,10 @@
     <span id="actions">
       <ul>
         
-        <li><a class="icon" aria-label="上一篇" href="/2025/10/23/251023-MySQL-%E7%B4%A2%E5%BC%95%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="上一篇" href="/2025/12/12/251212-Caffeine%E7%AE%80%E8%A6%81%E6%80%BB%E7%BB%93/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
         
         
-        <li><a class="icon" aria-label="下一篇" href="/2025/09/15/250915-Java-Servlet/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="下一篇" href="/2025/10/23/251023-MySQL-%E7%B4%A2%E5%BC%95%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
         
         <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
         <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
@@ -113,17 +113,17 @@
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://loudmute.github.io/2025/10/10/251010-Java-JVM%E5%9F%BA%E7%A1%80/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://loudmute.github.io/2025/10/10/251010-Java-JVM%E5%9F%BA%E7%A1%80/&text=Java-JVM基础"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://loudmute.github.io/2025/10/10/251010-Java-JVM%E5%9F%BA%E7%A1%80/&title=Java-JVM基础"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://loudmute.github.io/2025/10/10/251010-Java-JVM%E5%9F%BA%E7%A1%80/&is_video=false&description=Java-JVM基础"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=Java-JVM基础&body=Check out this article: https://loudmute.github.io/2025/10/10/251010-Java-JVM%E5%9F%BA%E7%A1%80/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://loudmute.github.io/2025/10/10/251010-Java-JVM%E5%9F%BA%E7%A1%80/&title=Java-JVM基础"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://loudmute.github.io/2025/10/10/251010-Java-JVM%E5%9F%BA%E7%A1%80/&title=Java-JVM基础"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://loudmute.github.io/2025/10/10/251010-Java-JVM%E5%9F%BA%E7%A1%80/&title=Java-JVM基础"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://loudmute.github.io/2025/10/10/251010-Java-JVM%E5%9F%BA%E7%A1%80/&title=Java-JVM基础"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://loudmute.github.io/2025/10/10/251010-Java-JVM%E5%9F%BA%E7%A1%80/&name=Java-JVM基础&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://loudmute.github.io/2025/10/10/251010-Java-JVM%E5%9F%BA%E7%A1%80/&t=Java-JVM基础"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://loudmute.github.io/2025/11/20/251120-Java-JVM%E5%9F%BA%E7%A1%80/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://loudmute.github.io/2025/11/20/251120-Java-JVM%E5%9F%BA%E7%A1%80/&text=Java-JVM基础"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://loudmute.github.io/2025/11/20/251120-Java-JVM%E5%9F%BA%E7%A1%80/&title=Java-JVM基础"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://loudmute.github.io/2025/11/20/251120-Java-JVM%E5%9F%BA%E7%A1%80/&is_video=false&description=Java-JVM基础"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Java-JVM基础&body=Check out this article: https://loudmute.github.io/2025/11/20/251120-Java-JVM%E5%9F%BA%E7%A1%80/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://loudmute.github.io/2025/11/20/251120-Java-JVM%E5%9F%BA%E7%A1%80/&title=Java-JVM基础"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://loudmute.github.io/2025/11/20/251120-Java-JVM%E5%9F%BA%E7%A1%80/&title=Java-JVM基础"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://loudmute.github.io/2025/11/20/251120-Java-JVM%E5%9F%BA%E7%A1%80/&title=Java-JVM基础"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://loudmute.github.io/2025/11/20/251120-Java-JVM%E5%9F%BA%E7%A1%80/&title=Java-JVM基础"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://loudmute.github.io/2025/11/20/251120-Java-JVM%E5%9F%BA%E7%A1%80/&name=Java-JVM基础&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://loudmute.github.io/2025/11/20/251120-Java-JVM%E5%9F%BA%E7%A1%80/&t=Java-JVM基础"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -155,7 +155,7 @@
       
     <div class="postdate">
       
-        <time datetime="2025-10-09T16:00:00.000Z" class="dt-published" itemprop="datePublished">2025-10-10</time>
+        <time datetime="2025-11-19T16:00:00.000Z" class="dt-published" itemprop="datePublished">2025-11-20</time>
         
       
     </div>
@@ -573,17 +573,17 @@
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://loudmute.github.io/2025/10/10/251010-Java-JVM%E5%9F%BA%E7%A1%80/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://loudmute.github.io/2025/10/10/251010-Java-JVM%E5%9F%BA%E7%A1%80/&text=Java-JVM基础"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://loudmute.github.io/2025/10/10/251010-Java-JVM%E5%9F%BA%E7%A1%80/&title=Java-JVM基础"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://loudmute.github.io/2025/10/10/251010-Java-JVM%E5%9F%BA%E7%A1%80/&is_video=false&description=Java-JVM基础"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=Java-JVM基础&body=Check out this article: https://loudmute.github.io/2025/10/10/251010-Java-JVM%E5%9F%BA%E7%A1%80/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://loudmute.github.io/2025/10/10/251010-Java-JVM%E5%9F%BA%E7%A1%80/&title=Java-JVM基础"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://loudmute.github.io/2025/10/10/251010-Java-JVM%E5%9F%BA%E7%A1%80/&title=Java-JVM基础"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://loudmute.github.io/2025/10/10/251010-Java-JVM%E5%9F%BA%E7%A1%80/&title=Java-JVM基础"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://loudmute.github.io/2025/10/10/251010-Java-JVM%E5%9F%BA%E7%A1%80/&title=Java-JVM基础"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://loudmute.github.io/2025/10/10/251010-Java-JVM%E5%9F%BA%E7%A1%80/&name=Java-JVM基础&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://loudmute.github.io/2025/10/10/251010-Java-JVM%E5%9F%BA%E7%A1%80/&t=Java-JVM基础"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://loudmute.github.io/2025/11/20/251120-Java-JVM%E5%9F%BA%E7%A1%80/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://loudmute.github.io/2025/11/20/251120-Java-JVM%E5%9F%BA%E7%A1%80/&text=Java-JVM基础"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://loudmute.github.io/2025/11/20/251120-Java-JVM%E5%9F%BA%E7%A1%80/&title=Java-JVM基础"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://loudmute.github.io/2025/11/20/251120-Java-JVM%E5%9F%BA%E7%A1%80/&is_video=false&description=Java-JVM基础"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Java-JVM基础&body=Check out this article: https://loudmute.github.io/2025/11/20/251120-Java-JVM%E5%9F%BA%E7%A1%80/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://loudmute.github.io/2025/11/20/251120-Java-JVM%E5%9F%BA%E7%A1%80/&title=Java-JVM基础"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://loudmute.github.io/2025/11/20/251120-Java-JVM%E5%9F%BA%E7%A1%80/&title=Java-JVM基础"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://loudmute.github.io/2025/11/20/251120-Java-JVM%E5%9F%BA%E7%A1%80/&title=Java-JVM基础"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://loudmute.github.io/2025/11/20/251120-Java-JVM%E5%9F%BA%E7%A1%80/&title=Java-JVM基础"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://loudmute.github.io/2025/11/20/251120-Java-JVM%E5%9F%BA%E7%A1%80/&name=Java-JVM基础&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://loudmute.github.io/2025/11/20/251120-Java-JVM%E5%9F%BA%E7%A1%80/&t=Java-JVM基础"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
