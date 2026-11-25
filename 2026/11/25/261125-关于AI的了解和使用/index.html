@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Rider中使用AIAgent目前，我是用ACP的方式，在Rider中使用AIAgent。ACP(Agent Client Protocal)可以理解为Editor &lt;-&gt; Agent的通信标准，Rider可以启动AI Agent程序让其作为内部的一个子程序运行。目前我的AIAgent用的是Cursor。    根据 Cursor 官方文档和 JetBrains 博客的说明，操作如下：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于AI的了解和使用">
+<meta property="og:url" content="https://loudmute.github.io/2026/11/25/261125-%E5%85%B3%E4%BA%8EAI%E7%9A%84%E4%BA%86%E8%A7%A3%E5%92%8C%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:site_name" content="loudmute">
+<meta property="og:description" content="Rider中使用AIAgent目前，我是用ACP的方式，在Rider中使用AIAgent。ACP(Agent Client Protocal)可以理解为Editor &lt;-&gt; Agent的通信标准，Rider可以启动AI Agent程序让其作为内部的一个子程序运行。目前我的AIAgent用的是Cursor。    根据 Cursor 官方文档和 JetBrains 博客的说明，操作如下：">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img.cdn1.vip/i/6b06cd7611ca4_1795607926.png">
+<meta property="og:image" content="https://img.cdn1.vip/i/6b06cd8c8d3e1_1795607948.webp">
+<meta property="og:image" content="https://img.cdn1.vip/i/6b06cd98dfae6_1795607960.webp">
+<meta property="og:image" content="https://img.cdn1.vip/i/6b06cda611486_1795607974.webp">
+<meta property="article:published_time" content="2026-11-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-11-25T12:04:40.269Z">
+<meta property="article:author" content="loudmute">
+<meta property="article:tag" content="Unity">
+<meta property="article:tag" content="人工智能">
+<meta property="article:tag" content="工具配置">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img.cdn1.vip/i/6b06cd7611ca4_1795607926.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>关于AI的了解和使用</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a href="/tags/">标签</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2026/11/24/261124-%E7%97%85%E6%A0%91%E5%89%8D%E5%A4%B4%E4%B8%87%E6%9C%A8%E6%98%A5/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://loudmute.github.io/2026/11/25/261125-%E5%85%B3%E4%BA%8EAI%E7%9A%84%E4%BA%86%E8%A7%A3%E5%92%8C%E4%BD%BF%E7%94%A8/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://loudmute.github.io/2026/11/25/261125-%E5%85%B3%E4%BA%8EAI%E7%9A%84%E4%BA%86%E8%A7%A3%E5%92%8C%E4%BD%BF%E7%94%A8/&text=关于AI的了解和使用"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://loudmute.github.io/2026/11/25/261125-%E5%85%B3%E4%BA%8EAI%E7%9A%84%E4%BA%86%E8%A7%A3%E5%92%8C%E4%BD%BF%E7%94%A8/&title=关于AI的了解和使用"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://loudmute.github.io/2026/11/25/261125-%E5%85%B3%E4%BA%8EAI%E7%9A%84%E4%BA%86%E8%A7%A3%E5%92%8C%E4%BD%BF%E7%94%A8/&is_video=false&description=关于AI的了解和使用"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=关于AI的了解和使用&body=Check out this article: https://loudmute.github.io/2026/11/25/261125-%E5%85%B3%E4%BA%8EAI%E7%9A%84%E4%BA%86%E8%A7%A3%E5%92%8C%E4%BD%BF%E7%94%A8/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://loudmute.github.io/2026/11/25/261125-%E5%85%B3%E4%BA%8EAI%E7%9A%84%E4%BA%86%E8%A7%A3%E5%92%8C%E4%BD%BF%E7%94%A8/&title=关于AI的了解和使用"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://loudmute.github.io/2026/11/25/261125-%E5%85%B3%E4%BA%8EAI%E7%9A%84%E4%BA%86%E8%A7%A3%E5%92%8C%E4%BD%BF%E7%94%A8/&title=关于AI的了解和使用"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://loudmute.github.io/2026/11/25/261125-%E5%85%B3%E4%BA%8EAI%E7%9A%84%E4%BA%86%E8%A7%A3%E5%92%8C%E4%BD%BF%E7%94%A8/&title=关于AI的了解和使用"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://loudmute.github.io/2026/11/25/261125-%E5%85%B3%E4%BA%8EAI%E7%9A%84%E4%BA%86%E8%A7%A3%E5%92%8C%E4%BD%BF%E7%94%A8/&title=关于AI的了解和使用"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://loudmute.github.io/2026/11/25/261125-%E5%85%B3%E4%BA%8EAI%E7%9A%84%E4%BA%86%E8%A7%A3%E5%92%8C%E4%BD%BF%E7%94%A8/&name=关于AI的了解和使用&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://loudmute.github.io/2026/11/25/261125-%E5%85%B3%E4%BA%8EAI%E7%9A%84%E4%BA%86%E8%A7%A3%E5%92%8C%E4%BD%BF%E7%94%A8/&t=关于AI的了解和使用"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Rider%E4%B8%AD%E4%BD%BF%E7%94%A8AIAgent"><span class="toc-number">1.</span> <span class="toc-text">Rider中使用AIAgent</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MCP-for-Unity"><span class="toc-number">2.</span> <span class="toc-text">MCP for Unity</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#MCP"><span class="toc-number">2.1.</span> <span class="toc-text">MCP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Unity-MCP"><span class="toc-number">2.2.</span> <span class="toc-text">Unity MCP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E9%85%8D%E7%BD%AE"><span class="toc-number">2.3.</span> <span class="toc-text">如何配置</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        关于AI的了解和使用
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">loudmute</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2026-11-24T16:00:00.000Z" class="dt-published" itemprop="datePublished">2026-11-25</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/">游戏开发</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Unity/" rel="tag">Unity</a>, <a class="p-category" href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" rel="tag">人工智能</a>, <a class="p-category" href="/tags/%E5%B7%A5%E5%85%B7%E9%85%8D%E7%BD%AE/" rel="tag">工具配置</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h2 id="Rider中使用AIAgent"><a href="#Rider中使用AIAgent" class="headerlink" title="Rider中使用AIAgent"></a>Rider中使用AIAgent</h2><p>目前，我是用ACP的方式，在Rider中使用AIAgent。ACP(Agent Client Protocal)可以理解为<code>Editor &lt;-&gt; Agent</code>的通信标准，Rider可以启动AI Agent程序让其作为内部的一个子程序运行。目前我的AIAgent用的是Cursor。</p>
+<p><img src="https://img.cdn1.vip/i/6b06cd7611ca4_1795607926.png" alt="image-20261125161825007.png · 14"></p>
+<img src="https://img.cdn1.vip/i/6b06cd8c8d3e1_1795607948.webp" alt="image-20261125161902557.png · 439"  />
+
+<p>根据 <a target="_blank" rel="noopener" href="https://cursor.com/docs/integrations/jetbrains">Cursor 官方文档</a>和 <a target="_blank" rel="noopener" href="https://blog.jetbrains.com/ai/2026/03/cursor-joined-the-acp-registry-and-is-now-live-in-your-jetbrains-ide/?trk=public_profile__posts-text">JetBrains 博客</a>的说明，操作如下：</p>
+<ol>
+<li><p><strong>检查前置条件</strong></p>
+<ul>
+<li>确保你的 <strong>Rider 版本在 2025.3.2 或更高</strong>，并且已经启用了内置的 <strong>AI Assistant</strong> 插件。</li>
+<li>你需要一个<strong>付费的 Cursor 订阅</strong>账户。</li>
+</ul>
+</li>
+<li><p><strong>从 ACP 注册表安装 Cursor</strong></p>
+<ul>
+<li><p>在 AI Chat 面板中，找到并打开<strong>代理提供者（Agent Provider）列表</strong>。</p>
+</li>
+<li><p>选择 <strong><code>Add Agent from Registry</code></strong>（从注册表添加代理）。</p>
+</li>
+<li><p>在弹出的列表中搜索 <strong><code>Cursor</code></strong>，然后点击安装。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>身份验证</strong></p>
+<ul>
+<li>安装完成后，在代理提供者列表中<strong>选择 Cursor</strong> 作为你的 AI 代理。</li>
+<li>根据提示完成登录和身份验证流程。</li>
+</ul>
+</li>
+<li><p><strong>开始使用</strong></p>
+<ul>
+<li>验证成功后，你就可以在 AI Chat 面板中直接向 Cursor 的 Agent 发送指令了。Cursor 可以读取你的项目文件、编辑代码，并在 IDE 的集成终端中运行命令。</li>
+</ul>
+</li>
+</ol>
+<h2 id="MCP-for-Unity"><a href="#MCP-for-Unity" class="headerlink" title="MCP for Unity"></a>MCP for Unity</h2><h3 id="MCP"><a href="#MCP" class="headerlink" title="MCP"></a>MCP</h3><p>MCP（Model Context Protocal）是个协议，由Anthropic提出，用于AI应用（比如我的Cursor客户端）和外部软件之间的连接。官方文档：<a target="_blank" rel="noopener" href="https://modelcontextprotocol.io/docs/2026-07-28/getting-started/intro">What is the Model Context Protocol (MCP)?</a></p>
+<p>在连接这件事情上，MCP提出了三个概念用于区分角色：</p>
+<ol>
+<li><strong>Host</strong>，AI应用</li>
+<li><strong>Client</strong>，Host内嵌的连接器</li>
+<li><strong>Server</strong>，外部软件按照MCP的规矩暴露出的能力服务</li>
+</ol>
+<p>其中，Client在Host中有多个，通过HTTP和Server一对一连接，并且使用json作为消息格式。</p>
+<p>MCP规定Server暴露的核心信息有三种：</p>
+<ul>
+<li><strong>Tools（工具）</strong>：AI 可以调用的可执行函数（如“查数据库”、“发邮件”）。<strong>由模型决定何时调用</strong>，但有副作用。</li>
+<li><strong>Resources（资源）</strong>：提供给 AI 的只读数据源（如文件内容、数据库记录）。<strong>由宿主或用户控制</strong>读取时机，无副作用。</li>
+<li><strong>Prompts（提示词模板）</strong>：服务端预定义的可复用交互模板（如工作流脚本）。<strong>由用户显式触发</strong>。</li>
+</ul>
+<h3 id="Unity-MCP"><a href="#Unity-MCP" class="headerlink" title="Unity MCP"></a>Unity MCP</h3><p>unityMCP链接：<a target="_blank" rel="noopener" href="https://github.com/CoplayDev/unity-mcp%E3%80%82">https://github.com/CoplayDev/unity-mcp。</a></p>
+<p>这里我们用的unityMCP是CoplayDev开源的三方unityMCP，我的Unity编辑器是2022.3版本，我的Agent客户端是Cursor。</p>
+<p>有了MCP的概念，unityMCP就自然而然的可以理解了。只不过，Agent连接Unity的过程中实际的角色是这样的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Cursor (Host/MCP Client)</span><br><span class="line">   ↓ MCP 协议（stdio 或 HTTP/JSON-RPC）</span><br><span class="line">Python MCP Server（独立进程，FastMCP）</span><br><span class="line">   ↓ 本地 WebSocket / HTTP（/hub/plugin 这类桥接通道）</span><br><span class="line">Unity Editor 内的 C# 插件（MCPForUnity 包）</span><br><span class="line">   ↓ 直接调用</span><br><span class="line">UnityEditor / UnityEngine API</span><br></pre></td></tr></table></figure>
+
+<h3 id="如何配置"><a href="#如何配置" class="headerlink" title="如何配置"></a>如何配置</h3><p>有了上面的相关概念，我们在配置的时候，就可以抓中重点。Host即Agent本身里内嵌Client，不需要我们来管，在连接这件事上，只需要重点关注Server：1）Server的目标Client；2）Server的配置文件；3）Server的运行</p>
+<ol>
+<li><p><strong>Unity编辑器中安装MCP for Unity</strong></p>
+<p> PackageManager左上方+号 有个Add Package from git URL</p>
+<p> 输入链接：<a target="_blank" rel="noopener" href="https://github.com/CoplayDev/unity-mcp.git?path=/MCPForUnity#main">https://github.com/CoplayDev/unity-mcp.git?path=/MCPForUnity#main</a></p>
+<p> 这里，<code>#main</code>可以替换为指定的版本比如<code>#v10.3.0</code>。</p>
+</li>
+<li><p><strong>打开MCP for Unity窗口并配置Server</strong></p>
+<p> 如下图所示，在Client Configuration中，选择指定的Agent Client，我这里用的Cursor，然后点击Configuration All Detected Clients，会自动配置在Agent客户端中配置Server的配置文件，用于连接Agent客户端中的Client。在Server中，点击Start Server，开始连接Agent。</p>
+<p> <img src="https://img.cdn1.vip/i/6b06cd98dfae6_1795607960.webp" alt="image-20261125172930806.png · 77"></p>
+</li>
+<li><p><strong>Agent客户端验证</strong></p>
+<p> 在我们的Agent客户端的设置中的MCP中，可以看到多了一个MCP的配置文件，并且是绿色状态，说明已经通过HTTP连上了MCP for Unity的Server。并且，我们可以unityMCP的Server，显示Tools有多少个，Resourses有多少个，这正是MCP所规定Server应该暴露的能力。</p>
+<p> <img src="https://img.cdn1.vip/i/6b06cda611486_1795607974.webp" alt="image-20261125173403978.png · 131"></p>
+</li>
+</ol>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/about/">关于</a></li>
+        
+          <li><a href="/archives/">文章</a></li>
+        
+          <li><a href="/categories/">分类</a></li>
+        
+          <li><a href="/tags/">标签</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Rider%E4%B8%AD%E4%BD%BF%E7%94%A8AIAgent"><span class="toc-number">1.</span> <span class="toc-text">Rider中使用AIAgent</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MCP-for-Unity"><span class="toc-number">2.</span> <span class="toc-text">MCP for Unity</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#MCP"><span class="toc-number">2.1.</span> <span class="toc-text">MCP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Unity-MCP"><span class="toc-number">2.2.</span> <span class="toc-text">Unity MCP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E9%85%8D%E7%BD%AE"><span class="toc-number">2.3.</span> <span class="toc-text">如何配置</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://loudmute.github.io/2026/11/25/261125-%E5%85%B3%E4%BA%8EAI%E7%9A%84%E4%BA%86%E8%A7%A3%E5%92%8C%E4%BD%BF%E7%94%A8/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://loudmute.github.io/2026/11/25/261125-%E5%85%B3%E4%BA%8EAI%E7%9A%84%E4%BA%86%E8%A7%A3%E5%92%8C%E4%BD%BF%E7%94%A8/&text=关于AI的了解和使用"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://loudmute.github.io/2026/11/25/261125-%E5%85%B3%E4%BA%8EAI%E7%9A%84%E4%BA%86%E8%A7%A3%E5%92%8C%E4%BD%BF%E7%94%A8/&title=关于AI的了解和使用"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://loudmute.github.io/2026/11/25/261125-%E5%85%B3%E4%BA%8EAI%E7%9A%84%E4%BA%86%E8%A7%A3%E5%92%8C%E4%BD%BF%E7%94%A8/&is_video=false&description=关于AI的了解和使用"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=关于AI的了解和使用&body=Check out this article: https://loudmute.github.io/2026/11/25/261125-%E5%85%B3%E4%BA%8EAI%E7%9A%84%E4%BA%86%E8%A7%A3%E5%92%8C%E4%BD%BF%E7%94%A8/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://loudmute.github.io/2026/11/25/261125-%E5%85%B3%E4%BA%8EAI%E7%9A%84%E4%BA%86%E8%A7%A3%E5%92%8C%E4%BD%BF%E7%94%A8/&title=关于AI的了解和使用"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://loudmute.github.io/2026/11/25/261125-%E5%85%B3%E4%BA%8EAI%E7%9A%84%E4%BA%86%E8%A7%A3%E5%92%8C%E4%BD%BF%E7%94%A8/&title=关于AI的了解和使用"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://loudmute.github.io/2026/11/25/261125-%E5%85%B3%E4%BA%8EAI%E7%9A%84%E4%BA%86%E8%A7%A3%E5%92%8C%E4%BD%BF%E7%94%A8/&title=关于AI的了解和使用"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://loudmute.github.io/2026/11/25/261125-%E5%85%B3%E4%BA%8EAI%E7%9A%84%E4%BA%86%E8%A7%A3%E5%92%8C%E4%BD%BF%E7%94%A8/&title=关于AI的了解和使用"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://loudmute.github.io/2026/11/25/261125-%E5%85%B3%E4%BA%8EAI%E7%9A%84%E4%BA%86%E8%A7%A3%E5%92%8C%E4%BD%BF%E7%94%A8/&name=关于AI的了解和使用&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://loudmute.github.io/2026/11/25/261125-%E5%85%B3%E4%BA%8EAI%E7%9A%84%E4%BA%86%E8%A7%A3%E5%92%8C%E4%BD%BF%E7%94%A8/&t=关于AI的了解和使用"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2026
+    loudmute
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a href="/tags/">标签</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
